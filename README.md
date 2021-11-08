@@ -1,1 +1,2 @@
 # JuniorMind
+Repository for training
