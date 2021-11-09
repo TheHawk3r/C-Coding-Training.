@@ -60,7 +60,7 @@ namespace Json.Facts
             Assert.True(IsJsonString(Quoted("⛅⚾")));
         }
 
-        [Fact(Skip = "Remove this Skip as you implement")]
+        [Fact]
         public void CanContainEscapedQuotationMark()
         {
             Assert.True(IsJsonString(Quoted(@"\""a\"" b")));
