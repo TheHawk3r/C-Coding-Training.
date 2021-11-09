@@ -17,7 +17,7 @@ namespace Json.Facts
             Assert.False(IsJsonString("abc\""));
         }
 
-        [Fact(Skip = "Remove this Skip as you implement")]
+        [Fact]
         public void AlwaysEndsWithQuotes()
         {
             Assert.False(IsJsonString("\"abc"));
