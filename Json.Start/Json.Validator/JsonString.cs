@@ -11,7 +11,9 @@ namespace Json
                 return false;
             }
 
-            return input.StartsWith('\"') && input.EndsWith('\"');
+            return input.StartsWith('\"')
+                && input.EndsWith('\"')
+                && input != string.Empty;
         }
     }
 }
