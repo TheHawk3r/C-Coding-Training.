@@ -78,7 +78,7 @@ namespace Json.Facts
             Assert.True(IsJsonString(Quoted(@"a \/ b")));
         }
 
-        [Fact(Skip = "Remove this Skip as you implement")]
+        [Fact]
         public void CanContainEscapedBackspace()
         {
             Assert.True(IsJsonString(Quoted(@"a \b b")));
