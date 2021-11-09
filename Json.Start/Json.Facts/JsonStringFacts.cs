@@ -41,7 +41,7 @@ namespace Json.Facts
             Assert.True(IsJsonString(Quoted(string.Empty)));
         }
 
-        [Fact(Skip = "Remove this Skip as you implement")]
+        [Fact]
         public void HasStartAndEndQuotes()
         {
             Assert.False(IsJsonString("\""));
