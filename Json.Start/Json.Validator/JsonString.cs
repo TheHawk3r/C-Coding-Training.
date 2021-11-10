@@ -33,8 +33,8 @@ namespace Json
                 return false;
             }
 
-            return (input.EndsWith('\"') && input.LastIndexOf('\"') != 0)
-                && input.StartsWith('\"')
+            return IsDoubleQuoted(input)
+                && input.LastIndexOf('\"') != 0
                 && input != string.Empty;
         }
 
@@ -50,6 +50,16 @@ namespace Json
                 && input.LastIndexOf("\\u") != -1
                 ? input.LastIndexOf("\\u") >= input.Length - HexNumberLength
                 : f;
+        }
+
+        public static bool IsDoubleQuoted(string input)
+        {
+            if (input == null)
+            {
+                return false;
+            }
+
+            return input.StartsWith("\"") && input.EndsWith('\"');
         }
     }
 }
