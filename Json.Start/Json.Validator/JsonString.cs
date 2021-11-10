@@ -47,6 +47,7 @@ namespace Json
             }
 
             return input.LastIndexOf("\\u") >= input.Length - HexNumberLength
+                && input.LastIndexOf("\\u") != -1
                 ? input.LastIndexOf("\\u") >= input.Length - HexNumberLength
                 : f;
         }
