@@ -28,14 +28,9 @@ namespace Json
                 return false;
             }
 
-            if (StringEndsWithAFinishedHexNumber(input))
-            {
-                return false;
-            }
-
-            return IsDoubleQuoted(input)
-                && input.LastIndexOf('\"') != 0
-                && input != string.Empty;
+            return InputIsDoubleQuoted(input)
+                && InputHasStartAndEndQuotes(input)
+                && !StringEndsWithAFinishedHexNumber(input);
         }
 
         public static bool StringEndsWithAFinishedHexNumber(string input)
@@ -52,7 +47,7 @@ namespace Json
                 : f;
         }
 
-        public static bool IsDoubleQuoted(string input)
+        public static bool InputIsDoubleQuoted(string input)
         {
             if (input == null)
             {
@@ -60,6 +55,21 @@ namespace Json
             }
 
             return input.StartsWith("\"") && input.EndsWith('\"');
+        }
+
+        public static bool InputIsNotEmpty(string input)
+        {
+            return input != string.Empty;
+        }
+
+        public static bool InputHasStartAndEndQuotes(string input)
+        {
+            if (input == null)
+            {
+                return false;
+            }
+
+            return input.StartsWith("\"") && input.EndsWith("\"") && input.Length != 1;
         }
     }
 }
