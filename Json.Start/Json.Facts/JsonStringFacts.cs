@@ -96,7 +96,7 @@ namespace Json.Facts
             Assert.True(IsJsonString(Quoted(@"a \n b")));
         }
 
-        [Fact(Skip = "Remove this Skip as you implement")]
+        [Fact]
         public void CanContainEscapedCarrigeReturn()
         {
             Assert.True(IsJsonString(Quoted(@"a \r b")));
