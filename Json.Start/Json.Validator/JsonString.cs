@@ -13,11 +13,6 @@ namespace Json
                 return false;
             }
 
-            if (input.Contains('\n') || input.Contains("\r"))
-            {
-                return false;
-            }
-
             if (input.Contains(@"\x"))
             {
                 return false;
@@ -30,6 +25,7 @@ namespace Json
 
             return InputIsDoubleQuoted(input)
                 && InputHasStartAndEndQuotes(input)
+                && !InputHasControlCharacters(input)
                 && !StringEndsWithAFinishedHexNumber(input);
         }
 
@@ -70,6 +66,29 @@ namespace Json
             }
 
             return input.StartsWith("\"") && input.EndsWith("\"") && input.Length != 1;
+        }
+
+        public static bool InputIsNull(string input)
+        {
+            return input == null;
+        }
+
+        public static bool InputHasControlCharacters(string input)
+        {
+            if (input == null)
+            {
+                return false;
+            }
+
+            foreach (char c in input)
+            {
+                if (char.IsControl(c))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
