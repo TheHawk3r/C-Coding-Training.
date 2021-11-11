@@ -5,15 +5,11 @@ namespace Json
     public static class JsonString
     {
         private const int HexNumberLength = 6;
+        private const int JsonEscapeCharacters = 10;
 
         public static bool IsJsonString(string input)
         {
             if (input == null)
-            {
-                return false;
-            }
-
-            if (input.Contains(@"\x"))
             {
                 return false;
             }
@@ -23,10 +19,46 @@ namespace Json
                 return false;
             }
 
+            return FirstGroupOfConditionsToValidateJsonString(input)
+                && !InputContainsUnrecognizedEscapeCharacters(input);
+        }
+
+        public static bool FirstGroupOfConditionsToValidateJsonString(string input)
+        {
             return InputIsDoubleQuoted(input)
                 && InputHasStartAndEndQuotes(input)
                 && !InputHasControlCharacters(input)
                 && !StringEndsWithAFinishedHexNumber(input);
+        }
+
+        public static bool InputContainsUnrecognizedEscapeCharacters(string input)
+        {
+            if (input == null)
+            {
+                return false;
+            }
+
+            int escapeCharactersNotFoundCount = 0;
+            char[] escapeCharacters = new[] { '"', '\\', '/', 'b', 'f', 'n', 'r', 't', 'u', ' ' };
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == '\\')
+                {
+                    escapeCharactersNotFoundCount = 0;
+                    foreach (char c in escapeCharacters)
+                    {
+                        escapeCharactersNotFoundCount += input[i + 1] == c ? 0 : 1;
+                    }
+
+                    if (escapeCharactersNotFoundCount >= JsonEscapeCharacters)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return escapeCharactersNotFoundCount >= JsonEscapeCharacters;
         }
 
         public static bool StringEndsWithAFinishedHexNumber(string input)
