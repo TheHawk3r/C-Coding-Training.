@@ -14,13 +14,8 @@ namespace Json
                 return false;
             }
 
-            if (input.EndsWith("\\\""))
-            {
-                return false;
-            }
-
             return FirstGroupOfConditionsToValidateJsonString(input)
-                && !InputContainsUnrecognizedEscapeCharacters(input);
+                && SecondGroupOfConditionsToValidateJsonString(input);
         }
 
         public static bool FirstGroupOfConditionsToValidateJsonString(string input)
@@ -29,6 +24,22 @@ namespace Json
                 && InputHasStartAndEndQuotes(input)
                 && !InputHasControlCharacters(input)
                 && !StringEndsWithAFinishedHexNumber(input);
+        }
+
+        public static bool SecondGroupOfConditionsToValidateJsonString(string input)
+        {
+            return !InputContainsUnrecognizedEscapeCharacters(input)
+                && !InputEndsWithReverseSolidus(input);
+        }
+
+        public static bool InputEndsWithReverseSolidus(string input)
+        {
+            if (input == null)
+            {
+                return false;
+            }
+
+            return input.EndsWith("\\\"");
         }
 
         public static bool InputContainsUnrecognizedEscapeCharacters(string input)
