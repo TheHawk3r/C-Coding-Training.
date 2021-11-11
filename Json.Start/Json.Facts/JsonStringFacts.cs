@@ -121,6 +121,12 @@ namespace Json.Facts
         }
 
         [Fact]
+        public void CanContainEscapedUnfinishedUnicodeCharacters()
+        {
+            Assert.True(IsJsonString(Quoted(@"a \u24 b")));
+        }
+
+        [Fact]
         public void DoesNotContainUnrecognizedExcapceCharacters()
         {
             Assert.False(IsJsonString(Quoted(@"a\x")));
