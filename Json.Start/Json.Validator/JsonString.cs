@@ -21,7 +21,6 @@ namespace Json
         public static bool FirstGroupOfConditionsToValidateJsonString(string input)
         {
             return InputIsDoubleQuoted(input)
-                && InputHasStartAndEndQuotes(input)
                 && !InputHasControlCharacters(input)
                 && !StringEndsWithAFinishedHexNumber(input);
         }
@@ -93,22 +92,12 @@ namespace Json
                 return false;
             }
 
-            return input.StartsWith("\"") && input.EndsWith('\"');
+            return input.StartsWith("\"") && input.EndsWith('\"') && input.Length != 1;
         }
 
-        public static bool InputIsNotEmpty(string input)
+        public static bool InputIsEmpty(string input)
         {
-            return input != string.Empty;
-        }
-
-        public static bool InputHasStartAndEndQuotes(string input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-
-            return input.StartsWith("\"") && input.EndsWith("\"") && input.Length != 1;
+            return input == string.Empty;
         }
 
         public static bool InputIsNull(string input)
