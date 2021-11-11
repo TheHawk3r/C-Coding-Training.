@@ -92,12 +92,7 @@ namespace Json
                 return false;
             }
 
-            return input.StartsWith("\"") && input.EndsWith('\"') && input.Length != 1;
-        }
-
-        public static bool InputIsEmpty(string input)
-        {
-            return input == string.Empty;
+            return input.StartsWith("\"") && input.EndsWith('\"') && input.Length > 1;
         }
 
         public static bool InputIsNull(string input)

@@ -24,6 +24,12 @@ namespace Json.Facts
         }
 
         [Fact]
+        public void StringLengthCanNotBeSmallerThenTwo()
+        {
+            Assert.False(IsJsonString("a"));
+        }
+
+        [Fact]
         public void IsNotNull()
         {
             Assert.False(IsJsonString(null));
