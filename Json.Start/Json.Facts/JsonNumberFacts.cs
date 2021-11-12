@@ -54,7 +54,7 @@ namespace Json.Facts
             Assert.True(IsJsonNumber("-26"));
         }
 
-        [Fact(Skip = "Remove this Skip as you implement")]
+        [Fact]
         public void CanBeMinusZero()
         {
             Assert.True(IsJsonNumber("-0"));
