@@ -36,7 +36,7 @@ namespace Json.Facts
             Assert.False(IsJsonNumber(null));
         }
 
-        [Fact(Skip = "Remove this Skip as you implement")]
+        [Fact]
         public void IsNotAnEmptyString()
         {
             Assert.False(IsJsonNumber(string.Empty));
