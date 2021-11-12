@@ -15,11 +15,11 @@ namespace Json
             }
 
             bool firstGroupOfConditions = !NumberEndsWithADot(input) && !NumberStartsWithADot(input);
-            bool secondGropuOfConditions = FractionCanHaveLeadingZeros(input) && !NumberHasMultipleFractionPoints(input) && NumberIsValid(input);
+            bool secondGropuOfConditions = FractionCanHaveLeadingZeros(input) && !NumberHasMultipleFractionPartss(input) && NumberCharactersAreValid(input);
             return firstGroupOfConditions && secondGropuOfConditions;
         }
 
-        static bool NumberHasMultipleFractionPoints(string input)
+        static bool NumberHasMultipleFractionPartss(string input)
         {
             int countOfDots = input.Length - input.Replace(".", "").Length;
 
@@ -46,7 +46,7 @@ namespace Json
             return input.Length > 1 && input[0] == '.';
         }
 
-        static bool NumberIsValid(string input)
+        static bool NumberCharactersAreValid(string input)
         {
             for (int i = input[0] == '-' ? 1 : 0; i < input.Length; i++)
             {
