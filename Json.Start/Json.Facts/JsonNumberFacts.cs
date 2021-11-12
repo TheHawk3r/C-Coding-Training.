@@ -49,6 +49,12 @@ namespace Json.Facts
         }
 
         [Fact]
+        public void DoesNotStartWithADot()
+        {
+            Assert.False(IsJsonNumber(".153"));
+        }
+
+        [Fact]
         public void CanBeNegative()
         {
             Assert.True(IsJsonNumber("-26"));
