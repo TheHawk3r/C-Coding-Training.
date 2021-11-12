@@ -4,6 +4,9 @@ namespace Json
 {
     public static class JsonNumber
     {
+        private const int AsciiDigitRangeMin = 47;
+        private const int AsciiDigitRangeMax = 58;
+
         public static bool IsJsonNumber(string input)
         {
             if (input == null)
@@ -11,7 +14,7 @@ namespace Json
                 return false;
             }
 
-            return input.Contains('0');
+            return input[0] > AsciiDigitRangeMin && input[0] < AsciiDigitRangeMax;
         }
     }
 }
