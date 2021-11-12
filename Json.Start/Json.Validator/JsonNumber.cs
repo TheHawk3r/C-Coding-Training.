@@ -19,6 +19,11 @@ namespace Json
                 return false;
             }
 
+            if (input.Length > 1 && input[0] == '0')
+            {
+                return false;
+            }
+
             for (int i = 0; i < input.Length; i++)
             {
                 if (input[i] < AsciiDigitRangeMin || input[i] > AsciiDigitRangeMax)
