@@ -9,12 +9,7 @@ namespace Json
 
         public static bool IsJsonNumber(string input)
         {
-            if (input == null)
-            {
-                return false;
-            }
-
-            if (input == string.Empty)
+            if (string.IsNullOrEmpty(input))
             {
                 return false;
             }
@@ -24,7 +19,7 @@ namespace Json
                 return false;
             }
 
-            for (int i = 0; i < input.Length; i++)
+            for (int i = input[0] == '-' ? 1 : 0; i < input.Length; i++)
             {
                 if (input[i] < AsciiDigitRangeMin || input[i] > AsciiDigitRangeMax)
                 {
@@ -32,7 +27,7 @@ namespace Json
                 }
             }
 
-            return input[0] > AsciiDigitRangeMin && input[0] < AsciiDigitRangeMax;
+            return input[0] > AsciiDigitRangeMin && input[0] < AsciiDigitRangeMax || input[0] == '-';
         }
     }
 }
