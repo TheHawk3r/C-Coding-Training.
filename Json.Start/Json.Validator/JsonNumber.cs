@@ -50,7 +50,7 @@ namespace Json
         {
             for (int i = input[0] == '-' ? 1 : 0; i < input.Length; i++)
             {
-                if (input[i] == '.' || input[i] == 'e')
+                if (input[i] == '.' || input[i] == 'e' || input[i] == 'E')
                 {
                     continue;
                 }
