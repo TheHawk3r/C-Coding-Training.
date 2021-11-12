@@ -14,13 +14,18 @@ namespace Json
                 return false;
             }
 
-            if (input.Length > 1 && input[0] == '0')
+            if (NumberStartsWithZeroOrADot(input))
             {
                 return false;
             }
 
             for (int i = input[0] == '-' ? 1 : 0; i < input.Length; i++)
             {
+                if (input[i] == '.')
+                {
+                    continue;
+                }
+
                 if (input[i] < AsciiDigitRangeMin || input[i] > AsciiDigitRangeMax)
                 {
                     return false;
@@ -28,6 +33,11 @@ namespace Json
             }
 
             return input[0] > AsciiDigitRangeMin && input[0] < AsciiDigitRangeMax || input[0] == '-';
+        }
+
+        static bool NumberStartsWithZeroOrADot(string input)
+        {
+            return (input.Length > 1 && input[0] == '0') || (input.Length > 1 && input[0] == '.');
         }
     }
 }
