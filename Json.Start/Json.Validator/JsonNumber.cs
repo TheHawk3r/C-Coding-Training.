@@ -14,7 +14,7 @@ namespace Json
                 return false;
             }
 
-            if (NumberStartsWithZeroOrADot(input))
+            if (NumberStartsWithZeroOrADot_NonFracionalNumber(input))
             {
                 return false;
             }
@@ -35,9 +35,11 @@ namespace Json
             return input[0] > AsciiDigitRangeMin && input[0] < AsciiDigitRangeMax || input[0] == '-';
         }
 
-        static bool NumberStartsWithZeroOrADot(string input)
+        static bool NumberStartsWithZeroOrADot_NonFracionalNumber(string input)
         {
-            return (input.Length > 1 && input[0] == '0') || (input.Length > 1 && input[0] == '.');
+            bool inputLengthIsBiggerThenOneAndFirstInputIndexEqualsCharacterZeroAndDoesNotContainDot = input.Length > 1 && input[0] == '0' && !input.Contains('.');
+            bool inputLengthIsBiggerThenOneAndFirstInputIndexEqualsCharacterDot = input.Length > 1 && input[0] == '.';
+            return inputLengthIsBiggerThenOneAndFirstInputIndexEqualsCharacterZeroAndDoesNotContainDot || inputLengthIsBiggerThenOneAndFirstInputIndexEqualsCharacterDot;
         }
     }
 }
