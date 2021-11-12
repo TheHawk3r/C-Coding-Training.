@@ -14,11 +14,33 @@ namespace Json
                 return false;
             }
 
-            if (NumberStartsWithZeroOrADot_NonFracionalNumber(input))
-            {
-                return false;
-            }
+            bool firstGroupOfConditions = !NumberEndsWithADot(input) && !NumberStartsWithADot(input);
+            bool secondGropuOfConditions = FractionCanHaveLeadingZeros(input) && NumberIsValid(input);
+            return firstGroupOfConditions && secondGropuOfConditions;
+        }
 
+        static bool NumberEndsWithADot(string input)
+        {
+            return input[input.Length - 1] == '.';
+        }
+
+        static bool NumberStartsWithZero(string input)
+        {
+            return input.Length > 1 && input[0] == '0';
+        }
+
+        static bool FractionCanHaveLeadingZeros(string input)
+        {
+            return !(NumberStartsWithZero(input) && !input.Contains('.'));
+        }
+
+        static bool NumberStartsWithADot(string input)
+        {
+            return input.Length > 1 && input[0] == '.';
+        }
+
+        static bool NumberIsValid(string input)
+        {
             for (int i = input[0] == '-' ? 1 : 0; i < input.Length; i++)
             {
                 if (input[i] == '.')
@@ -32,14 +54,7 @@ namespace Json
                 }
             }
 
-            return input[0] > AsciiDigitRangeMin && input[0] < AsciiDigitRangeMax || input[0] == '-';
-        }
-
-        static bool NumberStartsWithZeroOrADot_NonFracionalNumber(string input)
-        {
-            bool inputLengthIsBiggerThenOneAndFirstInputIndexEqualsCharacterZeroAndDoesNotContainDot = input.Length > 1 && input[0] == '0' && !input.Contains('.');
-            bool inputLengthIsBiggerThenOneAndFirstInputIndexEqualsCharacterDot = input.Length > 1 && input[0] == '.';
-            return inputLengthIsBiggerThenOneAndFirstInputIndexEqualsCharacterZeroAndDoesNotContainDot || inputLengthIsBiggerThenOneAndFirstInputIndexEqualsCharacterDot;
+            return true;
         }
     }
 }
