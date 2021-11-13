@@ -14,9 +14,26 @@ namespace Json
                 return false;
             }
 
-            bool firstGroupOfConditions = !NumberEndsWithADot(input) && !NumberStartsWithADot(input) && !NumberHasMultipleExponents(input);
+            bool firstGroupOfConditions = !NumberEndsWithADot(input) && !NumberStartsWithADot(input) && !NumberHasMultipleExponents(input) && NumberExponentIsComplete(input);
             bool secondGropuOfConditions = FractionCanHaveLeadingZeros(input) && !NumberHasMultipleFractionParts(input) && CheckNumberCharactersAreValid(input);
             return firstGroupOfConditions && secondGropuOfConditions;
+        }
+
+        static bool NumberExponentIsComplete(string input)
+        {
+            input = input.ToLower();
+            int indexOfExponent = input.IndexOf('e');
+            if (indexOfExponent == input.Length - 1)
+            {
+                return false;
+            }
+
+            if ((input[indexOfExponent + 1] == '+' || input[indexOfExponent + 1] == '-') && input.Length - 1 == indexOfExponent + 1)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         static bool NumberHasMultipleFractionParts(string input)

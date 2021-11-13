@@ -140,7 +140,7 @@ namespace Json.Facts
             Assert.False(IsJsonNumber("22e323e33"));
         }
 
-        [Fact(Skip = "Remove this Skip as you implement")]
+        [Fact]
         public void TheExponentIsAlwaysComplete()
         {
             Assert.False(IsJsonNumber("22e"));
