@@ -111,10 +111,11 @@ namespace Json.Facts
         }
 
         [Fact]
-        public void TheExponentCanNotHaveMultipleNegativeOrPositive()
+        public void TheExponentDoesNotHaveMultipleNegativeOrPositive()
         {
-            Assert.True(IsJsonNumber("12e++3"));
-            Assert.True(IsJsonNumber("12e--3"));
+            Assert.False(IsJsonNumber("12e++3"));
+            Assert.False(IsJsonNumber("12e--3"));
+            Assert.False(IsJsonNumber("12e--+3"));
         }
 
         [Fact]

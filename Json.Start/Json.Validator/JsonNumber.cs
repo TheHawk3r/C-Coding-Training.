@@ -43,6 +43,19 @@ namespace Json
             return indexOfExponent > indexOfFraction;
         }
 
+        static bool NumberHasTooManyPlusesOrMinuses(string input)
+        {
+            int countOfPluses = input.Length - input.Replace("+", "").Length;
+            if (input[0] == '-')
+            {
+                input = input.Remove(0, 1);
+            }
+
+            int countOfMinuses = input.Length - input.Replace("-", "").Length;
+
+            return countOfMinuses > 1 || countOfPluses > 1;
+        }
+
         static bool NumberExponentIsComplete(string input)
         {
             input = input.ToLower();
@@ -57,7 +70,7 @@ namespace Json
                 return false;
             }
 
-            return true;
+            return !NumberHasTooManyPlusesOrMinuses(input);
         }
 
         static bool NumberHasMultipleFractionParts(string input)
