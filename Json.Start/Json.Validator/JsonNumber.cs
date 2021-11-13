@@ -14,7 +14,7 @@ namespace Json
                 return false;
             }
 
-            bool firstGroupOfConditions = !NumberEndsWithADot(input) && !NumberStartsWithADot(input);
+            bool firstGroupOfConditions = !NumberEndsWithADot(input) && !NumberStartsWithADot(input) && !NumberHasMultipleExponents(input);
             bool secondGropuOfConditions = FractionCanHaveLeadingZeros(input) && !NumberHasMultipleFractionParts(input) && CheckNumberCharactersAreValid(input);
             return firstGroupOfConditions && secondGropuOfConditions;
         }
@@ -22,6 +22,14 @@ namespace Json
         static bool NumberHasMultipleFractionParts(string input)
         {
             int countOfDots = input.Length - input.Replace(".", "").Length;
+
+            return countOfDots > 1;
+        }
+
+        static bool NumberHasMultipleExponents(string input)
+        {
+            input = input.ToLower();
+            int countOfDots = input.Length - input.Replace("e", "").Length;
 
             return countOfDots > 1;
         }
