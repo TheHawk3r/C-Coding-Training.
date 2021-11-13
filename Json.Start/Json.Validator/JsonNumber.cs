@@ -14,14 +14,18 @@ namespace Json
                 return false;
             }
 
-            bool firstGroupOfConditions = !NumberEndsWithADot(input)
+            bool firstGroupOfConditions =
+                !NumberEndsWithADot(input)
                 && !NumberStartsWithADot(input)
                 && !NumberHasMultipleExponents(input)
                 && NumberExponentIsComplete(input);
-            bool secondGropuOfConditions = FractionCanHaveLeadingZeros(input)
+
+            bool secondGropuOfConditions =
+                FractionCanHaveLeadingZeros(input)
                 && !NumberHasMultipleFractionParts(input)
                 && NumberExponentIsAfterFraction(input, input.Contains('.'), input.Contains('e') || input.Contains('E'))
                 && CheckNumberCharactersAreValid(input);
+
             return firstGroupOfConditions && secondGropuOfConditions;
         }
 
