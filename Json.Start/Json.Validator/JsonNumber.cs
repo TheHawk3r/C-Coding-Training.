@@ -14,9 +14,29 @@ namespace Json
                 return false;
             }
 
-            bool firstGroupOfConditions = !NumberEndsWithADot(input) && !NumberStartsWithADot(input) && !NumberHasMultipleExponents(input) && NumberExponentIsComplete(input);
-            bool secondGropuOfConditions = FractionCanHaveLeadingZeros(input) && !NumberHasMultipleFractionParts(input) && CheckNumberCharactersAreValid(input);
+            bool firstGroupOfConditions = !NumberEndsWithADot(input)
+                && !NumberStartsWithADot(input)
+                && !NumberHasMultipleExponents(input)
+                && NumberExponentIsComplete(input);
+            bool secondGropuOfConditions = FractionCanHaveLeadingZeros(input)
+                && !NumberHasMultipleFractionParts(input)
+                && NumberExponentIsAfterFraction(input, input.Contains('.'), input.Contains('e') || input.Contains('E'))
+                && CheckNumberCharactersAreValid(input);
             return firstGroupOfConditions && secondGropuOfConditions;
+        }
+
+        static bool NumberExponentIsAfterFraction(string input, bool hasFraction, bool hasExponent)
+        {
+            if (!hasFraction || !hasExponent)
+            {
+                return true;
+            }
+
+            input = input.ToLower();
+            int indexOfFraction = input.IndexOf('.');
+            int indexOfExponent = input.IndexOf('e');
+
+            return indexOfExponent > indexOfFraction;
         }
 
         static bool NumberExponentIsComplete(string input)
