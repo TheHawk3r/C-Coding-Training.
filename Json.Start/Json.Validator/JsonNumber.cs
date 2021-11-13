@@ -55,6 +55,11 @@ namespace Json
                     continue;
                 }
 
+                if (input[i] == '-')
+                {
+                    continue;
+                }
+
                 if (input[i] < AsciiDigitRangeMin || input[i] > AsciiDigitRangeMax)
                 {
                     return false;
