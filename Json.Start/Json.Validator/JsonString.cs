@@ -14,8 +14,7 @@ namespace Json
                 return false;
             }
 
-            return FirstGroupOfConditionsToValidateJsonString(input)
-                && SecondGroupOfConditionsToValidateJsonString(input);
+            return InputIsDoubleQuoted(input) && CheckInputHasValidCharacters(input);
         }
 
         public static bool FirstGroupOfConditionsToValidateJsonString(string input)
@@ -50,7 +49,6 @@ namespace Json
 
             int escapeCharactersNotFoundCount = 0;
             char[] escapeCharacters = new[] { '"', '\\', '/', 'b', 'f', 'n', 'r', 't', 'u', ' ' };
-
             for (int i = 0; i < input.Length; i++)
             {
                 if (input[i] == '\\')
@@ -69,6 +67,28 @@ namespace Json
             }
 
             return escapeCharactersNotFoundCount >= JsonEscapeCharacters;
+        }
+
+        public static bool CheckInputHasValidCharacters(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return false;
+            }
+
+            const int min = 32;
+            const int max = 1114111;
+            const int solidus = '\u002F';
+            const int doubleQuotes = '\u0022';
+            for (int i = 0; i < input.Length - 1; i++)
+            {
+                if ((input[i] < min && input[i] > max) && (input[i] == solidus || input[i] == doubleQuotes))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public static bool StringEndsWithAFinishedHexNumber(string input)
