@@ -5,7 +5,6 @@ namespace Json
     public static class JsonString
     {
         private const int HexNumberLength = 6;
-        private const int JsonEscapeCharacters = 10;
 
         public static bool IsJsonString(string input)
         {
@@ -14,7 +13,7 @@ namespace Json
                 return false;
             }
 
-            return InputIsDoubleQuoted(input) && CheckInputHasValidCharacters(input);
+            return InputIsDoubleQuoted(input) && CheckInputHasValidCharacters(input) && InputContainsValidEscapeCharacters(input);
         }
 
         public static bool FirstGroupOfConditionsToValidateJsonString(string input)
@@ -26,7 +25,7 @@ namespace Json
 
         public static bool SecondGroupOfConditionsToValidateJsonString(string input)
         {
-            return !InputContainsUnrecognizedEscapeCharacters(input)
+            return !InputContainsValidEscapeCharacters(input)
                 && !InputEndsWithReverseSolidus(input);
         }
 
@@ -40,33 +39,23 @@ namespace Json
             return input.EndsWith("\\\"");
         }
 
-        public static bool InputContainsUnrecognizedEscapeCharacters(string input)
+        public static bool InputContainsValidEscapeCharacters(string input)
         {
             if (input == null)
             {
                 return false;
             }
 
-            int escapeCharactersNotFoundCount = 0;
-            char[] escapeCharacters = new[] { '"', '\\', '/', 'b', 'f', 'n', 'r', 't', 'u', ' ' };
+            const string validEscapeCharacters = "\"\\/bfnrtu";
             for (int i = 0; i < input.Length; i++)
             {
-                if (input[i] == '\\')
+                if (input[i] == '\\' && !validEscapeCharacters.Contains(input[i + 1]) && input[i - 1] != '\\')
                 {
-                    escapeCharactersNotFoundCount = 0;
-                    foreach (char c in escapeCharacters)
-                    {
-                        escapeCharactersNotFoundCount += input[i + 1] == c ? 0 : 1;
-                    }
-
-                    if (escapeCharactersNotFoundCount >= JsonEscapeCharacters)
-                    {
-                        break;
-                    }
+                    return false;
                 }
             }
 
-            return escapeCharactersNotFoundCount >= JsonEscapeCharacters;
+            return true;
         }
 
         public static bool CheckInputHasValidCharacters(string input)
@@ -78,11 +67,9 @@ namespace Json
 
             const int min = 32;
             const int max = 1114111;
-            const int solidus = '\u002F';
-            const int doubleQuotes = '\u0022';
             for (int i = 0; i < input.Length - 1; i++)
             {
-                if ((input[i] < min && input[i] > max) && (input[i] == solidus || input[i] == doubleQuotes))
+                if (input[i] < min || input[i] > max)
                 {
                     return false;
                 }
