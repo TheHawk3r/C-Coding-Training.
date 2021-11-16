@@ -140,6 +140,12 @@ namespace Json.Facts
         }
 
         [Fact]
+        public void ContainsMultipleFinishedUnicodeHexNumbers()
+        {
+            Assert.True(IsJsonString(Quoted(@"ab\u532f se\u213d")));
+        }
+
+        [Fact]
         public void DoesNotEndWithAnUnfinishedHexNumber()
         {
             Assert.False(IsJsonString(Quoted(@"a\u")));
