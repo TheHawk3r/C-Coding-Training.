@@ -20,7 +20,7 @@ namespace Json
         {
             return InputIsDoubleQuoted(input)
                 && !InputHasControlCharacters(input)
-                && !StringEndsWithAFinishedHexNumber(input);
+                && !InputEndsWithAFinishedHexNumber(input);
         }
 
         public static bool SecondGroupOfConditionsToValidateJsonString(string input)
@@ -47,14 +47,58 @@ namespace Json
             }
 
             const string validEscapeCharacters = "\"\\/bfnrtu";
-            for (int i = 0; i < input.Length; i++)
+            for (int i = 1; i < input.Length - 1; i++)
             {
-                if (input[i] == '\\' && !validEscapeCharacters.Contains(input[i + 1]) && input[i - 1] != '\\')
+                if (input[i] == '\"' && input[i - 1] != '\\')
+                {
+                    return false;
+                }
+
+                if (input[i] == '\\' && (!validEscapeCharacters.Contains(input[i + 1]) || i + 1 == input.Length - 1) && input[i - 1] != '\\')
                 {
                     return false;
                 }
             }
 
+            return !input.Contains("\\u") || InputContainsFinishedHexNumbers(input);
+        }
+
+        public static bool InputContainsFinishedHexNumbers(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return false;
+            }
+
+            int currentUnicodeHexIndex = input.IndexOf("\\u");
+
+            return InputContainsFinishedHexNumbers(input, currentUnicodeHexIndex);
+        }
+
+        public static bool InputContainsFinishedHexNumbers(string input, int index)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return false;
+            }
+
+            for (int i = index + 2; i < index + HexNumberLength; i++)
+            {
+                bool isHexLetter = (input[i] >= 'A' && input[i] <= 'F') || (input[i] > 'a' || input[i] <= 'f');
+                if (!char.IsDigit(input[i]) || !isHexLetter)
+                {
+                    return false;
+                }
+            }
+
+            index = input.IndexOf("\\u", index + HexNumberLength);
+
+            if (index == -1)
+            {
+                return true;
+            }
+
+            InputContainsFinishedHexNumbers(input, index);
             return true;
         }
 
@@ -66,7 +110,7 @@ namespace Json
             }
 
             const int min = 32;
-            const int max = 1114111;
+            const int max = char.MaxValue;
             for (int i = 0; i < input.Length - 1; i++)
             {
                 if (input[i] < min || input[i] > max)
@@ -78,7 +122,7 @@ namespace Json
             return true;
         }
 
-        public static bool StringEndsWithAFinishedHexNumber(string input)
+        public static bool InputEndsWithAFinishedHexNumber(string input)
         {
             const bool f = false;
             if (input == null)

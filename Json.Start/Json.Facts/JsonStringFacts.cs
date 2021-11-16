@@ -115,21 +115,22 @@ namespace Json.Facts
         }
 
         [Fact]
-        public void CanContainEscapedUnicodeCharacters()
-        {
-            Assert.True(IsJsonString(Quoted(@"a \u26Be b")));
-        }
-
-        [Fact]
-        public void CanContainEscapedUnfinishedUnicodeCharacters()
-        {
-            Assert.True(IsJsonString(Quoted(@"a \u24 b")));
-        }
-
-        [Fact]
         public void DoesNotContainUnrecognizedExcapceCharacters()
         {
             Assert.False(IsJsonString(Quoted(@"a\x")));
+        }
+
+        [Fact]
+        public void DoesNotContainUnescapedDoubleQuote()
+        {
+            Assert.False(IsJsonString(Quoted(@"a""")));
+        }
+
+
+        [Fact]
+        public void DoesNotContainUnescapedReverseSolidu()
+        {
+            Assert.False(IsJsonString(Quoted(@"a\abc")));
         }
 
         [Fact]
