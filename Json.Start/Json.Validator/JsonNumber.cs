@@ -50,10 +50,10 @@ namespace Json
 
             if (dotIndex == -1)
             {
-                return input.Remove(exponentIndex);
+                return input[..exponentIndex];
             }
 
-            return input.Remove(dotIndex);
+            return input[..dotIndex];
         }
 
         static bool IsValidFraction(string fractionPart)
@@ -80,13 +80,10 @@ namespace Json
 
             if (exponentIndex == -1)
             {
-                return input.Remove(0, dotIndex);
+                return input[dotIndex..];
             }
 
-            input = input.Remove(exponentIndex);
-            input = input.Remove(0, dotIndex);
-
-            return input;
+            return input[dotIndex..exponentIndex];
         }
 
         static bool IsValidExponent(string exponentPart)
@@ -116,7 +113,7 @@ namespace Json
                 return "";
             }
 
-            return input.Remove(0, exponentIndex);
+            return input[exponentIndex..];
         }
 
         static bool ExponentSignIsValid(char sign)
