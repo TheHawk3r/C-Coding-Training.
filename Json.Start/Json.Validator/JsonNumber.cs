@@ -4,8 +4,6 @@ namespace Json
 {
     public static class JsonNumber
     {
-        private const int Two = 2;
-
         public static bool IsJsonNumber(string input)
         {
             if (string.IsNullOrEmpty(input))
@@ -23,22 +21,12 @@ namespace Json
 
         static bool IsValidInteger(string integerPart)
         {
-            if (integerPart == "")
+            if (integerPart.StartsWith('0') && integerPart.Length > 1)
             {
                 return false;
             }
 
-            if (integerPart.Length == 1)
-            {
-                return char.IsDigit(integerPart[0]);
-            }
-
-            if (integerPart[0] == '0')
-            {
-                return false;
-            }
-
-            return CheckDigits(integerPart[0] == '-' ? 1 : 0, integerPart);
+            return integerPart.Length >= 1 && CheckDigits(integerPart[0] == '-' ? integerPart[1..] : integerPart);
         }
 
         static string IntegerPart(string input, int dotIndex, int exponentIndex)
@@ -58,17 +46,12 @@ namespace Json
 
         static bool IsValidFraction(string fractionPart)
         {
-            if (fractionPart == "")
-            {
-                return true;
-            }
-
             if (fractionPart == ".")
             {
                 return false;
             }
 
-            return CheckDigits(1, fractionPart);
+            return fractionPart == string.Empty || CheckDigits(fractionPart[1..]);
         }
 
         static string FractionPart(string input, int dotIndex, int exponentIndex)
@@ -98,12 +81,9 @@ namespace Json
                 return false;
             }
 
-            if (exponentPart.Length == Two && (exponentPart[1] == '+' || exponentPart[1] == '-'))
-            {
-                return false;
-            }
+            exponentPart = exponentPart[1..];
 
-            return CheckDigits(Two, exponentPart);
+            return CheckDigits(exponentPart[0] == '-' || exponentPart[0] == '+' ? exponentPart[1..] : exponentPart);
         }
 
         static string ExponentPart(string input, int exponentIndex)
@@ -121,9 +101,9 @@ namespace Json
             return char.IsDigit(sign) || sign == '-' || sign == '+';
         }
 
-        static bool CheckDigits(int index, string partToValidate)
+        static bool CheckDigits(string partToValidate)
         {
-            for (int i = index; i < partToValidate.Length; i++)
+            for (int i = 0; i < partToValidate.Length; i++)
             {
                 if (!char.IsDigit(partToValidate[i]))
                 {
@@ -131,7 +111,7 @@ namespace Json
                 }
             }
 
-            return true;
+            return partToValidate.Length >= 1;
         }
     }
 }
