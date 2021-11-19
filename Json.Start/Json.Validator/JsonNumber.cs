@@ -23,7 +23,7 @@ namespace Json
 
         static bool IsValidInteger(string integerPart)
         {
-            if (integerPart.Length < 1)
+            if (integerPart == "")
             {
                 return false;
             }
@@ -107,11 +107,6 @@ namespace Json
             }
 
             return CheckDigits(Two, exponentPart);
-        }
-
-        static bool PartIsEmpty(string partToValidate)
-        {
-            return 
         }
 
         static string ExponentPart(string input, int exponentIndex)
