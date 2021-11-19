@@ -38,15 +38,7 @@ namespace Json
                 return false;
             }
 
-            for (int i = integerPart[0] == '-' ? 1 : 0; i < integerPart.Length; i++)
-            {
-                if (!char.IsDigit(integerPart[i]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return CheckDigits(integerPart[0] == '-' ? 1 : 0, integerPart);
         }
 
         static string IntegerPart(string input, int dotIndex, int exponentIndex)
@@ -76,15 +68,7 @@ namespace Json
                 return false;
             }
 
-            for (int i = 1; i < fractionPart.Length; i++)
-            {
-                if (!char.IsDigit(fractionPart[i]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return CheckDigits(1, fractionPart);
         }
 
         static string FractionPart(string input, int dotIndex, int exponentIndex)
@@ -122,15 +106,12 @@ namespace Json
                 return false;
             }
 
-            for (int i = 2; i < exponentPart.Length; i++)
-            {
-                if (!char.IsDigit(exponentPart[i]))
-                {
-                    return false;
-                }
-            }
+            return CheckDigits(Two, exponentPart);
+        }
 
-            return true;
+        static bool PartIsEmpty(string partToValidate)
+        {
+            return 
         }
 
         static string ExponentPart(string input, int exponentIndex)
@@ -146,6 +127,19 @@ namespace Json
         static bool ExponentSignIsValid(char sign)
         {
             return char.IsDigit(sign) || sign == '-' || sign == '+';
+        }
+
+        static bool CheckDigits(int index, string partToValidate)
+        {
+            for (int i = index; i < partToValidate.Length; i++)
+            {
+                if (!char.IsDigit(partToValidate[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
