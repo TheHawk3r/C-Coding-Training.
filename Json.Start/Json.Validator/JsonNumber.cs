@@ -57,6 +57,11 @@ namespace Json
 
         static bool IsValidFraction(string fractionPart)
         {
+            if (fractionPart == "")
+            {
+                return true;
+            }
+
             for (int i = 0; i < fractionPart.Length; i++)
             {
                 if (!char.IsDigit(fractionPart[i]))
