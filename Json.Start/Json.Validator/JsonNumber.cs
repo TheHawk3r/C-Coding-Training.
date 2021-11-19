@@ -14,19 +14,69 @@ namespace Json
                 return false;
             }
 
-            bool firstGroupOfConditions =
-                !NumberEndsWithADot(input)
-                && !NumberStartsWithADot(input)
-                && !NumberHasMultipleExponents(input)
-                && NumberExponentIsComplete(input);
+            var dotIndex = input.IndexOf('.');
+            var exponentIndex = input.IndexOfAny("eE".ToCharArray());
 
-            bool secondGropuOfConditions =
-                FractionCanHaveLeadingZeros(input)
-                && !NumberHasMultipleFractionParts(input)
-                && NumberExponentIsAfterFraction(input, input.Contains('.'), input.Contains('e') || input.Contains('E'))
-                && CheckNumberCharactersAreValid(input);
+            return IsValidInteger(IntegerPart(input, dotIndex, exponentIndex))
+            && IsValidFraction(FractionPart(input, dotIndex, exponentIndex))
+            && IsValidExponent(ExponentPart(input, exponentIndex));
+        }
 
-            return firstGroupOfConditions && secondGropuOfConditions;
+
+        static bool IsValidInteger(string integerPart)
+        {
+            if (integerPart.Length == 1)
+            {
+                return char.IsDigit(integerPart[0]);
+            }
+
+            for (int i = integerPart[0] == '-' ? 1 : 0; i < integerPart.Length; i++)
+            {
+                if (integerPart[i] < AsciiDigitRangeMin || integerPart[i] > AsciiDigitRangeMax)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        static string IntegerPart(string input, int dotIndex, int exponentIndex)
+        {
+            if (dotIndex == -1 && exponentIndex == -1)
+            {
+                return input;
+            }
+
+            if (dotIndex == -1)
+            {
+                return input.Remove(exponentIndex);
+            }
+
+            return input.Remove(dotIndex);
+        }
+
+        static bool IsValidFraction(string FractionPart)
+        {
+            for (int i = 0; i < FractionPart.Length; i++)
+            {
+                if (FractionPart[i] == '.' || FractionPart[i] == 'e' || FractionPart[i] == 'E')
+                {
+                    continue;
+                }
+
+                if (FractionPart[i] == '-' || FractionPart[i] == '+')
+                {
+                    continue;
+                }
+
+                if (FractionPart[i] < AsciiDigitRangeMin || FractionPart[i] > AsciiDigitRangeMax)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         static bool NumberExponentIsAfterFraction(string input, bool hasFraction, bool hasExponent)
@@ -35,6 +85,18 @@ namespace Json
             {
                 return true;
             }
+
+            bool firstGroupOfConditions =
+               !NumberEndsWithADot(input)
+               && !NumberStartsWithADot(input)
+               && !NumberHasMultipleExponents(input)
+               && NumberExponentIsComplete(input);
+
+            bool secondGropuOfConditions =
+                FractionCanHaveLeadingZeros(input)
+                && !NumberHasMultipleFractionParts(input)
+                && NumberExponentIsAfterFraction(input, input.Contains('.'), input.Contains('e') || input.Contains('E'))
+                && CheckNumberCharactersAreValid(input);
 
             input = input.ToLower();
             int indexOfFraction = input.IndexOf('.');
@@ -83,9 +145,9 @@ namespace Json
         static bool NumberHasMultipleExponents(string input)
         {
             input = input.ToLower();
-            int countOfDots = input.Length - input.Replace("e", "").Length;
+            int countOfExponents = input.Length - input.Replace("e", "").Length;
 
-            return countOfDots > 1;
+            return countOfExponents > 1;
         }
 
         static bool NumberEndsWithADot(string input)

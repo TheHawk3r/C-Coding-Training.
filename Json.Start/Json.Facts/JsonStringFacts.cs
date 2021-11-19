@@ -126,7 +126,6 @@ namespace Json.Facts
             Assert.False(IsJsonString(Quoted(@"a""")));
         }
 
-
         [Fact]
         public void DoesNotContainUnescapedReverseSolidu()
         {
