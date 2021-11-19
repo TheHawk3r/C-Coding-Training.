@@ -22,7 +22,6 @@ namespace Json
             && IsValidExponent(ExponentPart(input, exponentIndex));
         }
 
-
         static bool IsValidInteger(string integerPart)
         {
             if (integerPart.Length == 1)
@@ -32,7 +31,7 @@ namespace Json
 
             for (int i = integerPart[0] == '-' ? 1 : 0; i < integerPart.Length; i++)
             {
-                if (integerPart[i] < AsciiDigitRangeMin || integerPart[i] > AsciiDigitRangeMax)
+                if (!char.IsDigit(integerPart[i]))
                 {
                     return false;
                 }
@@ -56,27 +55,35 @@ namespace Json
             return input.Remove(dotIndex);
         }
 
-        static bool IsValidFraction(string FractionPart)
+        static bool IsValidFraction(string fractionPart)
         {
-            for (int i = 0; i < FractionPart.Length; i++)
+            for (int i = 0; i < fractionPart.Length; i++)
             {
-                if (FractionPart[i] == '.' || FractionPart[i] == 'e' || FractionPart[i] == 'E')
-                {
-                    continue;
-                }
-
-                if (FractionPart[i] == '-' || FractionPart[i] == '+')
-                {
-                    continue;
-                }
-
-                if (FractionPart[i] < AsciiDigitRangeMin || FractionPart[i] > AsciiDigitRangeMax)
+                if (!char.IsDigit(fractionPart[i]))
                 {
                     return false;
                 }
             }
 
             return true;
+        }
+
+        static string FractionPart(string input, int dotIndex, int exponentIndex)
+        {
+            if (dotIndex == -1)
+            {
+                return "";
+            }
+
+            if (exponentIndex == -1)
+            {
+                return input.Remove(0, dotIndex);
+            }
+
+            input = input.Remove(exponentIndex);
+            input = input.Remove(0, dotIndex);
+
+            return input;
         }
 
         static bool NumberExponentIsAfterFraction(string input, bool hasFraction, bool hasExponent)
