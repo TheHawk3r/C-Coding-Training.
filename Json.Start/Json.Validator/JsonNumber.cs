@@ -24,6 +24,11 @@ namespace Json
 
         static bool IsValidInteger(string integerPart)
         {
+            if (integerPart.Length < 1)
+            {
+                return false;
+            }
+
             if (integerPart.Length == 1)
             {
                 return char.IsDigit(integerPart[0]);
@@ -62,7 +67,12 @@ namespace Json
                 return true;
             }
 
-            for (int i = 0; i < fractionPart.Length; i++)
+            if (fractionPart == ".")
+            {
+                return false;
+            }
+
+            for (int i = 1; i < fractionPart.Length; i++)
             {
                 if (!char.IsDigit(fractionPart[i]))
                 {
@@ -89,6 +99,44 @@ namespace Json
             input = input.Remove(0, dotIndex);
 
             return input;
+        }
+
+        static bool IsValidExponent(string exponentPart)
+        {
+            if (exponentPart == "")
+            {
+                return true;
+            }
+
+            if (!ExponentSignIsValid(exponentPart[1]))
+            {
+                return false;
+            }
+
+            for (int i = 2; i < exponentPart.Length; i++)
+            {
+                if (!char.IsDigit(exponentPart[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        static string ExponentPart(string input, int exponentIndex)
+        {
+            if (exponentIndex == -1)
+            {
+                return "";
+            }
+
+            return input.Remove(0, exponentIndex);
+        }
+
+        static bool ExponentSignIsValid(char sign)
+        {
+            return char.IsDigit(sign) || sign == '-' || sign == '+';
         }
 
         static bool NumberExponentIsAfterFraction(string input, bool hasFraction, bool hasExponent)
