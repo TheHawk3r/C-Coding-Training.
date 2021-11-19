@@ -6,6 +6,7 @@ namespace Json
     {
         private const int AsciiDigitRangeMin = 47;
         private const int AsciiDigitRangeMax = 58;
+        private const int Two = 2;
 
         public static bool IsJsonNumber(string input)
         {
@@ -32,6 +33,11 @@ namespace Json
             if (integerPart.Length == 1)
             {
                 return char.IsDigit(integerPart[0]);
+            }
+
+            if (integerPart[0] == '0')
+            {
+                return false;
             }
 
             for (int i = integerPart[0] == '-' ? 1 : 0; i < integerPart.Length; i++)
@@ -108,7 +114,12 @@ namespace Json
                 return true;
             }
 
-            if (!ExponentSignIsValid(exponentPart[1]))
+            if (exponentPart.Length == 1 || !ExponentSignIsValid(exponentPart[1]))
+            {
+                return false;
+            }
+
+            if (exponentPart.Length == Two && (exponentPart[1] == '+' || exponentPart[1] == '-'))
             {
                 return false;
             }
