@@ -15,5 +15,26 @@ namespace SoccerRanking
             Assert.Equal(testTeam.GetName(), name);
             Assert.Equal(testTeam.GetPoints(), points);
         }
+
+        [Fact]
+        public void GetNameMethodReturnsNameOfTeam()
+        {
+            const string name = "CFR CLuj";
+
+            SoccerTeam testTeam = new (name, 0);
+
+            Assert.Equal(testTeam.GetName(), name);
+        }
+
+        [Fact]
+        public void GetPointsMethodReturnsPointsOfTeam()
+        {
+            const string name = "CFR CLuj";
+            const int points = 5;
+
+            SoccerTeam testTeam = new (name, points);
+
+            Assert.Equal(testTeam.GetPoints(), points);
+        }
     }
 }
