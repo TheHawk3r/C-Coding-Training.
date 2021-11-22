@@ -1,14 +1,6 @@
-using System;
-using Xunit;
-
 namespace SoccerRanking
 {
-    public class UnitTest1
+    public class RankingFacts
     {
-        [Fact]
-        public void Test1()
-        {
-
-        }
     }
 }
