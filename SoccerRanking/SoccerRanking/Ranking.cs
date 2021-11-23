@@ -20,7 +20,7 @@ namespace SoccerRanking
 
         public string GetTeamOnPosition(int position)
         {
-            return teams[position].GetName();
+            return teams[position - 1].GetName();
         }
 
         public int GetPositionOfTeam(string nameOfTeam)

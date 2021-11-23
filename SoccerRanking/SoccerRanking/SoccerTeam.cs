@@ -4,13 +4,18 @@ namespace SoccerRanking
 {
     class SoccerTeam : IComparable<SoccerTeam>
     {
+        private const int PointsPerVictory = 3;
         readonly string name;
-        readonly int points;
+        readonly int matchesWon;
+        readonly int matchesLost;
+        readonly int drawMatches;
 
-        public SoccerTeam(string name, int points)
+        public SoccerTeam(string name, int matchesWon, int matchesLost, int drawMatches)
         {
             this.name = name;
-            this.points = points;
+            this.matchesWon = matchesWon;
+            this.matchesLost = matchesLost;
+            this.drawMatches = drawMatches;
         }
 
         public int CompareTo(SoccerTeam teamToCompareTo)
@@ -20,7 +25,7 @@ namespace SoccerRanking
                 return 1;
             }
 
-            return teamToCompareTo.points.CompareTo(this.points);
+            return teamToCompareTo.GetPoints().CompareTo(this.GetPoints());
         }
 
         public string GetName()
@@ -30,7 +35,7 @@ namespace SoccerRanking
 
         public int GetPoints()
         {
-            return this.points;
+            return this.matchesWon * PointsPerVictory + this.drawMatches;
         }
     }
 }

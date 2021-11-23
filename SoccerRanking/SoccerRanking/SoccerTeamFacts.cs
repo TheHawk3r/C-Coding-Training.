@@ -5,15 +5,18 @@ namespace SoccerRanking
     public class SoccerTeamFacts
     {
         [Fact]
-        public void SoccerTeamNameAndPointsAreInitializedCorrectly()
+        public void SoccerTeamNameAndMatchesAreInitializedCorrectly()
         {
             const string name = "Pandurii";
-            const int points = 10;
+            const int wonMatches = 10;
+            const int lostMatches = 4;
+            const int drawMatches = 5;
+            const int points = 35;
 
-            SoccerTeam testTeam = new (name, points);
+            SoccerTeam testTeam = new (name, wonMatches, lostMatches, drawMatches);
 
-            Assert.Equal(testTeam.GetName(), name);
-            Assert.Equal(testTeam.GetPoints(), points);
+            Assert.Equal(name, testTeam.GetName());
+            Assert.Equal(points, testTeam.GetPoints());
         }
 
         [Fact]
@@ -21,7 +24,7 @@ namespace SoccerRanking
         {
             const string name = "CFR CLuj";
 
-            SoccerTeam testTeam = new (name, 0);
+            SoccerTeam testTeam = new (name, 0, 0, 0);
 
             Assert.Equal(name, testTeam.GetName());
         }
@@ -30,9 +33,10 @@ namespace SoccerRanking
         public void GetPointsMethodReturnsPointsOfTeam()
         {
             const string name = "CFR CLuj";
-            const int points = 5;
+            const int points = 64;
 
-            SoccerTeam testTeam = new (name, points);
+            SoccerTeam testTeam = new (name, 20, 4, 4);
+
             Assert.Equal(points, testTeam.GetPoints());
         }
     }

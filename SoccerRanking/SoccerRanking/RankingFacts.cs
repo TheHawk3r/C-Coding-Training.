@@ -9,14 +9,14 @@ namespace SoccerRanking
         public void RankingAfterInstantiationSortsItself()
         {
             List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
-            soccerTeams.Add(new SoccerTeam("CFR Cluj", 10));
-            soccerTeams.Add(new SoccerTeam("FCSB", 8));
-            soccerTeams.Add(new SoccerTeam("Univ. Craiova", 11));
+            soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
+            soccerTeams.Add(new SoccerTeam("FCSB", 7, 4, 2));
+            soccerTeams.Add(new SoccerTeam("Univ. Craiova", 5, 7, 10));
 
             Ranking ranking = new Ranking(soccerTeams);
 
-            Assert.Equal(11, soccerTeams[0].GetPoints());
-            Assert.Equal(10, soccerTeams[1].GetPoints());
+            Assert.Equal(35, soccerTeams[0].GetPoints());
+            Assert.Equal(25, soccerTeams[1].GetPoints());
         }
     }
 }
