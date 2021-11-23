@@ -25,7 +25,7 @@ namespace SoccerRanking
 
         public int GetPositionOfTeam(string nameOfTeam)
         {
-            return teams.FindIndex(x => x.GetName().Contains(nameOfTeam));
+            return teams.FindIndex(x => x.GetName().Contains(nameOfTeam)) + 1;
         }
     }
 }

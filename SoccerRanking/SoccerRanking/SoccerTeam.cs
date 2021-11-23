@@ -42,5 +42,20 @@ namespace SoccerRanking
         {
             return this.matchesWon + this.matchesLost + this.drawMatches;
         }
+
+        public int GetWonMatches()
+        {
+            return this.matchesWon;
+        }
+
+        public int GetLostMatches()
+        {
+            return this.matchesLost;
+        }
+
+        public int GetDraws()
+        {
+            return this.drawMatches;
+        }
     }
 }
