@@ -39,5 +39,15 @@ namespace SoccerRanking
 
             Assert.Equal(points, testTeam.GetPoints());
         }
+
+        [Fact]
+        public void GetMatchesPlayedMethodReturnsTotalMatchesPlayed()
+        {
+            const int matchesPlayed = 15;
+
+            SoccerTeam testTeam = new ("FCSB", 6, 5, 4);
+
+            Assert.Equal(matchesPlayed, testTeam.GetMatchesPlayed());
+        }
     }
 }
