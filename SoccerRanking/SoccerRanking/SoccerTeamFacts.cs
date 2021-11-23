@@ -33,7 +33,6 @@ namespace SoccerRanking
             const int points = 5;
 
             SoccerTeam testTeam = new (name, points);
-
             Assert.Equal(testTeam.GetPoints(), points);
         }
     }

@@ -9,6 +9,7 @@ namespace SoccerRanking
         public Ranking(List<SoccerTeam> teams)
         {
             this.teams = teams;
+            teams.Sort();
         }
 
         public void AddTeam(SoccerTeam team)
@@ -19,6 +20,11 @@ namespace SoccerRanking
         public string GetTeamOnPosition(int position)
         {
             return teams[position].GetName();
+        }
+
+        public int GetPositionOfTeam(string nameOfTeam)
+        {
+            return teams.FindIndex(x => x.GetName().Contains(nameOfTeam));
         }
     }
 }
