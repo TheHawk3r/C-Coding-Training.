@@ -23,7 +23,7 @@ namespace SoccerRanking
 
             SoccerTeam testTeam = new (name, 0);
 
-            Assert.Equal(testTeam.GetName(), name);
+            Assert.Equal(name, testTeam.GetName());
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace SoccerRanking
             const int points = 5;
 
             SoccerTeam testTeam = new (name, points);
-            Assert.Equal(testTeam.GetPoints(), points);
+            Assert.Equal(points, testTeam.GetPoints());
         }
     }
 }

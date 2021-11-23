@@ -15,6 +15,7 @@ namespace SoccerRanking
         public void AddTeam(SoccerTeam team)
         {
             teams.Add(team);
+            teams.Sort();
         }
 
         public string GetTeamOnPosition(int position)
