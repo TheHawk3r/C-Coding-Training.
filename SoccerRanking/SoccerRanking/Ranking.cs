@@ -23,14 +23,14 @@ namespace SoccerRanking
             teams.Sort();
         }
 
-        public string GetTeamOnPosition(int position)
+        public SoccerTeam GetTeamOnPosition(int position)
         {
-            return teams[position - 1].GetName();
+            return teams[position - 1];
         }
 
-        public int GetPositionOfTeam(string nameOfTeam)
+        public int GetPositionOfTeam(SoccerTeam team)
         {
-            return teams.FindIndex(x => x.GetName().Contains(nameOfTeam)) + 1;
+            return teams.FindIndex(x => x.Equals(team)) + 1;
         }
 
         public void UpdateRankingBasedOnMatch(string firstTeamName, string matchResult, string secondTeamName)

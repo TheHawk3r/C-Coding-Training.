@@ -35,6 +35,7 @@ namespace SoccerRanking
         [Fact]
         public void AddTeamMethodAddsATeamToTheRanking()
         {
+            SoccerTeam pandurii = new SoccerTeam("Pandurii", 1, 3, 9);
             List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
             soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
             soccerTeams.Add(new SoccerTeam("FCSB", 7, 4, 2));
@@ -43,31 +44,33 @@ namespace SoccerRanking
 
             ranking.AddTeam(new SoccerTeam("Pandurii", 1, 3, 9));
 
-            Assert.Equal("Pandurii", ranking.GetTeamOnPosition(4));
+            Assert.Equal(pandurii, ranking.GetTeamOnPosition(4));
         }
 
         [Fact]
         public void GetTeamOnPositionShouldReturnTheTeamOnTheSpecifiedPosition()
         {
+            SoccerTeam fcsb = new SoccerTeam("FCSB", 7, 4, 2);
             List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
             soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
             soccerTeams.Add(new SoccerTeam("FCSB", 7, 4, 2));
             soccerTeams.Add(new SoccerTeam("Univ. Craiova", 5, 7, 10));
             Ranking ranking = new Ranking(soccerTeams);
 
-            Assert.Equal("FCSB", ranking.GetTeamOnPosition(3));
+            Assert.Equal(fcsb, ranking.GetTeamOnPosition(3));
         }
 
         [Fact]
         public void GetPositionOfTeamShouldReturnThePositionOfSpecifiedTeam()
         {
+            SoccerTeam fcsb = new SoccerTeam("FCSB", 7, 4, 2);
             List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
             soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
             soccerTeams.Add(new SoccerTeam("FCSB", 7, 4, 2));
             soccerTeams.Add(new SoccerTeam("Univ. Craiova", 5, 7, 10));
             Ranking ranking = new Ranking(soccerTeams);
 
-            Assert.Equal(3, ranking.GetPositionOfTeam("FCSB"));
+            Assert.Equal(3, ranking.GetPositionOfTeam(fcsb));
         }
 
         [Fact]

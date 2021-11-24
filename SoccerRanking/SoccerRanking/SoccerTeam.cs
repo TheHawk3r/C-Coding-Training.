@@ -28,6 +28,16 @@ namespace SoccerRanking
             return teamToCompareTo.GetPoints().CompareTo(this.GetPoints());
         }
 
+        public bool Equals(SoccerTeam team)
+        {
+            if (team == null)
+            {
+                return false;
+            }
+
+            return this.name == team.name && this.drawMatches == team.drawMatches && this.matchesWon == team.matchesWon && this.matchesLost == team.matchesLost;
+        }
+
         public string GetName()
         {
             return this.name;
