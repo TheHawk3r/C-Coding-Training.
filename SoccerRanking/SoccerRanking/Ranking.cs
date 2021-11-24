@@ -60,7 +60,7 @@ namespace SoccerRanking
                 else
                 {
                     secondTeamWonMatches++;
-                    firstTeamLostMatches--;
+                    firstTeamLostMatches++;
                 }
             }
             else
@@ -69,7 +69,7 @@ namespace SoccerRanking
             }
 
             teams.RemoveAt(firstTeamIndex);
-            teams.RemoveAt(secondTeamIndex);
+            teams.RemoveAt(secondTeamIndex - 1);
             teams.Add(new SoccerTeam(firstTeamName, firstTeamWonMatches, firstTeamLostMatches, firstTeamDrawMatches));
             teams.Add(new SoccerTeam(secondTeamName, secondTeamWonMatches, secondTeamLostMatches, secondTeamDrawMatches));
             teams.Sort();
