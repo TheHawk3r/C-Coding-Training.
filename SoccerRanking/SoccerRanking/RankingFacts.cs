@@ -20,7 +20,7 @@ namespace SoccerRanking
         }
 
         [Fact]
-        public void RankingGetTeamsMethodReturnsTeamsInRanking()
+        public void GetTeamsMethodReturnsTeamsInRanking()
         {
             List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
             soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
@@ -33,7 +33,7 @@ namespace SoccerRanking
         }
 
         [Fact]
-        public void RankingAddTeamMethodAddsATeamToTheRanking()
+        public void AddTeamMethodAddsATeamToTheRanking()
         {
             List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
             soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
@@ -47,7 +47,7 @@ namespace SoccerRanking
         }
 
         [Fact]
-        public void RankingGetTeamOnPositionShouldReturnTheTeamOnTheSpecifiedPosition()
+        public void GetTeamOnPositionShouldReturnTheTeamOnTheSpecifiedPosition()
         {
             List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
             soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
@@ -59,7 +59,7 @@ namespace SoccerRanking
         }
 
         [Fact]
-        public void RankingGetPositionOfTeamShouldReturnThePositionOfSpecifiedTeam()
+        public void GetPositionOfTeamShouldReturnThePositionOfSpecifiedTeam()
         {
             List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
             soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
@@ -71,7 +71,7 @@ namespace SoccerRanking
         }
 
         [Fact]
-        public void RankingUpdatesCorrectlyAfterMatch()
+        public void UpdatesCorrectlyAfterMatch()
         {
             List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
             soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
@@ -87,7 +87,7 @@ namespace SoccerRanking
         }
 
         [Fact]
-        public void RankingUpdateRankingBasedOnMatchIfNameOfAnyTeamIsNotValidShouldNotMakeAnyChanges()
+        public void UpdateRankingBasedOnMatchIfNameOfAnyTeamIsNotValidShouldNotMakeAnyChanges()
         {
             List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
             soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
@@ -104,7 +104,7 @@ namespace SoccerRanking
         }
 
         [Fact]
-        public void RankingUpdateRankingBasedOnMatchIfScoreIsNotValidShouldNotMakeAnyChanges()
+        public void UpdateRankingBasedOnMatchIfScoreIsNotValidShouldNotMakeAnyChanges()
         {
             List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
             soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
