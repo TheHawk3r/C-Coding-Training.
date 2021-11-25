@@ -5,10 +5,11 @@ namespace SoccerRanking
     class SoccerTeam : IComparable<SoccerTeam>
     {
         private const int PointsPerVictory = 3;
-        readonly string name;
-        readonly int matchesWon;
-        readonly int matchesLost;
-        readonly int drawMatches;
+        private readonly string name;
+        private int points;
+        private int matchesWon;
+        private int matchesLost;
+        private int drawMatches;
 
         public SoccerTeam(string name, int matchesWon, int matchesLost, int drawMatches)
         {
@@ -16,6 +17,7 @@ namespace SoccerRanking
             this.matchesWon = matchesWon;
             this.matchesLost = matchesLost;
             this.drawMatches = drawMatches;
+            this.points = this.matchesWon * PointsPerVictory + this.drawMatches;
         }
 
         public int CompareTo(SoccerTeam teamToCompareTo)
@@ -25,7 +27,7 @@ namespace SoccerRanking
                 return 1;
             }
 
-            return teamToCompareTo.GetPoints().CompareTo(this.GetPoints());
+            return teamToCompareTo.points.CompareTo(this.points);
         }
 
         public bool Equals(SoccerTeam team)
@@ -35,37 +37,32 @@ namespace SoccerRanking
                 return false;
             }
 
-            return this.name == team.name && this.drawMatches == team.drawMatches && this.matchesWon == team.matchesWon && this.matchesLost == team.matchesLost;
+            return this.name == team.name
+                && this.drawMatches == team.drawMatches
+                && this.matchesWon == team.matchesWon
+                && this.matchesLost == team.matchesLost;
         }
 
-        public string GetName()
+        public void AddWonMatch()
         {
-            return this.name;
+            this.matchesWon++;
+            this.UpdatePoints();
         }
 
-        public int GetPoints()
+        public void AddLostMatch()
         {
-            return this.matchesWon * PointsPerVictory + this.drawMatches;
+            this.matchesLost++;
         }
 
-        public int GetMatchesPlayed()
+        public void AddDraw()
         {
-            return this.matchesWon + this.matchesLost + this.drawMatches;
+            this.drawMatches++;
+            this.UpdatePoints();
         }
 
-        public int GetWonMatches()
+        public void UpdatePoints()
         {
-            return this.matchesWon;
-        }
-
-        public int GetLostMatches()
-        {
-            return this.matchesLost;
-        }
-
-        public int GetDraws()
-        {
-            return this.drawMatches;
+            this.points = this.matchesWon * PointsPerVictory + drawMatches;
         }
     }
 }

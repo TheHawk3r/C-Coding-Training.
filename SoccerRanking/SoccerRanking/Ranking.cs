@@ -33,10 +33,10 @@ namespace SoccerRanking
             return teams.FindIndex(x => x.Equals(team)) + 1;
         }
 
-        public void UpdateRankingBasedOnMatch(string firstTeamName, string matchResult, string secondTeamName)
+        public void UpdateRankingBasedOnMatch(SoccerTeam firstTeam, string matchResult, SoccerTeam secondTeam)
         {
-            int firstTeamIndex = teams.FindIndex(x => x.GetName().Contains(firstTeamName));
-            int secondTeamIndex = teams.FindIndex(x => x.GetName().Contains(secondTeamName));
+            int firstTeamIndex = teams.FindIndex(x => x.Equals(firstTeam));
+            int secondTeamIndex = teams.FindIndex(x => x.Equals(secondTeam));
             string[] matchResultArray = matchResult.Split('-');
 
             if (firstTeamIndex == -1 || secondTeamIndex == -1 || matchResultArray.Length != 2)
@@ -44,29 +44,22 @@ namespace SoccerRanking
                 return;
             }
 
-            int firstTeamWonMatches = teams[firstTeamIndex].GetWonMatches();
-            int firstTeamLostMatches = teams[firstTeamIndex].GetLostMatches();
-            int firstTeamDrawMatches = teams[firstTeamIndex].GetDraws();
-            int secondTeamWonMatches = teams[secondTeamIndex].GetWonMatches();
-            int secondTeamLostMatches = teams[secondTeamIndex].GetLostMatches();
-            int secondTeamDrawMatches = teams[secondTeamIndex].GetDraws();
-
             if (int.TryParse(matchResultArray[0], out int firstTeamScore) && int.TryParse(matchResultArray[1], out int secondTeamScore))
             {
                 if (firstTeamScore > secondTeamScore)
                 {
-                    firstTeamWonMatches++;
-                    secondTeamLostMatches++;
+                    firstTeam.AddWonMatch();
+                    secondTeam.AddLostMatch();
                 }
                 else if (firstTeamScore == secondTeamScore)
                 {
-                    firstTeamDrawMatches++;
-                    secondTeamDrawMatches++;
+                    firstTeam.AddDraw();
+                    secondTeam.AddDraw();
                 }
                 else
                 {
-                    secondTeamWonMatches++;
-                    firstTeamLostMatches++;
+                    secondTeam.AddWonMatch();
+                    firstTeam.AddLostMatch();
                 }
             }
             else
@@ -74,10 +67,6 @@ namespace SoccerRanking
                 return;
             }
 
-            teams.RemoveAt(firstTeamIndex);
-            teams.RemoveAt(secondTeamIndex - 1);
-            teams.Add(new SoccerTeam(firstTeamName, firstTeamWonMatches, firstTeamLostMatches, firstTeamDrawMatches));
-            teams.Add(new SoccerTeam(secondTeamName, secondTeamWonMatches, secondTeamLostMatches, secondTeamDrawMatches));
             teams.Sort();
         }
     }

@@ -5,76 +5,6 @@ namespace SoccerRanking
     public class SoccerTeamFacts
     {
         [Fact]
-        public void SoccerTeamobjectIsInitializedCorrectly()
-        {
-            const string name = "Pandurii";
-            const int wonMatches = 10;
-            const int lostMatches = 4;
-            const int drawMatches = 5;
-            const int points = 35;
-
-            SoccerTeam testTeam = new (name, wonMatches, lostMatches, drawMatches);
-
-            Assert.Equal(name, testTeam.GetName());
-            Assert.Equal(points, testTeam.GetPoints());
-        }
-
-        [Fact]
-        public void GetNameMethodReturnsNameOfTeam()
-        {
-            const string name = "CFR CLuj";
-
-            SoccerTeam testTeam = new (name, 0, 0, 0);
-
-            Assert.Equal(name, testTeam.GetName());
-        }
-
-        [Fact]
-        public void GetPointsMethodReturnsPointsOfTeam()
-        {
-            const string name = "CFR CLuj";
-            const int points = 64;
-
-            SoccerTeam testTeam = new (name, 20, 4, 4);
-
-            Assert.Equal(points, testTeam.GetPoints());
-        }
-
-        [Fact]
-        public void GetMatchesPlayedMethodReturnsTotalMatchesPlayed()
-        {
-            const int matchesPlayed = 15;
-
-            SoccerTeam testTeam = new ("FCSB", 6, 5, 4);
-
-            Assert.Equal(matchesPlayed, testTeam.GetMatchesPlayed());
-        }
-
-        [Fact]
-        public void GetWonMatchesMethodReturnsWonMatches()
-        {
-            SoccerTeam testTeam = new ("FCSB", 6, 5, 4);
-
-            Assert.Equal(6, testTeam.GetWonMatches());
-        }
-
-        [Fact]
-        public void GetLostMatchesMethodReturnsWonMatches()
-        {
-            SoccerTeam testTeam = new ("FCSB", 6, 5, 4);
-
-            Assert.Equal(5, testTeam.GetLostMatches());
-        }
-
-        [Fact]
-        public void GetDrawsMethodReturnsWonMatches()
-        {
-            SoccerTeam testTeam = new ("FCSB", 6, 5, 4);
-
-            Assert.Equal(4, testTeam.GetDraws());
-        }
-
-        [Fact]
         public void CompareToMethodReturnsOneIfFirstTeamIsGreaterThenTheSecondTeam()
         {
             SoccerTeam testTeamOne = new ("FCSB", 6, 5, 4);
@@ -96,6 +26,49 @@ namespace SoccerRanking
             SoccerTeam testTeamOne = new ("CFR CLuj", 10, 2, 8);
             SoccerTeam testTeamTwo = new ("FCSB", 9, 5, 8);
             Assert.Equal(-1, testTeamOne.CompareTo(testTeamTwo));
+        }
+
+        [Fact]
+        public void EqualsMethodChecksIfTwoSoccerTeamObjectsAreEqualUsingMemberFields()
+        {
+            SoccerTeam testTeamOne = new ("CFR CLuj", 10, 2, 8);
+            SoccerTeam testTeamTwo = new ("CFR CLuj", 10, 2, 8);
+            SoccerTeam testTeamThree = new ("FCSB", 10, 2, 8);
+            Assert.True(testTeamOne.Equals(testTeamTwo));
+            Assert.False(testTeamTwo.Equals(testTeamThree));
+        }
+
+        [Fact]
+        public void AddWonMatchMethodShouldIncrementMatchesWonFieldAndUpdatePointsField()
+        {
+            SoccerTeam testTeam = new ("CFR CLuj", 10, 2, 8);
+            SoccerTeam testTeamAfterWonMatchAdded = new ("CFR CLuj", 11, 2, 8);
+
+            testTeam.AddWonMatch();
+
+            Assert.Equal(testTeam, testTeamAfterWonMatchAdded);
+        }
+
+        [Fact]
+        public void AddLostMatchMethodShouldIncrementMatchesLostField()
+        {
+            SoccerTeam testTeam = new ("CFR CLuj", 10, 2, 8);
+            SoccerTeam testTeamAfterLostMatchAdded = new ("CFR CLuj", 10, 3, 8);
+
+            testTeam.AddLostMatch();
+
+            Assert.Equal(testTeam, testTeamAfterLostMatchAdded);
+        }
+
+        [Fact]
+        public void AddDrawMethodShouldIncrementDrawMaatchesFieldAndUpdatePointsField()
+        {
+            SoccerTeam testTeam = new ("CFR CLuj", 10, 2, 8);
+            SoccerTeam testTeamAfterLostMatchAdded = new ("CFR CLuj", 10, 2, 9);
+
+            testTeam.AddDraw();
+
+            Assert.Equal(testTeam, testTeamAfterLostMatchAdded);
         }
     }
 }
