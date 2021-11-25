@@ -12,11 +12,6 @@ namespace SoccerRanking
             teams.Sort();
         }
 
-        public List<SoccerTeam> GetTeams()
-        {
-            return this.teams;
-        }
-
         public void AddTeam(SoccerTeam team)
         {
             teams.Add(team);
@@ -68,6 +63,11 @@ namespace SoccerRanking
             }
 
             teams.Sort();
+        }
+
+        private List<SoccerTeam> GetTeams()
+        {
+            return this.teams;
         }
     }
 }

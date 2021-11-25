@@ -60,7 +60,7 @@ namespace SoccerRanking
             this.UpdatePoints();
         }
 
-        public void UpdatePoints()
+        private void UpdatePoints()
         {
             this.points = this.matchesWon * PointsPerVictory + drawMatches;
         }

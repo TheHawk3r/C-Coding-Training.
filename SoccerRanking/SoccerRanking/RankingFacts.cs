@@ -17,21 +17,8 @@ namespace SoccerRanking
 
             Ranking ranking = new Ranking(soccerTeams);
 
-            Assert.Equal(cfrCluj, ranking.GetTeams()[0]);
-            Assert.Equal(univCraiova, ranking.GetTeams()[1]);
-        }
-
-        [Fact]
-        public void GetTeamsMethodReturnsTeamsInRanking()
-        {
-            List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
-            soccerTeams.Add(new SoccerTeam("CFR Cluj", 10, 4, 5));
-            soccerTeams.Add(new SoccerTeam("FCSB", 7, 4, 2));
-            soccerTeams.Add(new SoccerTeam("Univ. Craiova", 5, 7, 10));
-
-            Ranking ranking = new Ranking(soccerTeams);
-
-            Assert.Equal(soccerTeams, ranking.GetTeams());
+            Assert.Equal(cfrCluj, ranking.GetTeamOnPosition(1));
+            Assert.Equal(univCraiova, ranking.GetTeamOnPosition(2));
         }
 
         [Fact]
@@ -92,8 +79,8 @@ namespace SoccerRanking
 
             ranking.UpdateRankingBasedOnMatch(cfrCluj, "2-1", univCraiova);
 
-            Assert.Equal(cfrClujAfterUpdate, ranking.GetTeams()[0]);
-            Assert.Equal(univCraiovaAfterUpdate, ranking.GetTeams()[1]);
+            Assert.Equal(cfrClujAfterUpdate, ranking.GetTeamOnPosition(1));
+            Assert.Equal(univCraiovaAfterUpdate, ranking.GetTeamOnPosition(2));
         }
 
         [Fact]
@@ -111,8 +98,8 @@ namespace SoccerRanking
 
             ranking.UpdateRankingBasedOnMatch(cfrCluj, "1-3", univCraiova);
 
-            Assert.Equal(cfrClujAfterUpdate, ranking.GetTeams()[0]);
-            Assert.Equal(univCraiovaAfterUpdate, ranking.GetTeams()[1]);
+            Assert.Equal(cfrClujAfterUpdate, ranking.GetTeamOnPosition(1));
+            Assert.Equal(univCraiovaAfterUpdate, ranking.GetTeamOnPosition(2));
         }
 
         [Fact]
@@ -130,8 +117,8 @@ namespace SoccerRanking
 
             ranking.UpdateRankingBasedOnMatch(cfrCluj, "1-1", univCraiova);
 
-            Assert.Equal(cfrClujAfterUpdate, ranking.GetTeams()[0]);
-            Assert.Equal(univCraiovaAfterUpdate, ranking.GetTeams()[1]);
+            Assert.Equal(cfrClujAfterUpdate, ranking.GetTeamOnPosition(1));
+            Assert.Equal(univCraiovaAfterUpdate, ranking.GetTeamOnPosition(2));
         }
 
         [Fact]
@@ -152,8 +139,8 @@ namespace SoccerRanking
             ranking.UpdateRankingBasedOnMatch(cfrClujWithWrongData, "2-1", univCraiovaWithWrongData);
             ranking.UpdateRankingBasedOnMatch(dinamoBucuresti, "3-2", fcsb);
 
-            Assert.Equal(cfrCluj, ranking.GetTeams()[0]);
-            Assert.Equal(univCraiova, ranking.GetTeams()[1]);
+            Assert.Equal(cfrCluj, ranking.GetTeamOnPosition(1));
+            Assert.Equal(univCraiova, ranking.GetTeamOnPosition(2));
         }
 
         [Fact]
@@ -172,8 +159,8 @@ namespace SoccerRanking
             ranking.UpdateRankingBasedOnMatch(cfrCluj, "=-=", univCraiova);
             ranking.UpdateRankingBasedOnMatch(cfrCluj, "1,2", univCraiova);
 
-            Assert.Equal(cfrCluj, ranking.GetTeams()[0]);
-            Assert.Equal(univCraiova, ranking.GetTeams()[1]);
+            Assert.Equal(cfrCluj, ranking.GetTeamOnPosition(1));
+            Assert.Equal(univCraiova, ranking.GetTeamOnPosition(2));
         }
     }
 }
