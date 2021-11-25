@@ -28,38 +28,30 @@ namespace SoccerRanking
             return teams.FindIndex(x => x.Equals(team)) + 1;
         }
 
-        public void UpdateRankingBasedOnMatch(SoccerTeam firstTeam, string matchResult, SoccerTeam secondTeam)
+        public void UpdateRankingBasedOnMatch(SoccerTeam firstTeam, int firstTeamScore, int secondTeamScore, SoccerTeam secondTeam)
         {
             int firstTeamIndex = teams.FindIndex(x => x.Equals(firstTeam));
             int secondTeamIndex = teams.FindIndex(x => x.Equals(secondTeam));
-            string[] matchResultArray = matchResult.Split('-');
 
-            if (firstTeamIndex == -1 || secondTeamIndex == -1 || matchResultArray.Length != 2)
+            if (firstTeamIndex == -1 || secondTeamIndex == -1)
             {
                 return;
             }
 
-            if (int.TryParse(matchResultArray[0], out int firstTeamScore) && int.TryParse(matchResultArray[1], out int secondTeamScore))
+            if (firstTeamScore > secondTeamScore)
             {
-                if (firstTeamScore > secondTeamScore)
-                {
-                    firstTeam.AddWonMatch();
-                    secondTeam.AddLostMatch();
-                }
-                else if (firstTeamScore == secondTeamScore)
-                {
-                    firstTeam.AddDraw();
-                    secondTeam.AddDraw();
-                }
-                else
-                {
-                    secondTeam.AddWonMatch();
-                    firstTeam.AddLostMatch();
-                }
+                firstTeam.AddWonMatch();
+                secondTeam.AddLostMatch();
+            }
+            else if (firstTeamScore == secondTeamScore)
+            {
+                firstTeam.AddDraw();
+                secondTeam.AddDraw();
             }
             else
             {
-                return;
+                secondTeam.AddWonMatch();
+                firstTeam.AddLostMatch();
             }
 
             teams.Sort();

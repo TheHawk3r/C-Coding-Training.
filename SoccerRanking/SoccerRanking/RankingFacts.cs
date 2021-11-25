@@ -77,7 +77,7 @@ namespace SoccerRanking
 
             Ranking ranking = new Ranking(soccerTeams);
 
-            ranking.UpdateRankingBasedOnMatch(cfrCluj, "2-1", univCraiova);
+            ranking.UpdateRankingBasedOnMatch(cfrCluj, 2, 1, univCraiova);
 
             Assert.Equal(cfrClujAfterUpdate, ranking.GetTeamOnPosition(1));
             Assert.Equal(univCraiovaAfterUpdate, ranking.GetTeamOnPosition(2));
@@ -96,7 +96,7 @@ namespace SoccerRanking
 
             Ranking ranking = new Ranking(soccerTeams);
 
-            ranking.UpdateRankingBasedOnMatch(cfrCluj, "1-3", univCraiova);
+            ranking.UpdateRankingBasedOnMatch(cfrCluj, 1, 3, univCraiova);
 
             Assert.Equal(cfrClujAfterUpdate, ranking.GetTeamOnPosition(1));
             Assert.Equal(univCraiovaAfterUpdate, ranking.GetTeamOnPosition(2));
@@ -115,7 +115,7 @@ namespace SoccerRanking
 
             Ranking ranking = new Ranking(soccerTeams);
 
-            ranking.UpdateRankingBasedOnMatch(cfrCluj, "1-1", univCraiova);
+            ranking.UpdateRankingBasedOnMatch(cfrCluj, 1, 1, univCraiova);
 
             Assert.Equal(cfrClujAfterUpdate, ranking.GetTeamOnPosition(1));
             Assert.Equal(univCraiovaAfterUpdate, ranking.GetTeamOnPosition(2));
@@ -136,28 +136,8 @@ namespace SoccerRanking
             soccerTeams.Add(univCraiova);
             Ranking ranking = new Ranking(soccerTeams);
 
-            ranking.UpdateRankingBasedOnMatch(cfrClujWithWrongData, "2-1", univCraiovaWithWrongData);
-            ranking.UpdateRankingBasedOnMatch(dinamoBucuresti, "3-2", fcsb);
-
-            Assert.Equal(cfrCluj, ranking.GetTeamOnPosition(1));
-            Assert.Equal(univCraiova, ranking.GetTeamOnPosition(2));
-        }
-
-        [Fact]
-        public void UpdateRankingBasedOnMatchIfScoreIsNotValidShouldNotMakeAnyChanges()
-        {
-            List<SoccerTeam> soccerTeams = new List<SoccerTeam>();
-            SoccerTeam cfrCluj = new SoccerTeam("CFR Cluj", 10, 4, 5);
-            SoccerTeam univCraiova = new SoccerTeam("Univ. Craiova", 5, 7, 10);
-            SoccerTeam fcsb = new SoccerTeam("FCSB", 7, 4, 2);
-            soccerTeams.Add(cfrCluj);
-            soccerTeams.Add(fcsb);
-            soccerTeams.Add(univCraiova);
-            Ranking ranking = new Ranking(soccerTeams);
-
-            ranking.UpdateRankingBasedOnMatch(cfrCluj, "21", univCraiova);
-            ranking.UpdateRankingBasedOnMatch(cfrCluj, "=-=", univCraiova);
-            ranking.UpdateRankingBasedOnMatch(cfrCluj, "1,2", univCraiova);
+            ranking.UpdateRankingBasedOnMatch(cfrClujWithWrongData, 2, 1, univCraiovaWithWrongData);
+            ranking.UpdateRankingBasedOnMatch(dinamoBucuresti, 3, 2, fcsb);
 
             Assert.Equal(cfrCluj, ranking.GetTeamOnPosition(1));
             Assert.Equal(univCraiova, ranking.GetTeamOnPosition(2));
