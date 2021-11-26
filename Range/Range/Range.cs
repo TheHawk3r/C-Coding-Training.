@@ -13,8 +13,8 @@
 
         public bool Match(string text)
         {
-            return !string.IsNullOrEmpty(text) 
-                && text[0] >= this.start 
+            return !string.IsNullOrEmpty(text)
+                && text[0] >= this.start
                 && text[0] <= this.end;
         }
     }
