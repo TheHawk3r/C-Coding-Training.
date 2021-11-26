@@ -21,7 +21,7 @@ namespace Range
         }
 
         [Fact]
-        public void RangeMatchMethodTextThatIsInRangeOfCharactersShouldReturnTrue()
+        public void RangeMatchMethodFirstCharacterOfTextThatIsInRangeOfCharactersShouldReturnTrue()
         {
             var digit = new Range('1', '4');
 
@@ -29,11 +29,19 @@ namespace Range
         }
 
         [Fact]
-        public void RangeMatchMethodTextThatIsNotInRangeOfCharactersShouldReturnTrue()
+        public void RangeMatchMethodFirstCharacterOfTextThatIsNotInRangeOfCharactersShouldReturnFalse()
         {
             var digit = new Range('7', '9');
 
             Assert.False(digit.Match("34"));
+        }
+
+        [Fact]
+        public void RangeMatchMethodFirstCharacterOfTextIsInRangeButOthersAreNotShouldReturnTrue()
+        {
+            var digit = new Range('a', 'g');
+
+            Assert.True(digit.Match("abecedar"));
         }
 
         [Fact]

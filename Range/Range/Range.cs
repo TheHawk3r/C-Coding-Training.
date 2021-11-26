@@ -18,12 +18,9 @@
                 return false;
             }
 
-            for (int i = 0; i < text.Length; i++)
+            if (text[0] < this.start || text[0] > this.end)
             {
-                if (text[i] < this.start || text[i] > this.end)
-                {
-                    return false;
-                }
+                return false;
             }
 
             return true;
