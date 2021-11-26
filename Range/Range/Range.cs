@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Range
+﻿namespace Range
 {
     class Range
     {
