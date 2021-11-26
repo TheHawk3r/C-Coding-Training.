@@ -13,17 +13,9 @@
 
         public bool Match(string text)
         {
-            if (string.IsNullOrEmpty(text))
-            {
-                return false;
-            }
-
-            if (text[0] < this.start || text[0] > this.end)
-            {
-                return false;
-            }
-
-            return true;
+            return !string.IsNullOrEmpty(text) 
+                && text[0] >= this.start 
+                && text[0] <= this.end;
         }
     }
 }
