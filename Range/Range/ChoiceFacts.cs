@@ -4,23 +4,41 @@ namespace Range
 {
     public class ChoiceFacts
     {
-        [Fact]
-        public void ChoiceClassValidatesDigitsProperly()
+        [Theory]
+        [InlineData("012")]
+        [InlineData("12")]
+        [InlineData("92")]
+        public void ChoiceClassValidatesDigitsProperlyInDigitObject(string text)
         {
             var digit = new Choice(
                 new Character('0'),
                 new Range('1', '9'));
 
-            Assert.True(digit.Match("012"));
-            Assert.True(digit.Match("12"));
-            Assert.True(digit.Match("92"));
-            Assert.False(digit.Match("a9"));
-            Assert.False(digit.Match(""));
-            Assert.False(digit.Match(null));
+            Assert.True(digit.Match(text));
         }
 
-        [Fact]
-        public void ChoiceClassValidatesHexesProperly()
+        [Theory]
+        [InlineData("a9")]
+        [InlineData("")]
+        [InlineData(null)]
+        public void ChoiceClassDigitObjectReturnsFalseForInvalidData(string text)
+        {
+            var digit = new Choice(
+                new Character('0'),
+                new Range('1', '9'));
+
+            Assert.False(digit.Match(text));
+        }
+
+        [Theory]
+        [InlineData("012")]
+        [InlineData("12")]
+        [InlineData("92")]
+        [InlineData("a9")]
+        [InlineData("f8")]
+        [InlineData("A9")]
+        [InlineData("F8")]
+        public void ChoiceClassValidatesHexesProperly(string text)
         {
             var hex = new Choice(
                 new Character('0'),
@@ -28,17 +46,23 @@ namespace Range
                 new Range('a', 'f'),
                 new Range('A', 'F'));
 
-            Assert.True(hex.Match("012"));
-            Assert.True(hex.Match("12"));
-            Assert.True(hex.Match("92"));
-            Assert.True(hex.Match("a9"));
-            Assert.True(hex.Match("f8"));
-            Assert.True(hex.Match("A9"));
-            Assert.True(hex.Match("F8"));
-            Assert.False(hex.Match("g8"));
-            Assert.False(hex.Match("G8"));
-            Assert.False(hex.Match(""));
-            Assert.False(hex.Match(null));
+            Assert.True(hex.Match(text));
+        }
+
+        [Theory]
+        [InlineData("g8")]
+        [InlineData("G8")]
+        [InlineData("")]
+        [InlineData(null)]
+        public void ChoiceClassHexObjectReturnsFalseToInvalidData(string text)
+        {
+            var hex = new Choice(
+                new Character('0'),
+                new Range('1', '9'),
+                new Range('a', 'f'),
+                new Range('A', 'F'));
+
+            Assert.False(hex.Match(text));
         }
     }
 }
