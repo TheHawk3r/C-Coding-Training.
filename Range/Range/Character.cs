@@ -2,7 +2,12 @@
 
 namespace Range
 {
-    class Character
+    interface IPattern
+    {
+        bool Match(string text);
+    }
+
+    class Character : IPattern
     {
         readonly char pattern;
 
