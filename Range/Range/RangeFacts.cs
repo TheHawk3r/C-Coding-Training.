@@ -37,7 +37,7 @@ namespace Range
         }
 
         [Fact]
-        public void RangeMatchMethodFirstCharacterOfTextIsInRangeButOthersAreNotShouldReturnTrue()
+        public void RangeMatchMethodFirstCharacterOfTextIsInRangeButOtherCharactersAreNotShouldReturnTrue()
         {
             var digit = new Range('a', 'g');
 
