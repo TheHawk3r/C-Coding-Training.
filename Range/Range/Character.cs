@@ -2,9 +2,16 @@
 
 namespace Range
 {
+    interface IMatch
+    {
+        bool Success();
+
+        string RemainingText();
+    }
+
     interface IPattern
     {
-        bool Match(string text);
+        IMatch Match(string text);
     }
 
     class Character : IPattern
@@ -24,6 +31,18 @@ namespace Range
             }
 
             return text[0] == pattern;
+        }
+
+        IMatch IPattern.Match(string text)
+        {
+            var match = new Match(text);
+
+            if (text[0] == pattern)
+            {
+                return new Match(match.RemainingText());
+            }
+
+            return match;
         }
     }
 }
