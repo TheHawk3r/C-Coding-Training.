@@ -35,14 +35,7 @@ namespace Range
 
         IMatch IPattern.Match(string text)
         {
-            var match = new Match(text);
-
-            if (text[0] == pattern)
-            {
-                return new Match(match.RemainingText());
-            }
-
-            return match;
+            return new Match(text, this.pattern);
         }
     }
 }

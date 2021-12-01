@@ -1,6 +1,6 @@
 ﻿namespace Range
 {
-    class Choice
+    class Choice : IPattern
     {
         readonly IPattern[] patterns;
 
@@ -20,6 +20,21 @@
             }
 
             return false;
+        }
+
+        IMatch IPattern.Match(string text)
+        {
+            var match = new Match(text);
+            foreach (IPattern pattern in patterns)
+            {
+                if (pattern.Match(text).Success())
+                {
+                    match = (Match)pattern.Match(text);
+                    return match;
+                }
+            }
+
+            return match;
         }
     }
 }

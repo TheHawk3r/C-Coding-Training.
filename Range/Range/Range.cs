@@ -20,14 +20,7 @@
 
         IMatch IPattern.Match(string text)
         {
-            var match = new Match(text);
-
-            if (!string.IsNullOrEmpty(text) && text[0] >= this.start && text[0] <= this.end)
-            {
-                return new Match(match.RemainingText());
-            }
-
-            return match;
+            return new Match(text, start: this.start, end: this.end);
         }
     }
 }
