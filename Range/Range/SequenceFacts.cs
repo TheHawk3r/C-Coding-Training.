@@ -83,10 +83,11 @@ namespace Range
         }
 
         [Theory]
+        [InlineData("us7692 u&*(^%", "us7692 u&*(^%")]
         [InlineData("abc", "abc")]
         [InlineData("", "")]
         [InlineData(null, null)]
-        public void SequanceObjectReturnsAInvalidMatchFromAStringThatContainsAUnicodeHexNumberSequance(string text, string remainingText)
+        public void SequanceObjectReturnsAInvalidMatchFromAStringThatDoesNotContainAUnicodeHexNumberSequance(string text, string remainingText)
         {
             var hex = new Choice(
                 new Range('0', '9'),
