@@ -24,7 +24,7 @@
 
         IMatch IPattern.Match(string text)
         {
-            var match = new Match(text);
+            var match = new Match(text, false);
             foreach (IPattern pattern in patterns)
             {
                 if (pattern.Match(text).Success())
