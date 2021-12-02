@@ -12,7 +12,7 @@
         public IMatch Match(string text)
         {
             var initialText = text;
-            var match = new Match(text, false);
+            var match = new Match(text);
             foreach (IPattern pattern in patterns)
             {
                 match = (Match)pattern.Match(text);
