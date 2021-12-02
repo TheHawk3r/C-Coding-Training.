@@ -7,73 +7,73 @@ namespace Range
         [Fact]
         public void RangeMatchMethodIfTextIsNullReturnsFalse()
         {
-            var digit = new Range('a', 'f');
+            IPattern digit = new Range('a', 'f');
 
-            Assert.False(digit.Match(null));
+            Assert.False(digit.Match(null).Success());
         }
 
         [Fact]
         public void RangeMatchMethodIfTextIsEmptyReturnsFalse()
         {
-            var digit = new Range('a', 'f');
+            IPattern digit = new Range('a', 'f');
 
-            Assert.False(digit.Match(string.Empty));
+            Assert.False(digit.Match(string.Empty).Success());
         }
 
         [Fact]
         public void RangeMatchMethodFirstCharacterOfTextThatIsInRangeOfCharactersShouldReturnTrue()
         {
-            var digit = new Range('1', '4');
+            IPattern digit = new Range('1', '4');
 
-            Assert.True(digit.Match("123"));
+            Assert.True(digit.Match("123").Success());
         }
 
         [Fact]
         public void RangeMatchMethodFirstCharacterOfTextThatIsNotInRangeOfCharactersShouldReturnFalse()
         {
-            var digit = new Range('7', '9');
+            IPattern digit = new Range('7', '9');
 
-            Assert.False(digit.Match("34"));
+            Assert.False(digit.Match("34").Success());
         }
 
         [Fact]
         public void RangeMatchMethodFirstCharacterOfTextIsInRangeButOtherCharactersAreNotShouldReturnTrue()
         {
-            var digit = new Range('a', 'g');
+            IPattern digit = new Range('a', 'g');
 
-            Assert.True(digit.Match("abecedar"));
+            Assert.True(digit.Match("abecedar").Success());
         }
 
         [Fact]
         public void RangeMatchMethodHomeWorkFirstStringShouldReturnTrue()
         {
-            var digit = new Range('a', 'f');
+            IPattern digit = new Range('a', 'f');
 
-            Assert.True(digit.Match("abc"));
+            Assert.True(digit.Match("abc").Success());
         }
 
         [Fact]
         public void RangeMatchMethodHomeWorkSecondStringShouldReturnTrue()
         {
-            var digit = new Range('a', 'f');
+            IPattern digit = new Range('a', 'f');
 
-            Assert.True(digit.Match("fab"));
+            Assert.True(digit.Match("fab").Success());
         }
 
         [Fact]
         public void RangeMatchMethodHomeWorkThirdStringShouldReturnTrue()
         {
-            var digit = new Range('a', 'f');
+            IPattern digit = new Range('a', 'f');
 
-            Assert.True(digit.Match("bcd"));
+            Assert.True(digit.Match("bcd").Success());
         }
 
         [Fact]
         public void RangeMatchMethodHomeWorkFourthStringShouldReturnFalse()
         {
-            var digit = new Range('a', 'f');
+            IPattern digit = new Range('a', 'f');
 
-            Assert.False(digit.Match("1ab"));
+            Assert.False(digit.Match("1ab").Success());
         }
     }
 }

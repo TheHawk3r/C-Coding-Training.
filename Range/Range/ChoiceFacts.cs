@@ -10,11 +10,10 @@ namespace Range
         [InlineData("92")]
         public void ChoiceClassValidatesDigitsProperlyInDigitObject(string text)
         {
-            var digit = new Choice(
+            IPattern digit = new Choice(
                 new Character('0'),
                 new Range('1', '9'));
-
-            Assert.True(digit.Match(text));
+            Assert.True(digit.Match(text).Success());
         }
 
         [Theory]
@@ -23,11 +22,11 @@ namespace Range
         [InlineData(null)]
         public void ChoiceClassDigitObjectReturnsFalseForInvalidData(string text)
         {
-            var digit = new Choice(
+            IPattern digit = new Choice(
                 new Character('0'),
                 new Range('1', '9'));
 
-            Assert.False(digit.Match(text));
+            Assert.False(digit.Match(text).Success());
         }
 
         [Theory]
@@ -40,13 +39,13 @@ namespace Range
         [InlineData("F8")]
         public void ChoiceClassValidatesHexesProperly(string text)
         {
-            var hex = new Choice(
+            IPattern hex = new Choice(
                 new Character('0'),
                 new Range('1', '9'),
                 new Range('a', 'f'),
                 new Range('A', 'F'));
 
-            Assert.True(hex.Match(text));
+            Assert.True(hex.Match(text).Success());
         }
 
         [Theory]
@@ -56,13 +55,13 @@ namespace Range
         [InlineData(null)]
         public void ChoiceClassHexObjectReturnsFalseToInvalidData(string text)
         {
-            var hex = new Choice(
+            IPattern hex = new Choice(
                 new Character('0'),
                 new Range('1', '9'),
                 new Range('a', 'f'),
                 new Range('A', 'F'));
 
-            Assert.False(hex.Match(text));
+            Assert.False(hex.Match(text).Success());
         }
     }
 }
