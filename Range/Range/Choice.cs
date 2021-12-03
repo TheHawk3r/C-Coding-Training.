@@ -9,25 +9,12 @@
             this.patterns = patterns;
         }
 
-        public bool Match(string text)
+        public IMatch Match(string text)
         {
+            IMatch match = new Match(text, false);
             foreach (IPattern pattern in patterns)
             {
-                if (pattern.Match(text).Success())
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        IMatch IPattern.Match(string text)
-        {
-            var match = new Match(text, false);
-            foreach (IPattern pattern in patterns)
-            {
-                match = (Match)pattern.Match(text);
+                match = pattern.Match(text);
                 if (match.Success())
                 {
                     return match;

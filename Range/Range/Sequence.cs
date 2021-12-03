@@ -11,16 +11,13 @@
 
         public IMatch Match(string text)
         {
-            var initialText = text;
-            var match = new Match(text, false);
+            IMatch match = new Match(text, false);
             foreach (IPattern pattern in patterns)
             {
-                match = (Match)pattern.Match(text);
-                text = pattern.Match(text).RemainingText();
+                match = pattern.Match(match.RemainingText());
                 if (!match.Success())
                 {
-                    text = initialText;
-                    return (Match)pattern.Match(text);
+                    return pattern.Match(text);
                 }
             }
 

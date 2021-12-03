@@ -11,14 +11,7 @@
             this.end = end;
         }
 
-        public bool Match(string text)
-        {
-            return !string.IsNullOrEmpty(text)
-                && text[0] >= this.start
-                && text[0] <= this.end;
-        }
-
-        IMatch IPattern.Match(string text)
+        public IMatch Match(string text)
         {
             if (!string.IsNullOrEmpty(text)
             && text[0] >= this.start
