@@ -8,7 +8,7 @@ namespace Range
         [InlineData("ea", "a")]
         [InlineData("Ea", "a")]
 
-        public void AnyClassObjectReturnsAValidMatchForATextInWitchTheFirstLetterContainsAnAcceptedLetter(string text, string remainingText)
+        public void ReturnsAValidMatchWhenATextInWitchTheFirstLetterContainsAnAcceptedLetter(string text, string remainingText)
         {
             var e = new Any("eE");
 
@@ -21,7 +21,7 @@ namespace Range
         [InlineData("", "")]
         [InlineData(null, null)]
 
-        public void AnyClassObjectReturnsAnInvalidMatchForATextInWitchTheFirstLetterDoesNotContainAnAcceptedLetter(string text, string remainingText)
+        public void ReturnsAnInvalidMatchWhenATextInWitchTheFirstLetterDoesNotContainAnAcceptedLetter(string text, string remainingText)
         {
             var e = new Any("eE");
 
@@ -33,7 +33,7 @@ namespace Range
         [InlineData("+3", "3")]
         [InlineData("-2", "2")]
 
-        public void AnyClassObjectReturnsAValidMatchForATextInWitchTheFirstLetterContainsAnAcceptedSign(string text, string remainingText)
+        public void ReturnsAValidMatchWhenATextInWitchTheFirstLetterContainsAnAcceptedSign(string text, string remainingText)
         {
             var sign = new Any("-+");
 
@@ -46,7 +46,7 @@ namespace Range
         [InlineData("", "")]
         [InlineData(null, null)]
 
-        public void AnyClassObjectReturnsAnInvalidMatchForATextInWitchTheFirstLetterDoesNotContainAnAcceptedSign(string text, string remainingText)
+        public void ReturnsAnInvalidMatchWhenATextInWitchTheFirstLetterDoesNotContainAnAcceptedSign(string text, string remainingText)
         {
             var sign = new Any("-+");
 

@@ -13,30 +13,12 @@ namespace Range
 
         public IMatch Match(string text)
         {
-            if (string.IsNullOrEmpty(text))
+            if (!string.IsNullOrEmpty(text) && accepted.Contains(text[0]))
             {
-                return new Match(text, false);
+                return new Match(text[1..], true);
             }
 
-            const int index = 0;
-            return Match(text, index);
-        }
-
-        public IMatch Match(string text, int index)
-        {
-            if (index >= this.accepted.Length)
-            {
-                return new Match(text, false);
-            }
-
-            if (text[0] == this.accepted[index])
-            {
-               return new Match(text[1..], true);
-            }
-
-            index++;
-
-            return Match(text, index);
+            return new Match(text, false);
         }
     }
 }
