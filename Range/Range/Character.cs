@@ -2,18 +2,6 @@
 
 namespace Range
 {
-    interface IMatch
-    {
-        bool Success();
-
-        string RemainingText();
-    }
-
-    interface IPattern
-    {
-        IMatch Match(string text);
-    }
-
     class Character : IPattern
     {
         readonly char pattern;
