@@ -13,12 +13,9 @@ namespace Range
 
         public IMatch Match(string text)
         {
-            if (!string.IsNullOrEmpty(text) && accepted.Contains(text[0]))
-            {
-                return new Match(text[1..], true);
-            }
-
-            return new Match(text, false);
+            return !string.IsNullOrEmpty(text) && accepted.Contains(text[0])
+            ? new Match(text[1..], true)
+            : new Match(text, false);
         }
     }
 }
