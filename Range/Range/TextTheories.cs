@@ -16,6 +16,7 @@ namespace Range
         }
 
         [Theory]
+        [InlineData("Xtrue", "Xtrue")]
         [InlineData("false", "false")]
         [InlineData("", "")]
         [InlineData(null, null)]
@@ -39,6 +40,7 @@ namespace Range
         }
 
         [Theory]
+        [InlineData("Xfalse", "Xfalse")]
         [InlineData("true", "true")]
         [InlineData("", "")]
         [InlineData(null, null)]
