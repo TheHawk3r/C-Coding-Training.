@@ -1,6 +1,4 @@
-﻿
-
-namespace Range
+﻿namespace Range
 {
     class Many : IPattern
     {
@@ -15,14 +13,12 @@ namespace Range
         {
             IMatch match = pattern.Match(text);
 
-            while (true)
+            while (match.Success())
             {
                 match = pattern.Match(match.RemainingText());
-                if (!match.Success())
-                {
-                    return new Match(match.RemainingText(), true);
-                }
             }
+
+            return new Match(match.RemainingText(), true);
         }
     }
 }
