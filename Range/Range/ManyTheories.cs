@@ -19,6 +19,7 @@ namespace Range
 
         [Theory]
         [InlineData("12345ab123", "ab123")]
+        [InlineData("53221345645bb123", "bb123")]
         [InlineData("ab", "ab")]
         public void ReturnsAMatchWithATextInWitchTheRangePatternIsConsumed(string text, string remainingText)
         {
