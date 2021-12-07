@@ -10,7 +10,7 @@ namespace Range
         [InlineData("bc", "bc")]
         [InlineData("", "")]
         [InlineData(null, null)]
-        public void Test1(string text, string remainingText)
+        public void ReturnsAMatchWithATextInWitchTheCharacterPatternIsConsumed(string text, string remainingText)
         {
             var a = new Many(new Character('a'));
             Assert.True(a.Match(text).Success());
@@ -20,7 +20,7 @@ namespace Range
         [Theory]
         [InlineData("12345ab123", "ab123")]
         [InlineData("ab", "ab")]
-        public void Test2(string text, string remainingText)
+        public void ReturnsAMatchWithATextInWitchTheRangePatternIsConsumed(string text, string remainingText)
         {
             var digits = new Many(new Range('0', '9'));
             Assert.True(digits.Match(text).Success());
