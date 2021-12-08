@@ -7,7 +7,7 @@ namespace Range
         [Theory]
         [InlineData("123", "")]
         [InlineData("1a", "a")]
-        public void Test1(string text, string remainingText)
+        public void ReturnsAValidMatchWithATextInWitchTheRangePatternIsFoundAtLeastOnce(string text, string remainingText)
         {
             var a = new OneOrMore(new Range('0', '9'));
 
@@ -19,7 +19,7 @@ namespace Range
         [InlineData("bc", "bc")]
         [InlineData("", "")]
         [InlineData(null, null)]
-        public void Test2(string text, string remainingText)
+        public void ReturnsAInvalidMatchWithATextInWitchTheRangePatternIsNotFound(string text, string remainingText)
         {
             var a = new OneOrMore(new Range('0', '9'));
 
