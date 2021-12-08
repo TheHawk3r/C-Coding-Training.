@@ -6,14 +6,12 @@
 
         public OneOrMore(IPattern pattern)
         {
-            this.pattern = new Many(pattern);
+            this.pattern = new Sequence(pattern, new Many(pattern));
         }
 
         public IMatch Match(string text)
         {
-            return pattern.Match(text).RemainingText() == text
-                ? new Match(text, false)
-                : pattern.Match(text);
+            return pattern.Match(text);
         }
     }
 }
