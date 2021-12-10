@@ -6,6 +6,7 @@ namespace Range
     {
         [Theory]
         [InlineData("1,2,3", "")]
+        [InlineData("1,2", "")]
         [InlineData("1,2,3,", ",")]
         [InlineData("1a", "a")]
         [InlineData("abc", "abc")]
@@ -25,6 +26,7 @@ namespace Range
         [InlineData("1; 22  ;\n 333 \t; 22", "")]
         [InlineData("1 \n;", " \n;")]
         [InlineData("abc", "abc")]
+        [InlineData(",abc", ",abc")]
         public void Test2(string text, string remainingText)
         {
             var digits = new OneOrMore(new Range('0', '9'));
