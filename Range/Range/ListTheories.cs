@@ -14,7 +14,7 @@ namespace Range
         [InlineData("abc", "abc")]
         [InlineData("", "")]
         [InlineData(null, null)]
-        public void Test1(string text, string remainingText)
+        public void ReturnsAvalidMatchWithListPatternofRangeElementAndCharacterSeparator(string text, string remainingText)
         {
             var a = new List(new Range('0', '9'), new Character(','));
 
@@ -29,7 +29,7 @@ namespace Range
         [InlineData("1 \n;", " \n;")]
         [InlineData("abc", "abc")]
         [InlineData(",abc", ",abc")]
-        public void Test2(string text, string remainingText)
+        public void ReturnsAValidMatchWithListPatternOfDigitsElementAndWhiteSpaceAndSemicolonSeparator(string text, string remainingText)
         {
             var digits = new OneOrMore(new Range('0', '9'));
             var whitespace = new Many(new Any(" \r\n\t"));
