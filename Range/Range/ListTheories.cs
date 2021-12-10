@@ -20,6 +20,8 @@ namespace Range
         }
 
         [Theory]
+        [InlineData("2; 23  ;\n 333 \t; 32 \r; 45  \n; 52", "")]
+        [InlineData("1; 22  ;\n 333 \t; 22 \r; 33", "")]
         [InlineData("1; 22  ;\n 333 \t; 22", "")]
         [InlineData("1 \n;", " \n;")]
         [InlineData("abc", "abc")]
