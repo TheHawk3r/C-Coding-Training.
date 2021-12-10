@@ -8,6 +8,7 @@ namespace Range
         [InlineData("1,2,3", "")]
         [InlineData("1,2", "")]
         [InlineData("1,2,3,", ",")]
+        [InlineData("11a", "1a")]
         [InlineData("1a", "a")]
         [InlineData("abc", "abc")]
         [InlineData("", "")]
