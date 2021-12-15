@@ -38,7 +38,7 @@ namespace Range
         [InlineData("123.", ".")]
         [InlineData("12.34.56", ".56")]
         [InlineData("12.3x", "x")]
-        public void ReturnsAMatchedWithOnlyTheValidNumberConsumedFromTheGivenString(string text, string remainingText)
+        public void MatchConsumesOnlyTheValidNumberFromTheText(string text, string remainingText)
         {
             var n = new Number();
 
