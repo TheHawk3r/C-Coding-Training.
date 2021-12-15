@@ -8,75 +8,14 @@
         {
             Range oneNine = new Range('1', '9');
             Range digit = new Range('0', '9');
-            Choice signChoice = new Choice(new Character('+'), new Character('-'));
-            Choice exponentChoice = new Choice(new Character('e'), new Character('E'));
-            Sequence fractionPart = new Sequence(new Character('.'), new OneOrMore(digit));
+            Sequence fraction = new Sequence(new Character('.'), new OneOrMore(digit));
 
-            var digitNumber = new Sequence(
-                new Optional(new Character('-')),
-                digit);
+            var integer = new Choice(new Sequence(new Character('-'), oneNine, new Many(digit)), new Sequence(new Character('-'), digit), new Sequence(oneNine, new Many(digit)), new Sequence(digit));
+            var exponent = new Choice(
+                new Sequence(new Character('E'), new Optional(new Choice(new Character('+'), new Character('-'))), new OneOrMore(digit)),
+                new Sequence(new Character('e'), new Optional(new Choice(new Character('+'), new Character('-'))), new OneOrMore(digit)));
 
-            var digitsFractionalNumber = new Sequence(
-                new Optional(new Character('-')),
-                new OneOrMore(oneNine),
-                new Many(digit),
-                fractionPart);
-
-            var zeroDigitFractionalNumber = new Sequence(
-                    new Optional(new Character('-')),
-                    new Character('0'),
-                    fractionPart);
-
-            var digitsNumber = new Sequence(
-                    new Optional(new Character('-')),
-                    new OneOrMore(oneNine),
-                    new Many(digit));
-
-            var digitsNumberZeroDigitExponent = new Sequence(
-                    new Optional(new Character('-')),
-                    new OneOrMore(oneNine),
-                    new Many(digit),
-                    new Optional(fractionPart),
-                    exponentChoice,
-                    new Optional(signChoice),
-                    new Character('0'));
-
-            var digitsNumberDigitsExponent = new Sequence(
-                    new Optional(new Character('-')),
-                    new OneOrMore(oneNine),
-                    new Many(digit),
-                    new Optional(fractionPart),
-                    exponentChoice,
-                    new Optional(signChoice),
-                    new OneOrMore(oneNine),
-                    new Many(digit));
-
-            var digitNumberZeroDigitExponent = new Sequence(
-                    new Optional(new Character('-')),
-                    digit,
-                    new Optional(fractionPart),
-                    exponentChoice,
-                    new Optional(signChoice),
-                    new Character('0'));
-
-            var digitNumberDigitsExponent = new Sequence(
-                    new Optional(new Character('-')),
-                    digit,
-                    new Optional(fractionPart),
-                    exponentChoice,
-                    new Optional(signChoice),
-                    new OneOrMore(oneNine),
-                    new Many(digit));
-
-            pattern = new Choice(
-                digitsNumberZeroDigitExponent,
-                digitsNumberDigitsExponent,
-                digitNumberZeroDigitExponent,
-                digitNumberDigitsExponent,
-                digitsFractionalNumber,
-                zeroDigitFractionalNumber,
-                digitsNumber,
-                digitNumber);
+            pattern = new Sequence(integer, new Optional(fraction), new Optional(exponent));
         }
 
         public IMatch Match(string text)
