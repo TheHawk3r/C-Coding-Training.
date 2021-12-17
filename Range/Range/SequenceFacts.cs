@@ -47,6 +47,7 @@ namespace Range
         [Theory]
         [InlineData("def", "def")]
         [InlineData("abx", "abx")]
+        [InlineData("aba", "aba")]
         [InlineData("", "")]
         [InlineData(null, null)]
 

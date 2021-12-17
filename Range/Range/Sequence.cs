@@ -17,7 +17,7 @@
                 match = pattern.Match(match.RemainingText());
                 if (!match.Success())
                 {
-                    return pattern.Match(text);
+                    return new Match(text, false);
                 }
             }
 
