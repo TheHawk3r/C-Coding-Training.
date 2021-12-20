@@ -5,7 +5,7 @@ namespace Range
     public class ExtendedChoiceFacts
     {
         [Fact]
-        public void CanAddPatternToValue()
+        public void CanAddPatternToValueChoicePatterns()
         {
             var jsonString = new JsonString();
             var number = new Number();
@@ -36,6 +36,7 @@ namespace Range
                 new Sequence(new Character('{'), members, new Character('}')));
 
             var expectedValue = new Choice(
+                jsonObject,
                 array,
                 jsonString,
                 number,
