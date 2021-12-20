@@ -2,7 +2,7 @@
 {
     class Choice : IPattern
     {
-        readonly IPattern[] patterns;
+        private IPattern[] patterns;
 
         public Choice(params IPattern[] patterns)
         {
@@ -22,6 +22,16 @@
             }
 
             return match;
+        }
+
+        public void Add(IPattern pattern)
+        {
+            IPattern[] newPatterns = new IPattern[patterns.Length + 1];
+
+            newPatterns[0] = pattern;
+            patterns.CopyTo(newPatterns, 1);
+
+            patterns = newPatterns;
         }
     }
 }

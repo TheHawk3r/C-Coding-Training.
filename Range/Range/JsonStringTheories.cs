@@ -36,6 +36,7 @@ namespace Range
         [InlineData("\"abc", "\"abc")]
         [InlineData("abc\"", "abc\"")]
         [InlineData("\"a\\\"", "\"a\\\"")]
+        [InlineData("\"", "\"")]
         [InlineData("a", "a")]
         [InlineData(null, null)]
         [InlineData("", "")]
