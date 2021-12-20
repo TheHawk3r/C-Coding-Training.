@@ -14,7 +14,7 @@
                 new Range('\u0023', '\u005b'),
                 new Range('\u005d', char.MaxValue),
                 new Sequence(new Character('\\'), escape));
-            var characters = new Choice(new OneOrMore(character));
+            var characters = new Choice(new OneOrMore(character), new Text(""));
             pattern = new Sequence(new Character('\"'), characters, new Character('\"'));
         }
 

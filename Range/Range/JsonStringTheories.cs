@@ -18,6 +18,7 @@ namespace Range
         [InlineData("\"a \\t b\"", "")]
         [InlineData("\"a \\f b\"", "")]
         [InlineData("\"a \\n b\"", "")]
+        [InlineData("\"\"", "")]
         public void IsJsonString(string text, string remainingText)
         {
             var jsonString = new JsonString();
