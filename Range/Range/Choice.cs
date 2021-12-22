@@ -28,8 +28,8 @@
         {
             IPattern[] newPatterns = new IPattern[patterns.Length + 1];
 
-            newPatterns[0] = pattern;
-            patterns.CopyTo(newPatterns, 1);
+            newPatterns[patterns.Length] = pattern;
+            patterns.CopyTo(newPatterns, 0);
 
             patterns = newPatterns;
         }
