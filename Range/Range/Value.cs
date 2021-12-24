@@ -8,7 +8,7 @@
         {
             var jsonString = new JsonString();
             var number = new Number();
-            var ws = new Choice(new Any("\u0020\u000A\u000D\u0009"), new Text(""));
+            var ws = new Many(new Any("\u0020\u000A\u000D\u0009"));
             var value = new Choice(
                 jsonString,
                 number,

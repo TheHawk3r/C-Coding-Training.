@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31727.386
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonValidator", "JsonValidator\JsonValidator.csproj", "{2A1CE93E-81FD-4B93-A635-D450C7BBE29B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Range", "..\Range\Range\Range.csproj", "{A6DE7596-3C9B-445C-AA43-70B7134C9ACD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A1CE93E-81FD-4B93-A635-D450C7BBE29B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A1CE93E-81FD-4B93-A635-D450C7BBE29B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A1CE93E-81FD-4B93-A635-D450C7BBE29B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A1CE93E-81FD-4B93-A635-D450C7BBE29B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6DE7596-3C9B-445C-AA43-70B7134C9ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6DE7596-3C9B-445C-AA43-70B7134C9ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6DE7596-3C9B-445C-AA43-70B7134C9ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6DE7596-3C9B-445C-AA43-70B7134C9ACD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8845F956-D756-47B8-A2F2-39C33B73953B}
+	EndGlobalSection
+EndGlobal
