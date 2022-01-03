@@ -19,7 +19,7 @@ namespace Range
         [InlineData("\"Holiday\"", "")]
         [InlineData("1.34E2", "")]
         [InlineData("12.34E2, { \"M\" }", ", { \"M\" }")]
-        [InlineData("\"Name\" , [ 1 , 2 , 3 }", " , [ 1 , 2 , 3 }")]
+        [InlineData("\"Name\" , [ 1 , 2 , 3 }", ", [ 1 , 2 , 3 }")]
         [InlineData("true", "")]
         [InlineData("false", "")]
         [InlineData("null", "")]

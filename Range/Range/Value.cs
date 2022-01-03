@@ -8,7 +8,7 @@
         {
             var jsonString = new JsonString();
             var number = new Number();
-            var ws = new Many(new Any("\u0020\u000A\u000D\u0009"));
+            var ws = new Many(new Any("\n\r\t "));
             var value = new Choice(
                 jsonString,
                 number,
@@ -22,18 +22,14 @@
             var member = new Sequence(ws, jsonString, ws, new Character(':'), element);
             var members = new List(member, new Character(','));
 
-            var array = new Choice(
-                new Sequence(new Character('['), ws, new Character(']')),
-                new Sequence(new Character('['), elements, new Character(']')));
+            var array = new Sequence(new Character('['), elements, ws, new Character(']'));
 
-            var jsonObject = new Choice(
-                new Sequence(new Character('{'), ws, new Character('}')),
-                new Sequence(new Character('{'), members, new Character('}')));
+            var jsonObject = new Sequence(new Character('{'), members, ws, new Character('}'));
 
             value.Add(jsonObject);
             value.Add(array);
 
-            pattern = value;
+            pattern = element;
         }
 
         public IMatch Match(string text)
