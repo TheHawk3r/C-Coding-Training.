@@ -15,8 +15,9 @@ namespace JsonValidator
 
             var jsonValue = new Value();
             string text = System.IO.File.ReadAllText(args[0]);
+            bool isValidJsonFile = jsonValue.Match(text).Success() && jsonValue.Match(text).RemainingText() == string.Empty;
 
-            Console.WriteLine(jsonValue.Match(text).Success() && jsonValue.Match(text).RemainingText() == string.Empty);
+            Console.WriteLine(isValidJsonFile);
         }
     }
 }
