@@ -44,9 +44,7 @@ namespace DataCollections
 
         public void Insert(int index, int element)
         {
-            Array.Resize(ref array, array.Length + 1);
-            int oldArrayLength = array.Length - 1;
-            Array.Copy(array[..oldArrayLength], 0, array, 1, oldArrayLength);
+            this.ShiftToTheRight(index);
             array[index] = element;
         }
 
@@ -63,8 +61,25 @@ namespace DataCollections
 
         public void RemoveAt(int index)
         {
-            Array.Copy(array, 0, array, 0, index);
-            Array.Copy(array, index + 1, array, index, array.Length - (index + 1));
+            this.ShiftToTheLeft(index);
+        }
+
+        private void ShiftToTheRight(int index)
+        {
+            Array.Resize(ref array, array.Length + 1);
+            for (int i = index; i < array.Length - 1; i++)
+            {
+                array[i + 1] = array[index];
+            }
+        }
+
+        private void ShiftToTheLeft(int index)
+        {
+            for (int i = index; i < array.Length - 1; i++)
+            {
+                array[i] = array[i + 1];
+            }
+
             Array.Resize(ref array, array.Length - 1);
         }
     }
