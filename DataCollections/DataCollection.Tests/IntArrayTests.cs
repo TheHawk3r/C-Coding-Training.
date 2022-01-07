@@ -14,7 +14,7 @@ namespace DataCollection.Tests
 
             testArray.Add(element);
 
-            Assert.Equal(element, testArray.Element(testArray.Count() - 1));
+            Assert.Equal(element, testArray[testArray.Count - 1]);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace DataCollection.Tests
             testArray.Add(2);
             testArray.Add(10);
 
-            Assert.Equal(3, testArray.Count());
+            Assert.Equal(3, testArray.Count);
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace DataCollection.Tests
             testArray.Add(4);
             testArray.Add(0);
 
-            Assert.Equal(5, testArray.Count());
+            Assert.Equal(5, testArray.Count);
         }
 
         [Theory]
@@ -59,7 +59,7 @@ namespace DataCollection.Tests
             testArray.Add(4);
             testArray.Add(0);
 
-            Assert.Equal(elementReturned, testArray.Element(index));
+            Assert.Equal(elementReturned, testArray[index]);
         }
 
         [Theory]
@@ -78,9 +78,9 @@ namespace DataCollection.Tests
             testArray.Add(4);
             testArray.Add(0);
 
-            testArray.SetElement(index, elementToSet);
+            testArray[index] = elementToSet;
 
-            Assert.Equal(elementToSet, testArray.Element(index));
+            Assert.Equal(elementToSet, testArray[index]);
         }
 
         [Theory]
@@ -176,8 +176,8 @@ namespace DataCollection.Tests
 
             testArray.Insert(index, element);
 
-            Assert.Equal(nextElement, testArray.Element(index + 1));
-            Assert.Equal(element, testArray.Element(index));
+            Assert.Equal(nextElement, testArray[index + 1]);
+            Assert.Equal(element, testArray[index]);
         }
 
         [Fact]
@@ -192,8 +192,8 @@ namespace DataCollection.Tests
             testArray.Add(9);
 
             testArray.Clear();
-            Assert.Equal(0, testArray.Count());
-            Assert.Equal(0, testArray.Element(3));
+            Assert.Equal(0, testArray.Count);
+            Assert.Equal(0, testArray[3]);
         }
 
         [Theory]
@@ -242,7 +242,7 @@ namespace DataCollection.Tests
         }
 
         [Fact]
-        public void IfAnElementIsRemovedAndCountOfElementsisHalfOfArrayLengthShouldRealocateArrayInHalf()
+        public void IfAnElementIsRemovedAndCountOfElementsIsThePreviousArrayLengthArrayGetsRealocatedToThatLengthSmallArray()
         {
             var testArray = new IntArray();
 
@@ -255,6 +255,26 @@ namespace DataCollection.Tests
 
             testArray.RemoveAt(0);
             testArray.RemoveAt(1);
+
+            Assert.Equal(-1, testArray.IndexOf(0));
+        }
+
+        [Fact]
+        public void IfAnElementIsRemovedAndCountOfElementsIsThePreviousArrayLengthArrayGetsRealocatedToThatLengthLargeArray()
+        {
+            var testArray = new IntArray();
+
+            testArray.Add(1);
+            testArray.Add(2);
+            testArray.Add(3);
+            testArray.Add(4);
+            testArray.Add(5);
+            testArray.Add(6);
+            testArray.Add(7);
+            testArray.Add(8);
+            testArray.Add(9);
+
+            testArray.RemoveAt(8);
 
             Assert.Equal(-1, testArray.IndexOf(0));
         }

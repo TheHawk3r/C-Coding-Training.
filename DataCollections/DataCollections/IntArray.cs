@@ -16,26 +16,22 @@ namespace DataCollections
             count = 0;
         }
 
+        public int Count
+        {
+            get { return count; }
+        }
+
+        public int this[int index]
+        {
+            get { return array[index]; }
+            set { array[index] = value; }
+        }
+
         public void Add(int element)
         {
             CheckArrayCount();
             array[count] = element;
             count++;
-        }
-
-        public int Count()
-        {
-            return count;
-        }
-
-        public int Element(int index)
-        {
-            return array[index];
-        }
-
-        public void SetElement(int index, int element)
-        {
-            array[index] = element;
         }
 
         public bool Contains(int element)
