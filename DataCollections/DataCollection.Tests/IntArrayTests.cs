@@ -193,6 +193,7 @@ namespace DataCollection.Tests
 
             testArray.Clear();
             Assert.Equal(0, testArray.Count());
+            Assert.Equal(0, testArray.Element(3));
         }
 
         [Theory]
@@ -238,6 +239,24 @@ namespace DataCollection.Tests
             testArray.Remove(element);
 
             Assert.Equal(indexOfElement, testArray.IndexOf(element));
+        }
+
+        [Fact]
+        public void IfAnElementIsRemovedAndCountOfElementsisHalfOfArrayLengthShouldRealocateArrayInHalf()
+        {
+            var testArray = new IntArray();
+
+            testArray.Add(1);
+            testArray.Add(2);
+            testArray.Add(3);
+            testArray.Add(4);
+            testArray.Add(5);
+            testArray.Add(6);
+
+            testArray.RemoveAt(0);
+            testArray.RemoveAt(1);
+
+            Assert.Equal(-1, testArray.IndexOf(0));
         }
     }
 }

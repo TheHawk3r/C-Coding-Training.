@@ -5,12 +5,14 @@ namespace DataCollections
     public class IntArray
     {
         private const int InitialSize = 4;
+        private int previousSize;
         private int[] array;
         private int count;
 
         public IntArray()
         {
             array = new int[InitialSize];
+            previousSize = InitialSize;
             count = 0;
         }
 
@@ -48,8 +50,8 @@ namespace DataCollections
 
         public void Insert(int index, int element)
         {
-            count++;
             CheckArrayCount();
+            count++;
             this.ShiftToTheRight(index);
             array[index] = element;
         }
@@ -57,6 +59,7 @@ namespace DataCollections
         public void Clear()
         {
             array = Array.Empty<int>();
+            CheckArrayCount();
             count = 0;
         }
 
@@ -70,11 +73,12 @@ namespace DataCollections
         {
             this.ShiftToTheLeft(index);
             count--;
+            CheckArrayCount();
         }
 
         private void ShiftToTheRight(int index)
         {
-            for (int i = index; i < array.Length - 1; i++)
+            for (int i = index; i < count; i++)
             {
                 array[i + 1] = array[index];
             }
@@ -82,7 +86,7 @@ namespace DataCollections
 
         private void ShiftToTheLeft(int index)
         {
-            for (int i = index; i < array.Length - 1; i++)
+            for (int i = index; i < count; i++)
             {
                 array[i] = array[i + 1];
             }
@@ -92,11 +96,23 @@ namespace DataCollections
         {
             const int two = 2;
 
+            if (count <= previousSize && array.Length != previousSize)
+            {
+                Array.Resize(ref array, previousSize);
+                return;
+            }
+
             if (count <= array.Length - 1)
             {
                 return;
             }
 
+            if (array.Length < InitialSize)
+            {
+                Array.Resize(ref array, InitialSize);
+            }
+
+            previousSize = array.Length;
             Array.Resize(ref array, array.Length * two);
         }
     }
