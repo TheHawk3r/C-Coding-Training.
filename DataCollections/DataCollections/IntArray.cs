@@ -4,22 +4,26 @@ namespace DataCollections
 {
     public class IntArray
     {
+        private const int InitialSize = 4;
         private int[] array;
+        private int count;
 
         public IntArray()
         {
-            array = new int[0];
+            array = new int[InitialSize];
+            count = 0;
         }
 
         public void Add(int element)
         {
-            Array.Resize(ref array, array.Length + 1);
-            array[array.Length - 1] = element;
+            CheckArrayCount();
+            array[count] = element;
+            count++;
         }
 
         public int Count()
         {
-            return array.Length;
+            return count;
         }
 
         public int Element(int index)
@@ -44,7 +48,8 @@ namespace DataCollections
 
         public void Insert(int index, int element)
         {
-            Array.Resize(ref array, array.Length + 1);
+            count++;
+            CheckArrayCount();
             this.ShiftToTheRight(index);
             array[index] = element;
         }
@@ -52,6 +57,7 @@ namespace DataCollections
         public void Clear()
         {
             array = Array.Empty<int>();
+            count = 0;
         }
 
         public void Remove(int element)
@@ -63,7 +69,7 @@ namespace DataCollections
         public void RemoveAt(int index)
         {
             this.ShiftToTheLeft(index);
-            Array.Resize(ref array, array.Length - 1);
+            count--;
         }
 
         private void ShiftToTheRight(int index)
@@ -80,6 +86,18 @@ namespace DataCollections
             {
                 array[i] = array[i + 1];
             }
+        }
+
+        private void CheckArrayCount()
+        {
+            const int two = 2;
+
+            if (count <= array.Length - 1)
+            {
+                return;
+            }
+
+            Array.Resize(ref array, array.Length * two);
         }
     }
 }

@@ -164,7 +164,7 @@ namespace DataCollection.Tests
         [InlineData(1, 1, 2)]
         [InlineData(3, 2, 10)]
         [InlineData(12, 3, 4)]
-        [InlineData(21, 4, 9)]
+        [InlineData(21, 4, 0)]
         public void CanInsertElements(int element, int index, int nextElement)
         {
             var testArray = new IntArray();
@@ -173,7 +173,6 @@ namespace DataCollection.Tests
             testArray.Add(2);
             testArray.Add(10);
             testArray.Add(4);
-            testArray.Add(9);
 
             testArray.Insert(index, element);
 
