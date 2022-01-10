@@ -18,13 +18,13 @@ namespace DataCollections
 
         public int Count
         {
-            get { return count; }
+            get => count;
         }
 
         public int this[int index]
         {
-            get { return array[index]; }
-            set { array[index] = value; }
+            get => array[index];
+            set => array[index] = value;
         }
 
         public void Add(int element)
