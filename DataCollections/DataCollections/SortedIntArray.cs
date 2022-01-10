@@ -2,7 +2,7 @@
 {
     public class SortedIntArray : IntArray
     {
-        public int this[int index]
+        public override int this[int index]
         {
             get => array[index];
             set

@@ -21,7 +21,7 @@ namespace DataCollections
             protected set;
         }
 
-        public int this[int index]
+        public virtual int this[int index]
         {
             get => array[index];
             set => array[index] = value;
