@@ -7,18 +7,18 @@ namespace DataCollections
         private const int InitialSize = 4;
         private int previousSize;
         private int[] array;
-        private int count;
 
         public IntArray()
         {
             array = new int[InitialSize];
             previousSize = InitialSize;
-            count = 0;
+            Count = 0;
         }
 
         public int Count
         {
-            get => count;
+            get;
+            private set;
         }
 
         public int this[int index]
@@ -30,8 +30,8 @@ namespace DataCollections
         public void Add(int element)
         {
             CheckArrayCount();
-            array[count] = element;
-            count++;
+            array[Count] = element;
+            Count++;
         }
 
         public bool Contains(int element)
@@ -47,7 +47,7 @@ namespace DataCollections
         public void Insert(int index, int element)
         {
             CheckArrayCount();
-            count++;
+            Count++;
             this.ShiftToTheRight(index);
             array[index] = element;
         }
@@ -56,7 +56,7 @@ namespace DataCollections
         {
             array = Array.Empty<int>();
             CheckArrayCount();
-            count = 0;
+            Count = 0;
         }
 
         public void Remove(int element)
@@ -68,13 +68,13 @@ namespace DataCollections
         public void RemoveAt(int index)
         {
             this.ShiftToTheLeft(index);
-            count--;
+            Count--;
             CheckArrayCount();
         }
 
         private void ShiftToTheRight(int index)
         {
-            for (int i = index; i < count; i++)
+            for (int i = index; i < Count; i++)
             {
                 array[i + 1] = array[index];
             }
@@ -82,7 +82,7 @@ namespace DataCollections
 
         private void ShiftToTheLeft(int index)
         {
-            for (int i = index; i < count; i++)
+            for (int i = index; i < Count; i++)
             {
                 array[i] = array[i + 1];
             }
@@ -92,13 +92,13 @@ namespace DataCollections
         {
             const int two = 2;
 
-            if (count <= previousSize && array.Length != previousSize)
+            if (Count <= previousSize && array.Length != previousSize)
             {
                 Array.Resize(ref array, previousSize);
                 return;
             }
 
-            if (count <= array.Length - 1)
+            if (Count <= array.Length - 1)
             {
                 return;
             }
