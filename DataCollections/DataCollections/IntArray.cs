@@ -4,9 +4,9 @@ namespace DataCollections
 {
     public class IntArray
     {
+        protected int[] array;
         private const int InitialSize = 4;
         private int previousSize;
-        private int[] array;
 
         public IntArray()
         {
@@ -18,7 +18,7 @@ namespace DataCollections
         public int Count
         {
             get;
-            private set;
+            protected set;
         }
 
         public int this[int index]
@@ -27,7 +27,7 @@ namespace DataCollections
             set => array[index] = value;
         }
 
-        public void Add(int element)
+        public virtual void Add(int element)
         {
             CheckArrayCount();
             array[Count] = element;
@@ -44,11 +44,11 @@ namespace DataCollections
             return Array.IndexOf(array, element);
         }
 
-        public void Insert(int index, int element)
+        public virtual void Insert(int index, int element)
         {
             CheckArrayCount();
             Count++;
-            this.ShiftToTheRight(index);
+            ShiftToTheRight(index);
             array[index] = element;
         }
 
@@ -67,28 +67,12 @@ namespace DataCollections
 
         public void RemoveAt(int index)
         {
-            this.ShiftToTheLeft(index);
+            ShiftToTheLeft(index);
             Count--;
             CheckArrayCount();
         }
 
-        private void ShiftToTheRight(int index)
-        {
-            for (int i = index; i < Count; i++)
-            {
-                array[i + 1] = array[index];
-            }
-        }
-
-        private void ShiftToTheLeft(int index)
-        {
-            for (int i = index; i < Count; i++)
-            {
-                array[i] = array[i + 1];
-            }
-        }
-
-        private void CheckArrayCount()
+        protected void CheckArrayCount()
         {
             const int two = 2;
 
@@ -110,6 +94,22 @@ namespace DataCollections
 
             previousSize = array.Length;
             Array.Resize(ref array, array.Length * two);
+        }
+
+        protected void ShiftToTheRight(int index)
+        {
+            for (int i = Count - 1; i > index; i--)
+            {
+                array[i] = array[i - 1];
+            }
+        }
+
+        protected void ShiftToTheLeft(int index)
+        {
+            for (int i = index; i < Count; i++)
+            {
+                array[i] = array[i + 1];
+            }
         }
     }
 }
