@@ -6,7 +6,10 @@
         {
             set
             {
-                if (value <= base[index + 1] && value >= base[index - 1])
+                bool indexIsNotFirstOrLastElement = (index != 0 && index != Count - 1) && (value > base[index + 1] || value < base[index - 1]);
+                bool indexIsFirstElement = index == 0 && value > base[index + 1];
+                bool indexIsLastElement = index == Count - 1 && value < base[index - 1];
+                if (indexIsNotFirstOrLastElement || indexIsFirstElement || indexIsLastElement)
                 {
                     return;
                 }
@@ -17,15 +20,13 @@
 
         public override void Add(int element)
         {
-            CheckArrayCount();
-            base[Count] = element;
-            Count++;
+            base.Add(element);
             BubbleSort();
         }
 
         public override void Insert(int index, int element)
-            {
-            if (element > base[index + 1] || element < base[index - 1])
+        {
+            if (element > base[index] || element < base[index - 1])
             {
                 return;
             }
