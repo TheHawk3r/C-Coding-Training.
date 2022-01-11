@@ -75,12 +75,12 @@ namespace DataCollection.Tests
         {
             var testArray = new SortedIntArray();
 
+            testArray.Add(4);
             testArray.Add(3);
-            testArray.Add(2);
             testArray.Add(5);
             testArray.Add(6);
-            testArray.Insert(0, 4);
-            Assert.Equal(2, testArray[0]);
+            testArray.Insert(0, 7);
+            Assert.Equal(3, testArray[0]);
         }
 
         [Fact]
