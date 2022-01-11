@@ -4,8 +4,8 @@ namespace DataCollections
 {
     public class IntArray
     {
-        protected int[] array;
         private const int InitialSize = 4;
+        private int[] array;
         private int previousSize;
 
         public IntArray()

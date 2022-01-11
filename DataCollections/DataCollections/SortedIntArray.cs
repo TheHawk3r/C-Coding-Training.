@@ -4,10 +4,9 @@
     {
         public override int this[int index]
         {
-            get => array[index];
             set
             {
-                array[index] = value;
+                this[index] = value;
                 BubbleSort();
             }
         }
@@ -15,7 +14,7 @@
         public override void Add(int element)
         {
             CheckArrayCount();
-            array[Count] = element;
+            this[Count] = element;
             Count++;
             BubbleSort();
         }
@@ -25,7 +24,7 @@
             CheckArrayCount();
             Count++;
             ShiftToTheRight(index);
-            array[index] = element;
+            this[index] = element;
             BubbleSort();
         }
 
@@ -35,11 +34,11 @@
             {
                 for (int j = 0; j < Count - i - 1; j++)
                 {
-                    if (array[j] > array[j + 1])
+                    if (this[j] > this[j + 1])
                     {
-                        int temp = array[j];
-                        array[j] = array[j + 1];
-                        array[j + 1] = temp;
+                        int temp = this[j];
+                        this[j] = this[j + 1];
+                        this[j + 1] = temp;
                     }
                 }
             }
