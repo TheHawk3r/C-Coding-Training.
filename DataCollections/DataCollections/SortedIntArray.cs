@@ -6,26 +6,31 @@
         {
             set
             {
-                this[index] = value;
-                BubbleSort();
+                if (value <= base[index + 1] && value >= base[index - 1])
+                {
+                    return;
+                }
+
+                base[index] = value;
             }
         }
 
         public override void Add(int element)
         {
             CheckArrayCount();
-            this[Count] = element;
+            base[Count] = element;
             Count++;
             BubbleSort();
         }
 
         public override void Insert(int index, int element)
-        {
-            CheckArrayCount();
-            Count++;
-            ShiftToTheRight(index);
-            this[index] = element;
-            BubbleSort();
+            {
+            if (element > base[index + 1] || element < base[index - 1])
+            {
+                return;
+            }
+
+            base.Insert(index, element);
         }
 
         private void BubbleSort()
@@ -34,11 +39,11 @@
             {
                 for (int j = 0; j < Count - i - 1; j++)
                 {
-                    if (this[j] > this[j + 1])
+                    if (base[j] > base[j + 1])
                     {
-                        int temp = this[j];
-                        this[j] = this[j + 1];
-                        this[j + 1] = temp;
+                        int temp = base[j];
+                        base[j] = base[j + 1];
+                        base[j + 1] = temp;
                     }
                 }
             }
