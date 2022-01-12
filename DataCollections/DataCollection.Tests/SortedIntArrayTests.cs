@@ -43,7 +43,7 @@ namespace DataCollection.Tests
 
         [Fact]
 
-        public void IfAnElementIsSetAndIsBiggerThenTheNextElementAndSmallerThenThePreviousElementItIsNotSet()
+        public void IfAnElementIsSetAndIsBiggerThenTheNextElementOrSmallerThenThePreviousElementItIsNotSet()
         {
             var testArray = new SortedIntArray();
 
@@ -57,7 +57,7 @@ namespace DataCollection.Tests
 
         [Fact]
 
-        public void IfAnElementIsInsertedAndIsBiggerThenElementWhereItIsInsertedAndSmallerThenThePreviousElementItIsNotInserted()
+        public void IfAnElementIsInsertedAndIsBiggerThenElementWhereItIsInsertedOrSmallerThenThePreviousElementItIsNotInserted()
         {
             var testArray = new SortedIntArray();
 
@@ -81,6 +81,20 @@ namespace DataCollection.Tests
             testArray.Add(6);
             testArray.Insert(0, 7);
             Assert.Equal(3, testArray[0]);
+        }
+
+        [Fact]
+
+        public void IfAnElementIsInsertedOnTheLastIndexAndIsBiggerThenTheElementWhereItIsInsertedOrSmallerThenThePreviousElementItIsNotInserted()
+        {
+            var testArray = new SortedIntArray();
+
+            testArray.Add(4);
+            testArray.Add(3);
+            testArray.Add(5);
+            testArray.Add(6);
+            testArray.Insert(3, 7);
+            Assert.Equal(6, testArray[3]);
         }
 
         [Fact]
