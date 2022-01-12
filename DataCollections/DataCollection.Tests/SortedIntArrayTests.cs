@@ -9,7 +9,7 @@ namespace DataCollection.Tests
 
         public void AfterTwoElementsAreAddedArrayIsSorted()
         {
-            var testArray = new SortedIntArray();
+            IntArray testArray = new SortedIntArray();
 
             testArray.Add(5);
             testArray.Add(2);
@@ -21,7 +21,7 @@ namespace DataCollection.Tests
 
         public void IfAnElementIsSetOnTheFisrtIndexAndIsBiggerThenTheNextElementItIsNotSet()
         {
-            var testArray = new SortedIntArray();
+            IntArray testArray = new SortedIntArray();
 
             testArray.Add(3);
             testArray.Add(2);
@@ -33,7 +33,7 @@ namespace DataCollection.Tests
 
         public void IfAnElementIsSetOnTheLastIndexAndIsSmallerThenThePreviousElementItIsNotSet()
         {
-            var testArray = new SortedIntArray();
+            IntArray testArray = new SortedIntArray();
 
             testArray.Add(3);
             testArray.Add(2);
@@ -45,7 +45,7 @@ namespace DataCollection.Tests
 
         public void IfAnElementIsSetAndIsBiggerThenTheNextElementOrSmallerThenThePreviousElementItIsNotSet()
         {
-            var testArray = new SortedIntArray();
+            IntArray testArray = new SortedIntArray();
 
             testArray.Add(3);
             testArray.Add(2);
@@ -59,7 +59,7 @@ namespace DataCollection.Tests
 
         public void IfAnElementIsInsertedAndIsBiggerThenElementWhereItIsInsertedOrSmallerThenThePreviousElementItIsNotInserted()
         {
-            var testArray = new SortedIntArray();
+            IntArray testArray = new SortedIntArray();
 
             testArray.Add(3);
             testArray.Add(2);
@@ -73,7 +73,7 @@ namespace DataCollection.Tests
 
         public void IfAnElementIsInsertedOnTheFirstIndexAndIsBiggerThenTheElementWhereItIsInsertedItIsNotInserted()
         {
-            var testArray = new SortedIntArray();
+            IntArray testArray = new SortedIntArray();
 
             testArray.Add(4);
             testArray.Add(3);
@@ -87,7 +87,7 @@ namespace DataCollection.Tests
 
         public void IfAnElementIsInsertedOnTheLastIndexAndIsBiggerThenTheElementWhereItIsInsertedOrSmallerThenThePreviousElementItIsNotInserted()
         {
-            var testArray = new SortedIntArray();
+            IntArray testArray = new SortedIntArray();
 
             testArray.Add(4);
             testArray.Add(3);
@@ -100,7 +100,7 @@ namespace DataCollection.Tests
         [Fact]
         public void AfterThreeElementsAreAddedArrayIsSorted()
         {
-            var testArray = new SortedIntArray();
+            IntArray testArray = new SortedIntArray();
 
             testArray.Add(5);
             testArray.Add(2);
@@ -114,7 +114,7 @@ namespace DataCollection.Tests
 
         public void InsertingAnElementSortsTheArray()
         {
-            var testArray = new SortedIntArray();
+            IntArray testArray = new SortedIntArray();
 
             testArray.Add(5);
             testArray.Add(2);
@@ -130,7 +130,7 @@ namespace DataCollection.Tests
 
         public void ArrayIsProperlySorted()
         {
-            var testArray = new SortedIntArray();
+            IntArray testArray = new SortedIntArray();
 
             testArray.Add(5);
             testArray.Add(2);
