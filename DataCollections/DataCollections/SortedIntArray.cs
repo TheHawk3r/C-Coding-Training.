@@ -26,9 +26,10 @@
 
         public override void Insert(int index, int element)
         {
-            bool indexIsNotFirstOrLastElement = index != 0 && (element > base[index] || element < base[index - 1]);
+            bool indexIsNotFirstOrLastElement = (index != 0 && index != Count - 1) && (element > base[index] || element < base[index - 1]);
             bool indexIsFirstElement = index == 0 && element > base[index];
-            if (indexIsNotFirstOrLastElement || indexIsFirstElement)
+            bool indexIsLastElement = index == Count - 1 && (element > base[index] || element < base[index - 1]);
+            if (indexIsNotFirstOrLastElement || indexIsLastElement || indexIsFirstElement)
             {
                 return;
             }
