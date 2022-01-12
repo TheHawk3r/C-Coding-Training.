@@ -44,7 +44,7 @@ namespace DataCollections
             return Array.IndexOf(array, element);
         }
 
-        public void Insert(int index, int element)
+        public void Insert(int index, object element)
         {
             CheckArrayCount();
             Count++;

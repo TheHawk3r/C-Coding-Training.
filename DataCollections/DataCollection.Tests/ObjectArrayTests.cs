@@ -48,9 +48,61 @@ namespace DataCollection.Tests
             Assert.Equal(2, testArray.IndexOf(true));
         }
 
+        [Fact]
         public void CanInsertAnElement()
         {
             var testArray = new ObjectArray();
+
+            testArray.Add("Hello");
+            testArray.Add(1);
+            testArray.Add(false);
+
+            testArray.Insert(1, 1.500);
+
+            Assert.Equal(1.500, testArray[1]);
+        }
+
+        [Fact]
+        public void CanClearArray()
+        {
+            var testArray = new ObjectArray();
+
+            testArray.Add("Hello");
+            testArray.Add(1);
+            testArray.Add(false);
+
+            testArray.Clear();
+
+            Assert.Null(testArray[0]);
+            Assert.Null(testArray[1]);
+        }
+
+        [Fact]
+        public void CanRemoveObject()
+        {
+            var testArray = new ObjectArray();
+
+            testArray.Add("Hello");
+            testArray.Add(1);
+            testArray.Add(false);
+
+            testArray.Remove("Hello");
+
+            Assert.Equal(1, testArray[0]);
+        }
+
+        [Fact]
+        public void CanRemoveObjectAtIndex()
+        {
+            var testArray = new ObjectArray();
+
+            testArray.Add("Hello");
+            testArray.Add(1);
+            testArray.Add(false);
+
+            testArray.RemoveAt(0);
+
+            Assert.Equal(1, testArray[0]);
         }
     }
 }
