@@ -18,7 +18,7 @@ namespace DataCollections
         public int Count
         {
             get;
-            protected set;
+            private set;
         }
 
         public object this[int index]

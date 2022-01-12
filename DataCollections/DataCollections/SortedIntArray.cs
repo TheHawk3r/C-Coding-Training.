@@ -6,10 +6,7 @@
         {
             set
             {
-                bool indexIsNotFirstOrLastElement = (index != 0 && index != Count - 1) && (value > base[index + 1] || value < base[index - 1]);
-                bool indexIsFirstElement = index == 0 && value > base[index + 1];
-                bool indexIsLastElement = index == Count - 1 && value < base[index - 1];
-                if (indexIsNotFirstOrLastElement || indexIsFirstElement || indexIsLastElement)
+                if (value > ElementAt(index + 1, value) || value < ElementAt(index - 1, value))
                 {
                     return;
                 }
@@ -26,10 +23,7 @@
 
         public override void Insert(int index, int element)
         {
-            bool indexIsNotFirstOrLastElement = (index != 0 && index != Count - 1) && (element > base[index] || element < base[index - 1]);
-            bool indexIsFirstElement = index == 0 && element > base[index];
-            bool indexIsLastElement = index == Count - 1 && (element > base[index] || element < base[index - 1]);
-            if (indexIsNotFirstOrLastElement || indexIsLastElement || indexIsFirstElement)
+            if (element > ElementAt(index, element) || element < ElementAt(index - 1, element))
             {
                 return;
             }
@@ -37,10 +31,21 @@
             base.Insert(index, element);
         }
 
+        private int ElementAt(int index, int value)
+        {
+            if (index < 0 || index > Count - 1)
+            {
+                return value;
+            }
+
+            return base[index];
+        }
+
         private void BubbleSort()
         {
             for (int i = 0; i < Count - 1; i++)
             {
+                bool swaped = false;
                 for (int j = 0; j < Count - i - 1; j++)
                 {
                     if (base[j] > base[j + 1])
@@ -48,7 +53,13 @@
                         int temp = base[j];
                         base[j] = base[j + 1];
                         base[j + 1] = temp;
+                        swaped = true;
                     }
+                }
+
+                if (!swaped)
+                {
+                    break;
                 }
             }
         }
