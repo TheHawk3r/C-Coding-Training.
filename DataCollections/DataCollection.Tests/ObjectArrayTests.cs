@@ -1,6 +1,5 @@
 ﻿using DataCollections;
 using Xunit;
-using System;
 
 namespace DataCollection.Tests
 {
@@ -51,6 +50,21 @@ namespace DataCollection.Tests
         }
 
         [Fact]
+
+        public void SearchingForAnIndexOutsideOfArrayBoundsReturnsMinusOne()
+        {
+            var testArray = new ObjectArray();
+
+            testArray.Add("Hello");
+            testArray.Add(1);
+            testArray.Add(true);
+
+            Assert.Equal(-1, testArray[3]);
+            Assert.Equal(-1, testArray[-1]);
+            Assert.Equal(-1, testArray[4]);
+        }
+
+        [Fact]
         public void CanInsertAnElement()
         {
             var testArray = new ObjectArray();
@@ -76,10 +90,7 @@ namespace DataCollection.Tests
             testArray.Clear();
 
             Assert.Equal(0, testArray.Count);
-            Assert.Throws<ArgumentOutOfRangeException>(() => testArray[0]);
-            Assert.Equal("Index outside bounds of array. (Parameter '0')", Assert.Throws<ArgumentOutOfRangeException>(() => testArray[0]).Message);
-            Assert.Throws<ArgumentOutOfRangeException>(() => testArray[1]);
-            Assert.Equal("Index outside bounds of array. (Parameter '1')", Assert.Throws<ArgumentOutOfRangeException>(() => testArray[1]).Message);
+            Assert.Equal(-1, testArray[0]);
         }
 
         [Fact]
@@ -119,7 +130,50 @@ namespace DataCollection.Tests
             testArray.Add(1);
             testArray.Add(false);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => testArray.RemoveAt(3));
+            testArray.RemoveAt(-1);
+
+            Assert.Equal("Hello", testArray[0]);
+            Assert.Equal(1, testArray[1]);
+            Assert.Equal(false, testArray[2]);
+            Assert.Equal(-1, testArray[-1]);
+        }
+
+        [Theory]
+        [InlineData(9)]
+        [InlineData("Hi")]
+        [InlineData(null)]
+        [InlineData(2)]
+        [InlineData(4)]
+        [InlineData(1)]
+        public void ShouldReturnFalseIfArrayDoesNotContainElement(object element)
+        {
+            var testArray = new ObjectArray();
+
+            testArray.Add(5);
+            testArray.Add("Hello");
+            testArray.Add(true);
+            testArray.Add(false);
+
+            Assert.False(testArray.Contains(element));
+        }
+
+        [Theory]
+        [InlineData(5)]
+        [InlineData("No")]
+        [InlineData("Yes")]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ShouldReturnTrueIfArrayContainsElement(object element)
+        {
+            var testArray = new ObjectArray();
+
+            testArray.Add(5);
+            testArray.Add("No");
+            testArray.Add("Yes");
+            testArray.Add(true);
+            testArray.Add(false);
+
+            Assert.True(testArray.Contains(element));
         }
     }
 }

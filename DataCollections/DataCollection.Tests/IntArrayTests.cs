@@ -1,4 +1,3 @@
-using System;
 using DataCollections;
 using Xunit;
 
@@ -49,6 +48,9 @@ namespace DataCollection.Tests
         [InlineData(1, 2)]
         [InlineData(2, 10)]
         [InlineData(3, 4)]
+        [InlineData(4, 0)]
+        [InlineData(5, -1)]
+        [InlineData(-1, -1)]
         public void CanReturnElementFromAGivenIndex(int index, int elementReturned)
         {
             var testArray = new IntArray();
@@ -198,10 +200,7 @@ namespace DataCollection.Tests
             testArray.Clear();
 
             Assert.Equal(0, testArray.Count);
-            Assert.Throws<ArgumentOutOfRangeException>(() => testArray[4]);
-            Assert.Equal("Index outside bounds of array. (Parameter '4')", Assert.Throws<ArgumentOutOfRangeException>(() => testArray[4]).Message);
-            Assert.Throws<ArgumentOutOfRangeException>(() => testArray[2]);
-            Assert.Equal("Index outside bounds of array. (Parameter '2')", Assert.Throws<ArgumentOutOfRangeException>(() => testArray[2]).Message);
+            Assert.Equal(-1, testArray[0]);
         }
 
         [Theory]
@@ -261,7 +260,14 @@ namespace DataCollection.Tests
             testArray.Add(5);
             testArray.Add(6);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => testArray.RemoveAt(6));
+            testArray.RemoveAt(6);
+
+            Assert.Equal(1, testArray[0]);
+            Assert.Equal(2, testArray[1]);
+            Assert.Equal(3, testArray[2]);
+            Assert.Equal(4, testArray[3]);
+            Assert.Equal(5, testArray[4]);
+            Assert.Equal(6, testArray[5]);
         }
 
         [Fact]

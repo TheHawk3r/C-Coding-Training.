@@ -25,7 +25,11 @@ namespace DataCollections
         {
             get
             {
-                CheckIndex(index);
+                if (index < 0 || index > Count - 1)
+                {
+                    return -1;
+                }
+
                 return array[index];
             }
 
@@ -46,7 +50,7 @@ namespace DataCollections
 
         public int IndexOf(object element)
         {
-            return Array.IndexOf(array, element) <= Count - 1 ? Array.IndexOf(array, element) : -1;
+            return Array.IndexOf(array, element, 0, Count);
         }
 
         public void Insert(int index, object element)
@@ -66,13 +70,22 @@ namespace DataCollections
 
         public void Remove(object element)
         {
-            int index = Array.IndexOf(array, element);
+            int index = this.IndexOf(element);
+            if (index == -1)
+            {
+                return;
+            }
+
             this.RemoveAt(index);
         }
 
         public void RemoveAt(int index)
         {
-            CheckIndex(index);
+            if (index < 0 || index > Count - 1)
+            {
+                return;
+            }
+
             ShiftToTheLeft(index);
             Count--;
             CheckArrayCount();
@@ -100,16 +113,6 @@ namespace DataCollections
 
             previousSize = array.Length;
             Array.Resize(ref array, array.Length * two);
-        }
-
-        protected void CheckIndex(int index)
-        {
-            if (index <= Count - 1)
-            {
-                return;
-            }
-
-            throw new ArgumentOutOfRangeException(index.ToString(), "Index outside bounds of array.");
         }
 
         protected void ShiftToTheRight(int index)
