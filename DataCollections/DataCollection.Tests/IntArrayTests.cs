@@ -1,3 +1,4 @@
+using System;
 using DataCollections;
 using Xunit;
 
@@ -48,7 +49,6 @@ namespace DataCollection.Tests
         [InlineData(1, 2)]
         [InlineData(2, 10)]
         [InlineData(3, 4)]
-        [InlineData(4, 0)]
         public void CanReturnElementFromAGivenIndex(int index, int elementReturned)
         {
             var testArray = new IntArray();
@@ -108,6 +108,7 @@ namespace DataCollection.Tests
         [InlineData(3)]
         [InlineData(6)]
         [InlineData(11)]
+        [InlineData(0)]
         public void ShouldReturnFalseIfArrayDoesNotContainElement(int element)
         {
             var testArray = new IntArray();
@@ -116,7 +117,6 @@ namespace DataCollection.Tests
             testArray.Add(2);
             testArray.Add(10);
             testArray.Add(4);
-            testArray.Add(0);
 
             Assert.False(testArray.Contains(element));
         }
@@ -126,7 +126,7 @@ namespace DataCollection.Tests
         [InlineData(2, 1)]
         [InlineData(10, 2)]
         [InlineData(4, 3)]
-        [InlineData(0, 4)]
+        [InlineData(0, -1)]
         public void ShouldReturnTheIndexOfAElementIfPresent(int element, int index)
         {
             var testArray = new IntArray();
@@ -135,7 +135,7 @@ namespace DataCollection.Tests
             testArray.Add(2);
             testArray.Add(10);
             testArray.Add(4);
-            testArray.Add(0);
+            testArray.Add(6);
 
             Assert.Equal(index, testArray.IndexOf(element));
         }
@@ -176,7 +176,11 @@ namespace DataCollection.Tests
 
             testArray.Insert(index, element);
 
-            Assert.Equal(nextElement, testArray[index + 1]);
+            if (index + 1 <= testArray.Count - 1)
+            {
+                Assert.Equal(nextElement, testArray[index + 1]);
+            }
+
             Assert.Equal(element, testArray[index]);
         }
 
@@ -192,8 +196,12 @@ namespace DataCollection.Tests
             testArray.Add(9);
 
             testArray.Clear();
+
             Assert.Equal(0, testArray.Count);
-            Assert.Equal(0, testArray[3]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => testArray[4]);
+            Assert.Equal("Index outside bounds of array. (Parameter '4')", Assert.Throws<ArgumentOutOfRangeException>(() => testArray[4]).Message);
+            Assert.Throws<ArgumentOutOfRangeException>(() => testArray[2]);
+            Assert.Equal("Index outside bounds of array. (Parameter '2')", Assert.Throws<ArgumentOutOfRangeException>(() => testArray[2]).Message);
         }
 
         [Theory]
@@ -218,12 +226,12 @@ namespace DataCollection.Tests
         }
 
         [Theory]
-        [InlineData(1, -1)]
-        [InlineData(2, -1)]
-        [InlineData(3, -1)]
-        [InlineData(4, -1)]
-        [InlineData(5, -1)]
-        [InlineData(6, -1)]
+        [InlineData(1, 0)]
+        [InlineData(2, 1)]
+        [InlineData(3, 2)]
+        [InlineData(4, 3)]
+        [InlineData(5, 4)]
+        [InlineData(6, 5)]
 
         public void CanRemoveElementAtGivenIndex(int element, int indexOfElement)
         {
@@ -236,9 +244,24 @@ namespace DataCollection.Tests
             testArray.Add(5);
             testArray.Add(6);
 
-            testArray.Remove(element);
+            testArray.RemoveAt(indexOfElement);
 
-            Assert.Equal(indexOfElement, testArray.IndexOf(element));
+            Assert.False(testArray.Contains(element));
+        }
+
+        [Fact]
+        public void CanNotRemoveElementOutsideBoundsOfArray()
+        {
+            var testArray = new IntArray();
+
+            testArray.Add(1);
+            testArray.Add(2);
+            testArray.Add(3);
+            testArray.Add(4);
+            testArray.Add(5);
+            testArray.Add(6);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => testArray.RemoveAt(6));
         }
 
         [Fact]

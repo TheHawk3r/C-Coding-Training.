@@ -23,7 +23,15 @@ namespace DataCollections
 
         public virtual int this[int index]
         {
-            get => array[index];
+            get
+            {
+               if (index > Count - 1)
+               {
+                   throw new ArgumentOutOfRangeException(index.ToString(), "Index outside bounds of array.");
+               }
+
+               return array[index];
+            }
             set => array[index] = value;
         }
 
@@ -36,12 +44,12 @@ namespace DataCollections
 
         public bool Contains(int element)
         {
-            return Array.Exists(array, elementToCheck => elementToCheck == element);
+            return Array.Exists(array, elementToCheck => elementToCheck == element && this.IndexOf(element) <= Count - 1);
         }
 
         public int IndexOf(int element)
         {
-            return Array.IndexOf(array, element);
+            return Array.IndexOf(array, element) <= Count - 1 ? Array.IndexOf(array, element) : -1;
         }
 
         public virtual void Insert(int index, int element)
@@ -67,6 +75,11 @@ namespace DataCollections
 
         public void RemoveAt(int index)
         {
+            if (index > Count - 1)
+            {
+                throw new ArgumentOutOfRangeException(index.ToString(), "Index outside bounds of array.");
+            }
+
             ShiftToTheLeft(index);
             Count--;
             CheckArrayCount();

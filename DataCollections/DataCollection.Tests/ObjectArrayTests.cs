@@ -1,5 +1,6 @@
 ﻿using DataCollections;
 using Xunit;
+using System;
 
 namespace DataCollection.Tests
 {
@@ -16,6 +17,7 @@ namespace DataCollection.Tests
             testArray.Add(true);
 
             Assert.Equal("Hello", testArray[0]);
+            Assert.Equal(true, testArray[2]);
         }
 
         [Fact]
@@ -73,8 +75,11 @@ namespace DataCollection.Tests
 
             testArray.Clear();
 
-            Assert.Null(testArray[0]);
-            Assert.Null(testArray[1]);
+            Assert.Equal(0, testArray.Count);
+            Assert.Throws<ArgumentOutOfRangeException>(() => testArray[0]);
+            Assert.Equal("Index outside bounds of array. (Parameter '0')", Assert.Throws<ArgumentOutOfRangeException>(() => testArray[0]).Message);
+            Assert.Throws<ArgumentOutOfRangeException>(() => testArray[1]);
+            Assert.Equal("Index outside bounds of array. (Parameter '1')", Assert.Throws<ArgumentOutOfRangeException>(() => testArray[1]).Message);
         }
 
         [Fact]
@@ -103,6 +108,18 @@ namespace DataCollection.Tests
             testArray.RemoveAt(0);
 
             Assert.Equal(1, testArray[0]);
+        }
+
+        [Fact]
+        public void CanNotRemoveObjectOutsideOfBounds()
+        {
+            var testArray = new ObjectArray();
+
+            testArray.Add("Hello");
+            testArray.Add(1);
+            testArray.Add(false);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => testArray.RemoveAt(3));
         }
     }
 }
