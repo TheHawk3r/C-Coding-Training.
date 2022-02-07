@@ -25,10 +25,7 @@ namespace DataCollections
         {
             get
             {
-               if (index > Count - 1)
-               {
-                   throw new ArgumentOutOfRangeException(index.ToString(), "Index outside bounds of array.");
-               }
+               CheckIndex(index);
 
                return array[index];
             }
@@ -75,11 +72,7 @@ namespace DataCollections
 
         public void RemoveAt(int index)
         {
-            if (index > Count - 1)
-            {
-                throw new ArgumentOutOfRangeException(index.ToString(), "Index outside bounds of array.");
-            }
-
+            CheckIndex(index);
             ShiftToTheLeft(index);
             Count--;
             CheckArrayCount();
@@ -107,6 +100,16 @@ namespace DataCollections
 
             previousSize = array.Length;
             Array.Resize(ref array, array.Length * two);
+        }
+
+        protected void CheckIndex(int index)
+            {
+            if (index <= Count - 1)
+            {
+                return;
+            }
+
+            throw new ArgumentOutOfRangeException(index.ToString(), "Index outside bounds of array.");
         }
 
         protected void ShiftToTheRight(int index)
