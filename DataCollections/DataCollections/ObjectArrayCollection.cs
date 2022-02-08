@@ -152,7 +152,7 @@ namespace DataCollections
 
         private ObjectArrayCollectionEnumerator GetEnumerator()
         {
-            return new ObjectArrayCollectionEnumerator(array, Count);
+            return new ObjectArrayCollectionEnumerator(this);
         }
     }
 }

@@ -4,25 +4,23 @@ namespace DataCollections
 {
     internal class ObjectArrayCollectionEnumerator : IEnumerator
     {
-        private readonly object[] array;
-        private readonly int count;
+        private readonly ObjectArrayCollection objectArray;
         private int position = -1;
 
-        public ObjectArrayCollectionEnumerator(object[] list, int count)
+        public ObjectArrayCollectionEnumerator(ObjectArrayCollection objectArray)
         {
-            array = list;
-            this.count = count;
+            this.objectArray = objectArray;
         }
 
         public object Current
         {
-            get => array[position];
+            get => objectArray[position];
         }
 
         public bool MoveNext()
         {
             position++;
-            return position < count;
+            return position < objectArray.Count;
         }
 
         public void Reset()
