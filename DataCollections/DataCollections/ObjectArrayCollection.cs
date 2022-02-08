@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections;
 
 namespace DataCollections
 {
-    public class ObjectArray
+    public class ObjectArrayCollection : IEnumerable
     {
         protected object[] array;
         private const int InitialSize = 4;
         private int previousSize;
 
-        public ObjectArray()
+        public ObjectArrayCollection()
         {
             array = new object[InitialSize];
             previousSize = InitialSize;
@@ -91,6 +92,11 @@ namespace DataCollections
             CheckArrayCount();
         }
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         protected void CheckArrayCount()
         {
             const int two = 2;
@@ -129,6 +135,11 @@ namespace DataCollections
             {
                 array[i] = array[i + 1];
             }
+        }
+
+        private ObjectArrayCollectionEnumerator GetEnumerator()
+        {
+            return new ObjectArrayCollectionEnumerator(array, Count);
         }
     }
 }

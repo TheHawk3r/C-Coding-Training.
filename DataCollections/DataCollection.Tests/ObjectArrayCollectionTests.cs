@@ -3,13 +3,13 @@ using Xunit;
 
 namespace DataCollection.Tests
 {
-    public class ObjectArrayTests
+    public class ObjectArrayCollectionTests
     {
         [Fact]
 
         public void CanAddVarriedObjectsToObjectArray()
         {
-            var testArray = new ObjectArray();
+            var testArray = new ObjectArrayCollection();
 
             testArray.Add("Hello");
             testArray.Add(1);
@@ -23,7 +23,7 @@ namespace DataCollection.Tests
 
         public void CanCheckForAObjectWithContainsMethod()
         {
-            var testArray = new ObjectArray();
+            var testArray = new ObjectArrayCollection();
 
             testArray.Add("Hello");
             testArray.Add(1);
@@ -38,7 +38,7 @@ namespace DataCollection.Tests
 
         public void CanFindIndexOfAnElement()
         {
-            var testArray = new ObjectArray();
+            var testArray = new ObjectArrayCollection();
 
             testArray.Add("Hello");
             testArray.Add(1);
@@ -53,7 +53,7 @@ namespace DataCollection.Tests
 
         public void SearchingForAnIndexOutsideOfArrayBoundsReturnsMinusOne()
         {
-            var testArray = new ObjectArray();
+            var testArray = new ObjectArrayCollection();
 
             testArray.Add("Hello");
             testArray.Add(1);
@@ -67,7 +67,7 @@ namespace DataCollection.Tests
         [Fact]
         public void CanInsertAnElement()
         {
-            var testArray = new ObjectArray();
+            var testArray = new ObjectArrayCollection();
 
             testArray.Add("Hello");
             testArray.Add(1);
@@ -81,7 +81,7 @@ namespace DataCollection.Tests
         [Fact]
         public void CanClearArray()
         {
-            var testArray = new ObjectArray();
+            var testArray = new ObjectArrayCollection();
 
             testArray.Add("Hello");
             testArray.Add(1);
@@ -96,7 +96,7 @@ namespace DataCollection.Tests
         [Fact]
         public void CanRemoveObject()
         {
-            var testArray = new ObjectArray();
+            var testArray = new ObjectArrayCollection();
 
             testArray.Add("Hello");
             testArray.Add(1);
@@ -110,7 +110,7 @@ namespace DataCollection.Tests
         [Fact]
         public void CanRemoveObjectAtIndex()
         {
-            var testArray = new ObjectArray();
+            var testArray = new ObjectArrayCollection();
 
             testArray.Add("Hello");
             testArray.Add(1);
@@ -124,7 +124,7 @@ namespace DataCollection.Tests
         [Fact]
         public void CanNotRemoveObjectOutsideOfBounds()
         {
-            var testArray = new ObjectArray();
+            var testArray = new ObjectArrayCollection();
 
             testArray.Add("Hello");
             testArray.Add(1);
@@ -147,7 +147,7 @@ namespace DataCollection.Tests
         [InlineData(1)]
         public void ShouldReturnFalseIfArrayDoesNotContainElement(object element)
         {
-            var testArray = new ObjectArray();
+            var testArray = new ObjectArrayCollection();
 
             testArray.Add(5);
             testArray.Add("Hello");
@@ -165,7 +165,7 @@ namespace DataCollection.Tests
         [InlineData(false)]
         public void ShouldReturnTrueIfArrayContainsElement(object element)
         {
-            var testArray = new ObjectArray();
+            var testArray = new ObjectArrayCollection();
 
             testArray.Add(5);
             testArray.Add("No");
@@ -174,6 +174,25 @@ namespace DataCollection.Tests
             testArray.Add(false);
 
             Assert.True(testArray.Contains(element));
+        }
+
+        [Fact]
+        public void CanIterateTroughObjects()
+        {
+            var testArray = new ObjectArrayCollection();
+            int i = 0;
+
+            testArray.Add(5);
+            testArray.Add("No");
+            testArray.Add("Yes");
+            testArray.Add(true);
+            testArray.Add(false);
+
+            foreach (object o in testArray)
+            {
+                Assert.Equal(testArray[i], o);
+                ++i;
+            }
         }
     }
 }
