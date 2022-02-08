@@ -187,6 +187,7 @@ namespace DataCollection.Tests
             testArray.Add("Yes");
             testArray.Add(true);
             testArray.Add(false);
+            testArray.Add("HI");
 
             foreach (object o in testArray)
             {

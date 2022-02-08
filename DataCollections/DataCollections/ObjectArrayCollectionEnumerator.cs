@@ -14,18 +14,18 @@ namespace DataCollections
             this.count = count;
         }
 
-        private object Current
+        public object Current
         {
             get => array[position];
         }
 
-        private bool MoveNext()
+        public bool MoveNext()
         {
             position++;
             return position < count;
         }
 
-        private void Reset()
+        public void Reset()
         {
             position = -1;
         }

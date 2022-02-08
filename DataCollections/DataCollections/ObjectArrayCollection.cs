@@ -94,7 +94,20 @@ namespace DataCollections
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            int position = 0;
+            foreach (object o in array)
+            {
+                if (position < Count)
+                {
+                    position++;
+                    yield return o;
+                }
+
+                if (position == Count)
+                {
+                    yield break;
+                }
+            }
         }
 
         protected void CheckArrayCount()
