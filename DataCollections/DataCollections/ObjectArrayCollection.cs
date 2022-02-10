@@ -94,18 +94,11 @@ namespace DataCollections
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            int position = 0;
-            foreach (object o in array)
+            for (int i = 0; i < Count; i++)
             {
-                if (position < Count)
+                if (i < Count)
                 {
-                    position++;
-                    yield return o;
-                }
-
-                if (position == Count)
-                {
-                    yield break;
+                    yield return array[i];
                 }
             }
         }
