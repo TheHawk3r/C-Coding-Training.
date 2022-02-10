@@ -96,10 +96,7 @@ namespace DataCollections
         {
             for (int i = 0; i < Count; i++)
             {
-                if (i < Count)
-                {
-                    yield return array[i];
-                }
+                yield return array[i];
             }
         }
 
