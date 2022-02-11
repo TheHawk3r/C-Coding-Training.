@@ -2,7 +2,7 @@
 
 namespace DataCollections
 {
-    internal class ListCollectionEnumerator<T> : IEnumerator
+    public class ListCollectionEnumerator<T> : IEnumerator
     {
         private readonly ListCollection<T> list;
         private int position = -1;

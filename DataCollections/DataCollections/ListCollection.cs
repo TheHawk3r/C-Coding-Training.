@@ -22,7 +22,7 @@ namespace DataCollections
             private set;
         }
 
-        public T this[int index]
+        public virtual T this[int index]
         {
             get
             {
@@ -37,7 +37,7 @@ namespace DataCollections
             set => array[index] = value;
         }
 
-        public void Add(T element)
+        public virtual void Add(T element)
         {
             CheckArrayCount();
             array[Count] = element;
@@ -54,7 +54,7 @@ namespace DataCollections
             return Array.IndexOf(array, element, 0, Count);
         }
 
-        public void Insert(int index, T element)
+        public virtual void Insert(int index, T element)
         {
             CheckArrayCount();
             Count++;
@@ -138,11 +138,6 @@ namespace DataCollections
             {
                 array[i] = array[i + 1];
             }
-        }
-
-        private ListCollectionEnumerator<T> GetEnumerator()
-        {
-            return new ListCollectionEnumerator<T>(this);
         }
     }
 }
