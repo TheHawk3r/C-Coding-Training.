@@ -3,15 +3,15 @@ using System.Collections;
 
 namespace DataCollections
 {
-    public class ObjectArrayCollection : IEnumerable
+    public class ListCollection<T> : IEnumerable
     {
-        protected object[] array;
+        protected T[] array;
         private const int InitialSize = 4;
         private int previousSize;
 
-        public ObjectArrayCollection()
+        public ListCollection()
         {
-            array = new object[InitialSize];
+            array = new T[InitialSize];
             previousSize = InitialSize;
             Count = 0;
         }
@@ -22,13 +22,13 @@ namespace DataCollections
             private set;
         }
 
-        public object this[int index]
+        public T this[int index]
         {
             get
             {
                 if (index < 0 || index > Count - 1)
                 {
-                    return -1;
+                    return default;
                 }
 
                 return array[index];
@@ -37,24 +37,24 @@ namespace DataCollections
             set => array[index] = value;
         }
 
-        public void Add(object element)
+        public void Add(T element)
         {
             CheckArrayCount();
             array[Count] = element;
             Count++;
         }
 
-        public bool Contains(object element)
+        public bool Contains(T element)
         {
             return Array.Exists(array, elementToCheck => elementToCheck.Equals(element) && this.IndexOf(element) <= Count - 1);
         }
 
-        public int IndexOf(object element)
+        public int IndexOf(T element)
         {
             return Array.IndexOf(array, element, 0, Count);
         }
 
-        public void Insert(int index, object element)
+        public void Insert(int index, T element)
         {
             CheckArrayCount();
             Count++;
@@ -64,12 +64,12 @@ namespace DataCollections
 
         public void Clear()
         {
-            array = Array.Empty<object>();
+            array = Array.Empty<T>();
             CheckArrayCount();
             Count = 0;
         }
 
-        public void Remove(object element)
+        public void Remove(T element)
         {
             int index = this.IndexOf(element);
             if (index == -1)
@@ -140,9 +140,9 @@ namespace DataCollections
             }
         }
 
-        private ObjectArrayCollectionEnumerator GetEnumerator()
+        private ListCollectionEnumerator<T> GetEnumerator()
         {
-            return new ObjectArrayCollectionEnumerator(this);
+            return new ListCollectionEnumerator<T>(this);
         }
     }
 }
