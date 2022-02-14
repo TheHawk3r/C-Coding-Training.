@@ -65,5 +65,17 @@ namespace DataCollection.Tests
             Assert.Equal("B", testArray[1]);
             Assert.Equal("C", testArray[2]);
         }
+
+        [Fact]
+        public void CanIterateTroughList()
+        {
+            int i = 0;
+            var testList = new ListCollection<int> { 1, 2, 3 };
+
+            foreach (int n in testList)
+            {
+                Assert.Equal(testList[i++], n);
+            }
+        }
     }
 }
