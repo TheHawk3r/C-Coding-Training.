@@ -79,7 +79,7 @@ namespace DataCollection.Tests
         }
 
         [Fact]
-        public void CanSwapItems()
+        public void CanSwapObjectItems()
         {
             var testList = new ListCollection<object> { 1, true, "A" };
 
@@ -87,6 +87,39 @@ namespace DataCollection.Tests
 
             Assert.Equal(true, testList[0]);
             Assert.Equal(1, testList[1]);
+        }
+
+        [Fact]
+        public void CanSwapStringItems()
+        {
+            var testList = new ListCollection<string> { "A", "B", "C" };
+
+            testList.Swap("A", "B");
+
+            Assert.Equal("B", testList[0]);
+            Assert.Equal("A", testList[1]);
+        }
+
+        [Fact]
+        public void CanSwapInttItems()
+        {
+            var testList = new ListCollection<int> { 1, 2, 3 };
+
+            testList.Swap(1, 2);
+
+            Assert.Equal(2, testList[0]);
+            Assert.Equal(1, testList[1]);
+        }
+
+        [Fact]
+        public void CanSwapCharItems()
+        {
+            var testList = new ListCollection<char> { 'a', 'b', 'c' };
+
+            testList.Swap('a', 'b');
+
+            Assert.Equal('b', testList[0]);
+            Assert.Equal('a', testList[1]);
         }
     }
 }
