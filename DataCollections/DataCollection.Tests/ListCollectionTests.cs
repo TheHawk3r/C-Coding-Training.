@@ -51,5 +51,19 @@ namespace DataCollection.Tests
 
             Assert.Equal(default(bool), testList3[3]);
         }
+
+        [Fact]
+
+        public void CanCopyListArrayToAnotherArray()
+        {
+            var testList = new ListCollection<string> { "A", "B", "C" };
+            var testArray = new string[4];
+
+            testList.CopyTo(testArray, 0);
+
+            Assert.Equal("A", testArray[0]);
+            Assert.Equal("B", testArray[1]);
+            Assert.Equal("C", testArray[2]);
+        }
     }
 }

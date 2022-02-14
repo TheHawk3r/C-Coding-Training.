@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace DataCollections
 {
-    public class ListCollection<T> : IEnumerable
+    public class ListCollection<T> : IList<T>
     {
         protected T[] array;
         private const int InitialSize = 4;
@@ -22,6 +23,11 @@ namespace DataCollections
             private set;
         }
 
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
         public virtual T this[int index]
         {
             get
@@ -37,29 +43,52 @@ namespace DataCollections
             set => array[index] = value;
         }
 
-        public virtual void Add(T element)
+        public virtual void Add(T item)
         {
             CheckArrayCount();
-            array[Count] = element;
+            array[Count] = item;
             Count++;
         }
 
-        public bool Contains(T element)
+        public bool Contains(T item)
         {
-            return Array.Exists(array, elementToCheck => elementToCheck.Equals(element) && this.IndexOf(element) <= Count - 1);
+            return Array.Exists(array, elementToCheck => elementToCheck.Equals(item) && this.IndexOf(item) <= Count - 1);
         }
 
-        public int IndexOf(T element)
+        public void CopyTo(T[] array, int arrayIndex)
         {
-            return Array.IndexOf(array, element, 0, Count);
+            if (array == null)
+            {
+                return;
+            }
+
+            if (arrayIndex < 0)
+            {
+                return;
+            }
+
+            if (Count > array.Length - arrayIndex + 1)
+            {
+                return;
+            }
+
+            for (int i = 0; i < Count; i++)
+            {
+                array[i + arrayIndex] = this.array[i];
+            }
         }
 
-        public virtual void Insert(int index, T element)
+        public int IndexOf(T item)
+        {
+            return Array.IndexOf(array, item, 0, Count);
+        }
+
+        public virtual void Insert(int index, T item)
         {
             CheckArrayCount();
             Count++;
             ShiftToTheRight(index);
-            array[index] = element;
+            array[index] = item;
         }
 
         public void Clear()
@@ -69,15 +98,18 @@ namespace DataCollections
             Count = 0;
         }
 
-        public void Remove(T element)
+        public bool Remove(T item)
         {
-            int index = this.IndexOf(element);
+            bool itemRemoved = false;
+            int index = this.IndexOf(item);
             if (index == -1)
             {
-                return;
+                return itemRemoved;
             }
 
             this.RemoveAt(index);
+            itemRemoved = true;
+            return itemRemoved;
         }
 
         public void RemoveAt(int index)
@@ -98,6 +130,11 @@ namespace DataCollections
             {
                 yield return array[i];
             }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new ListCollectionEnumerator<T>(this);
         }
 
         protected void CheckArrayCount()
