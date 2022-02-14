@@ -50,6 +50,20 @@ namespace DataCollections
             Count++;
         }
 
+        public void Swap(T a, T b)
+        {
+            if (!this.Contains(a) || !this.Contains(b))
+            {
+                return;
+            }
+
+            int indexOfA = this.IndexOf(a);
+            int indexOfB = this.IndexOf(b);
+            T temp = a;
+            this.array[indexOfA] = b;
+            this.array[indexOfB] = temp;
+        }
+
         public bool Contains(T item)
         {
             return Array.Exists(array, elementToCheck => elementToCheck.Equals(item) && this.IndexOf(item) <= Count - 1);

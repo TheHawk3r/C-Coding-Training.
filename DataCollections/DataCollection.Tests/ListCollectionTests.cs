@@ -77,5 +77,16 @@ namespace DataCollection.Tests
                 Assert.Equal(testList[i++], n);
             }
         }
+
+        [Fact]
+        public void CanSwapItems()
+        {
+            var testList = new ListCollection<object> { 1, true, "A" };
+
+            testList.Swap(1, true);
+
+            Assert.Equal(true, testList[0]);
+            Assert.Equal(1, testList[1]);
+        }
     }
 }
