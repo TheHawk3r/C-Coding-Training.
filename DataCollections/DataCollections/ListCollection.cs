@@ -50,7 +50,7 @@ namespace DataCollections
             Count++;
         }
 
-        public void Swap(T a, T b)
+        public void SwapItems(T a, T b)
         {
             if (!this.Contains(a) || !this.Contains(b))
             {
@@ -62,6 +62,13 @@ namespace DataCollections
             T temp = a;
             this.array[indexOfA] = b;
             this.array[indexOfB] = temp;
+        }
+
+        public void SwapObjects<T>(ref T a, ref T b)
+        {
+            T temp = a;
+            a = b;
+            b = temp;
         }
 
         public bool Contains(T item)
@@ -140,15 +147,15 @@ namespace DataCollections
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            for (int i = 0; i < Count; i++)
-            {
-                yield return array[i];
-            }
+            return GetEnumerator();
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return new ListCollectionEnumerator<T>(this);
+            for (int i = 0; i < Count; i++)
+            {
+                yield return array[i];
+            }
         }
 
         protected void CheckArrayCount()

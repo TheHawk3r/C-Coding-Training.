@@ -83,7 +83,7 @@ namespace DataCollection.Tests
         {
             var testList = new ListCollection<object> { 1, true, "A" };
 
-            testList.Swap(1, true);
+            testList.SwapItems(1, true);
 
             Assert.Equal(true, testList[0]);
             Assert.Equal(1, testList[1]);
@@ -94,7 +94,7 @@ namespace DataCollection.Tests
         {
             var testList = new ListCollection<string> { "A", "B", "C" };
 
-            testList.Swap("A", "B");
+            testList.SwapItems("A", "B");
 
             Assert.Equal("B", testList[0]);
             Assert.Equal("A", testList[1]);
@@ -105,7 +105,7 @@ namespace DataCollection.Tests
         {
             var testList = new ListCollection<int> { 1, 2, 3 };
 
-            testList.Swap(1, 2);
+            testList.SwapItems(1, 2);
 
             Assert.Equal(2, testList[0]);
             Assert.Equal(1, testList[1]);
@@ -116,10 +116,23 @@ namespace DataCollection.Tests
         {
             var testList = new ListCollection<char> { 'a', 'b', 'c' };
 
-            testList.Swap('a', 'b');
+            testList.SwapItems('a', 'b');
 
             Assert.Equal('b', testList[0]);
             Assert.Equal('a', testList[1]);
+        }
+
+        [Fact]
+
+        public void CanSwapTwoObjects()
+        {
+            ListCollection<int> testListOne = new ListCollection<int>() { 1, 2, 3 };
+            ListCollection<int> testListTwo = new ListCollection<int>() { 4, 5, 6 };
+
+            testListOne.SwapObjects<ListCollection<int>>(ref testListOne, ref testListTwo);
+
+            Assert.Equal(4, testListOne[0]);
+            Assert.Equal(1, testListTwo[0]);
         }
     }
 }
