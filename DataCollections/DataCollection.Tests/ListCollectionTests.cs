@@ -124,7 +124,7 @@ namespace DataCollection.Tests
 
         [Fact]
 
-        public void CanSwapTwoObjects()
+        public void CanSwapTwoListObjectsOfSameType()
         {
             ListCollection<int> testListOne = new ListCollection<int>() { 1, 2, 3 };
             ListCollection<int> testListTwo = new ListCollection<int>() { 4, 5, 6 };
