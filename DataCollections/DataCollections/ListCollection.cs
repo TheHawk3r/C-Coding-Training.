@@ -34,7 +34,7 @@ namespace DataCollections
             {
                 if (index < 0 || index > Count - 1)
                 {
-                    return default;
+                   return default(T);
                 }
 
                 return array[index];
@@ -83,6 +83,11 @@ namespace DataCollections
                 return;
             }
 
+            if (array.Rank != this.array.Rank)
+            {
+                return;
+            }
+
             if (arrayIndex < 0)
             {
                 return;
@@ -106,10 +111,15 @@ namespace DataCollections
 
         public virtual void Insert(int index, T item)
         {
-            CheckArrayCount();
-            Count++;
-            ShiftToTheRight(index);
-            array[index] = item;
+           if (index < 0 || index > Count - 1)
+           {
+              return;
+           }
+
+           CheckArrayCount();
+           Count++;
+           ShiftToTheRight(index);
+           array[index] = item;
         }
 
         public void Clear()

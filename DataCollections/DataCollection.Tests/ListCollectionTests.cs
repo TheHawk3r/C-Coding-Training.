@@ -134,5 +134,18 @@ namespace DataCollection.Tests
             Assert.Equal(4, testListOne[0]);
             Assert.Equal(1, testListTwo[0]);
         }
+
+        [Fact]
+
+        public void CanSwapTwoListObjectsOfObjectType()
+        {
+            ListCollection<object> testListOne = new ListCollection<object>() { 1, null, false };
+            ListCollection<object> testListTwo = new ListCollection<object>() { 4, true, "H" };
+
+            testListOne.SwapObjects<ListCollection<object>>(ref testListOne, ref testListTwo);
+
+            Assert.Equal(4, testListOne[0]);
+            Assert.Equal(1, testListTwo[0]);
+        }
     }
 }
