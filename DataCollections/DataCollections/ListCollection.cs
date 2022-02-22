@@ -8,12 +8,10 @@ namespace DataCollections
     {
         protected T[] array;
         private const int InitialSize = 4;
-        private int previousSize;
 
         public ListCollection()
         {
             array = new T[InitialSize];
-            previousSize = InitialSize;
             Count = 0;
         }
 
@@ -50,30 +48,17 @@ namespace DataCollections
             Count++;
         }
 
-        public void SwapItems(T a, T b)
-        {
-            if (!this.Contains(a) || !this.Contains(b))
-            {
-                return;
-            }
-
-            int indexOfA = this.IndexOf(a);
-            int indexOfB = this.IndexOf(b);
-            T temp = a;
-            this.array[indexOfA] = b;
-            this.array[indexOfB] = temp;
-        }
-
-        public void SwapObjects<T>(ref T a, ref T b)
-        {
-            T temp = a;
-            a = b;
-            b = temp;
-        }
-
         public bool Contains(T item)
         {
-            return Array.Exists(array, elementToCheck => elementToCheck.Equals(item) && this.IndexOf(item) <= Count - 1);
+            foreach (T element in this)
+            {
+                if (item.Equals(element))
+                {
+                    return this.IndexOf(item) <= Count - 1;
+                }
+            }
+
+            return false;
         }
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -81,11 +66,6 @@ namespace DataCollections
             if (array == null)
             {
                 throw new ArgumentNullException(nameof(array), "Array is null. Please input a proper array");
-            }
-
-            if (array.Rank != this.array.Rank)
-            {
-                throw new ArgumentException("Array is multidimensional. Please input a single dimension array", nameof(array));
             }
 
             if (Count > array.Length - arrayIndex)
@@ -133,7 +113,7 @@ namespace DataCollections
             int index = this.IndexOf(item);
             if (index == -1)
             {
-                throw new ArgumentException("Item is not present in the List.", nameof(item));
+                return itemRemoved;
             }
 
             this.RemoveAt(index);
@@ -166,9 +146,9 @@ namespace DataCollections
         {
             const int two = 2;
 
-            if (Count <= previousSize && array.Length != previousSize)
+            if (Count <= array.Length / two && array.Length != array.Length / two && array.Length / two >= InitialSize)
             {
-                Array.Resize(ref array, previousSize);
+                Array.Resize(ref array, array.Length / two);
                 return;
             }
 
@@ -177,12 +157,6 @@ namespace DataCollections
                 return;
             }
 
-            if (array.Length < InitialSize)
-            {
-                Array.Resize(ref array, InitialSize);
-            }
-
-            previousSize = array.Length;
             Array.Resize(ref array, array.Length * two);
         }
 

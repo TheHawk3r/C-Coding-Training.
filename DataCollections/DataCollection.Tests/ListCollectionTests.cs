@@ -7,6 +7,18 @@ namespace DataCollection.Tests
     public class ListCollectionTests
     {
         [Fact]
+        public void CheckArrayCountWorksProperly()
+        {
+            var testList = new ListCollection<int> { 1, 2, 3, 4, 5 };
+
+            Assert.Equal(5, testList.Count);
+
+            testList.RemoveAt(testList.Count - 1);
+
+            Assert.Equal(4, testList.Count);
+        }
+
+        [Fact]
 
         public void CanCreateAIntList()
         {
@@ -35,6 +47,22 @@ namespace DataCollection.Tests
             Assert.IsType<string>(testList[0]);
             Assert.IsType<string>(testList[1]);
             Assert.IsType<string>(testList[2]);
+        }
+
+        [Fact]
+        public void CanCheckForItem()
+        {
+            var testlistOne = new ListCollection<string> { "A", "B", "C" };
+
+            Assert.Contains("A", testlistOne);
+
+            var testlistTwo = new ListCollection<object> { "A", 1, true };
+
+            Assert.Contains(true, testlistTwo);
+
+            var testlistThree = new ListCollection<int> { 1, 2, 3 };
+
+            Assert.Contains(2, testlistThree);
         }
 
         [Fact]
@@ -76,15 +104,6 @@ namespace DataCollection.Tests
             var testList = new ListCollection<string> { "A", "B", "C" };
 
             Assert.Throws<ArgumentOutOfRangeException>(() => testList.Insert(4, "D"));
-        }
-
-        [Fact]
-
-        public void TryingToRemoveAnItemThatIsNotPresentInTheListShouldThrowArgumentException()
-        {
-            var testList = new ListCollection<string> { "A", "B", "C" };
-
-            Assert.Throws<ArgumentException>(() => testList.Remove("D"));
         }
 
         [Fact]
@@ -149,76 +168,6 @@ namespace DataCollection.Tests
             {
                 Assert.Equal(testList[i++], n);
             }
-        }
-
-        [Fact]
-        public void CanSwapObjectItems()
-        {
-            var testList = new ListCollection<object> { 1, true, "A" };
-
-            testList.SwapItems(1, true);
-
-            Assert.Equal(true, testList[0]);
-            Assert.Equal(1, testList[1]);
-        }
-
-        [Fact]
-        public void CanSwapStringItems()
-        {
-            var testList = new ListCollection<string> { "A", "B", "C" };
-
-            testList.SwapItems("A", "B");
-
-            Assert.Equal("B", testList[0]);
-            Assert.Equal("A", testList[1]);
-        }
-
-        [Fact]
-        public void CanSwapInttItems()
-        {
-            var testList = new ListCollection<int> { 1, 2, 3 };
-
-            testList.SwapItems(1, 2);
-
-            Assert.Equal(2, testList[0]);
-            Assert.Equal(1, testList[1]);
-        }
-
-        [Fact]
-        public void CanSwapCharItems()
-        {
-            var testList = new ListCollection<char> { 'a', 'b', 'c' };
-
-            testList.SwapItems('a', 'b');
-
-            Assert.Equal('b', testList[0]);
-            Assert.Equal('a', testList[1]);
-        }
-
-        [Fact]
-
-        public void CanSwapTwoListObjectsOfSameType()
-        {
-            ListCollection<int> testListOne = new ListCollection<int>() { 1, 2, 3 };
-            ListCollection<int> testListTwo = new ListCollection<int>() { 4, 5, 6 };
-
-            testListOne.SwapObjects<ListCollection<int>>(ref testListOne, ref testListTwo);
-
-            Assert.Equal(4, testListOne[0]);
-            Assert.Equal(1, testListTwo[0]);
-        }
-
-        [Fact]
-
-        public void CanSwapTwoListObjectsOfObjectType()
-        {
-            ListCollection<object> testListOne = new ListCollection<object>() { 1, null, false };
-            ListCollection<object> testListTwo = new ListCollection<object>() { 4, true, "H" };
-
-            testListOne.SwapObjects<ListCollection<object>>(ref testListOne, ref testListTwo);
-
-            Assert.Equal(4, testListOne[0]);
-            Assert.Equal(1, testListTwo[0]);
         }
     }
 }
