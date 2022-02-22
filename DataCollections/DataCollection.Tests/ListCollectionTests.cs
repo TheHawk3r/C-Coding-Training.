@@ -1,5 +1,6 @@
 ﻿using DataCollections;
 using Xunit;
+using System;
 
 namespace DataCollection.Tests
 {
@@ -37,19 +38,91 @@ namespace DataCollection.Tests
         }
 
         [Fact]
-        public void TryingToGetObjectOutsideListBoundsShouldReturnTypeDefault()
+        public void TryingToGetItemOutsideListBoundsShouldThrowArgumentOutOfBoundsException()
         {
             var testList1 = new ListCollection<string> { "A", "B", "C" };
 
-            Assert.Equal(default(string), testList1[3]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => testList1[3]);
 
             var testList2 = new ListCollection<int> { 1, 2, 3 };
 
-            Assert.Equal(default(int), testList2[3]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => testList2[3]);
 
             var testList3 = new ListCollection<bool> { true, false, true };
 
-            Assert.Equal(default(bool), testList3[3]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => testList3[3]);
+        }
+
+        [Fact]
+        public void TryingToSetItemOutsideListBoundsShouldThrowArgumentOutOfBoundsException()
+        {
+            var testList1 = new ListCollection<string> { "A", "B", "C" };
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => testList1[3] = "D");
+
+            var testList2 = new ListCollection<int> { 1, 2, 3 };
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => testList2[3] = 4);
+
+            var testList3 = new ListCollection<bool> { true, false, true };
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => testList3[3] = false);
+        }
+
+        [Fact]
+
+        public void TryingToInsertAItemOutsideBoundsOfListShouldThrowArgumentOutOfBoundsException()
+        {
+            var testList = new ListCollection<string> { "A", "B", "C" };
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => testList.Insert(4, "D"));
+        }
+
+        [Fact]
+
+        public void TryingToRemoveAnItemThatIsNotPresentInTheListShouldThrowArgumentException()
+        {
+            var testList = new ListCollection<string> { "A", "B", "C" };
+
+            Assert.Throws<ArgumentException>(() => testList.Remove("D"));
+        }
+
+        [Fact]
+
+        public void TryingToRemoveAnItemAtAIndexOutsideBoundsOfListShouldThrowArgumentOutOfBoundsException()
+        {
+            var testList = new ListCollection<string> { "A", "B", "C" };
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => testList.RemoveAt(3));
+        }
+
+        [Fact]
+        public void TryingToCopyListToANullArrayShouldThrowArgumentNullException()
+        {
+            var testList = new ListCollection<string> { "A", "B", "C" };
+            string[] testArray = null;
+
+            Assert.Throws<ArgumentNullException>(() => testList.CopyTo(testArray, 0));
+        }
+
+        [Fact]
+        public void TryingToCopyListToSmallerArrayShouldThrowArgumentException()
+        {
+            var testList = new ListCollection<string> { "A", "B", "C" };
+            string[] testArrayOne = new string[2];
+            string[] testArrayTwo = new string[5];
+
+            Assert.Throws<ArgumentException>(() => testList.CopyTo(testArrayOne, 1));
+            Assert.Throws<ArgumentException>(() => testList.CopyTo(testArrayTwo, 3));
+        }
+
+        [Fact]
+        public void TryingToCopyListToArrrayAtANegativeIndexShouldThrowArgumentOutOfRangeException()
+        {
+            var testList = new ListCollection<string> { "A", "B", "C" };
+            string[] testArrayOne = new string[2];
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => testList.CopyTo(testArrayOne, -1));
         }
 
         [Fact]
