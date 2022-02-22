@@ -32,15 +32,42 @@ namespace DataCollections
         {
             get
             {
-                if (index < 0 || index > Count - 1)
+                try
                 {
-                   return default(T);
-                }
+                    if (index < 0 || index > Count - 1)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(index), "index outside bounds of List");
+                    }
 
-                return array[index];
+                    return array[index];
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    Console.WriteLine(e);
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                    return default(T);
+                }
             }
 
-            set => array[index] = value;
+            set
+            {
+                try
+                {
+                    if (index < 0 || index > Count - 1)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(index), "Index outside bounds of List");
+                    }
+
+                    array[index] = value;
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    Console.WriteLine(e);
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                }
+            }
         }
 
         public virtual void Add(T item)
@@ -78,29 +105,46 @@ namespace DataCollections
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            if (array == null)
+            try
             {
-                return;
-            }
+                if (array == null)
+                {
+                    throw new ArgumentNullException(nameof(array), "Array is null. Please input a proper array");
+                }
 
-            if (array.Rank != this.array.Rank)
-            {
-                return;
-            }
+                if (array.Rank != this.array.Rank)
+                {
+                    throw new ArgumentException("Array is multidimensional. Please input a single dimension array", nameof(array));
+                }
 
-            if (arrayIndex < 0)
-            {
-                return;
-            }
+                if (Count > array.Length - arrayIndex + 1)
+                {
+                    throw new ArgumentException(
+                        $"The number of elements in the source ICollection is greater than the available space from {nameof(arrayIndex)} to the end of the destination {nameof(array)}.",
+                        nameof(array));
+                }
 
-            if (Count > array.Length - arrayIndex + 1)
-            {
-                return;
-            }
+                if (arrayIndex < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(arrayIndex), "index is less then zero");
+                }
 
-            for (int i = 0; i < Count; i++)
+                for (int i = 0; i < Count; i++)
+                {
+                    array[i + arrayIndex] = this.array[i];
+                }
+            }
+            catch (ArgumentNullException e)
             {
-                array[i + arrayIndex] = this.array[i];
+                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
             }
         }
 
@@ -111,15 +155,24 @@ namespace DataCollections
 
         public virtual void Insert(int index, T item)
         {
-           if (index < 0 || index > Count - 1)
-           {
-              return;
-           }
+            try
+            {
+                if (index < 0 || index > Count - 1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index), "index outside bounds of List");
+                }
 
-           CheckArrayCount();
-           Count++;
-           ShiftToTheRight(index);
-           array[index] = item;
+                CheckArrayCount();
+                Count++;
+                ShiftToTheRight(index);
+                array[index] = item;
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
         }
 
         public void Clear()
@@ -131,28 +184,47 @@ namespace DataCollections
 
         public bool Remove(T item)
         {
-            bool itemRemoved = false;
-            int index = this.IndexOf(item);
-            if (index == -1)
+            try
             {
+                bool itemRemoved = false;
+                int index = this.IndexOf(item);
+                if (index == -1)
+                {
+                    throw new ArgumentException("Item is not present in the List.", nameof(item));
+                }
+
+                this.RemoveAt(index);
+                itemRemoved = true;
                 return itemRemoved;
             }
-
-            this.RemoveAt(index);
-            itemRemoved = true;
-            return itemRemoved;
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                return false;
+            }
         }
 
         public void RemoveAt(int index)
         {
-            if (index < 0 || index > Count - 1)
+            try
             {
-                return;
-            }
+                if (index < 0 || index > Count - 1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index), "index outside bounds of List");
+                }
 
-            ShiftToTheLeft(index);
-            Count--;
-            CheckArrayCount();
+                ShiftToTheLeft(index);
+                Count--;
+                CheckArrayCount();
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
