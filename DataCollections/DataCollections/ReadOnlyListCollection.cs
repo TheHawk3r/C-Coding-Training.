@@ -6,9 +6,9 @@ namespace DataCollections
 {
     public class ReadOnlyListCollection<T> : IList<T>
     {
-        private readonly ListCollection<T> list;
+        private readonly IList<T> list;
 
-        public ReadOnlyListCollection(ListCollection<T> list)
+        public ReadOnlyListCollection(IList<T> list)
         {
             this.list = list;
         }
