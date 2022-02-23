@@ -21,7 +21,7 @@ namespace DataCollections
             private set;
         }
 
-        public bool IsReadOnly
+        public virtual bool IsReadOnly
         {
             get { return false; }
         }
@@ -39,6 +39,11 @@ namespace DataCollections
                 CheckArgumentOutOfBoundsException(index);
                 array[index] = value;
             }
+        }
+
+        public ReadOnlyListCollection<T> AsReadOnly()
+        {
+            return new ReadOnlyListCollection<T>(array);
         }
 
         public virtual void Add(T item)
@@ -100,28 +105,26 @@ namespace DataCollections
             array[index] = item;
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             array = Array.Empty<T>();
             CheckArrayCount();
             Count = 0;
         }
 
-        public bool Remove(T item)
+        public virtual bool Remove(T item)
         {
-            bool itemRemoved = false;
             int index = this.IndexOf(item);
             if (index == -1)
             {
-                return itemRemoved;
+                return false;
             }
 
             this.RemoveAt(index);
-            itemRemoved = true;
-            return itemRemoved;
+            return true;
         }
 
-        public void RemoveAt(int index)
+        public virtual void RemoveAt(int index)
         {
             CheckArgumentOutOfBoundsException(index);
             ShiftToTheLeft(index);
@@ -145,12 +148,6 @@ namespace DataCollections
         protected void CheckArrayCount()
         {
             const int two = 2;
-
-            if (Count <= array.Length / two && array.Length != array.Length / two && array.Length / two >= InitialSize)
-            {
-                Array.Resize(ref array, array.Length / two);
-                return;
-            }
 
             if (Count <= array.Length - 1)
             {
