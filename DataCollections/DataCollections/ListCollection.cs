@@ -43,7 +43,7 @@ namespace DataCollections
 
         public ReadOnlyListCollection<T> AsReadOnly()
         {
-            return new ReadOnlyListCollection<T>(array);
+            return new ReadOnlyListCollection<T>(this);
         }
 
         public virtual void Add(T item)

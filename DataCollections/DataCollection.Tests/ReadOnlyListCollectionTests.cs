@@ -1,6 +1,6 @@
 ﻿using DataCollections;
-using Xunit;
 using System;
+using Xunit;
 
 namespace DataCollection.Tests
 {
@@ -8,57 +8,68 @@ namespace DataCollection.Tests
     {
         [Fact]
 
-        public void SettingAELementInAReadOnlyListShouldThrowNotImplementedException()
+        public void SettingAELementInAReadOnlyListShouldThrowNotSupportedException()
         {
-            var testList = new ListCollection<int>() { 1, 2 };
+            var testListOne = new ListCollection<int>() { 1, 2 };
 
-            testList = testList.AsReadOnly();
+            var testListTwo = testListOne.AsReadOnly();
 
-            Assert.Throws<NotImplementedException>(() => testList[0] = 2);
+            Assert.Throws<NotSupportedException>(() => testListTwo[0] = 2);
         }
 
         [Fact]
 
-        public void AddingAELementInAReadOnlyListShouldThrowNotImplementedException()
+        public void AddingAELementInAReadOnlyListShouldThrowNotSupportedException()
         {
-            var testList = new ListCollection<int>() { 1, 2 };
+            var testListOne = new ListCollection<int>() { 1, 2 };
 
-            testList = testList.AsReadOnly();
+            var testListTwo = testListOne.AsReadOnly();
 
-            Assert.Throws<NotImplementedException>(() => testList.Add(5));
+            Assert.Throws<NotSupportedException>(() => testListTwo.Add(5));
         }
 
         [Fact]
 
-        public void InsertingAnELementInAReadOnlyListShouldThrowNotImplementedException()
+        public void InsertingAnELementInAReadOnlyListShouldThrowNotSupportedException()
         {
-            var testList = new ListCollection<int>() { 1, 2 };
+            var testListOne = new ListCollection<int>() { 1, 2 };
 
-            testList = testList.AsReadOnly();
+            var testListTwo = testListOne.AsReadOnly();
 
-            Assert.Throws<NotImplementedException>(() => testList.Insert(2, 10));
+            Assert.Throws<NotSupportedException>(() => testListTwo.Insert(2, 10));
         }
 
         [Fact]
 
-        public void RemovingAnELementInAReadOnlyListShouldThrowNotImplementedException()
+        public void RemovingAnELementInAReadOnlyListShouldThrowNotSupportedException()
         {
-            var testList = new ListCollection<int>() { 1, 2 };
+            var testListOne = new ListCollection<int>() { 1, 2 };
 
-            testList = testList.AsReadOnly();
+            var testListTwo = testListOne.AsReadOnly();
 
-            Assert.Throws<NotImplementedException>(() => testList.Remove(1));
+            Assert.Throws<NotSupportedException>(() => testListTwo.Remove(1));
         }
 
         [Fact]
 
-        public void RemovingAnELementAtAIndexInAReadOnlyListShouldThrowNotImplementedException()
+        public void RemovingAnELementAtAIndexInAReadOnlyListShouldThrowNotSupportedException()
         {
-            var testList = new ListCollection<int>() { 1, 2 };
+            var testListOne = new ListCollection<int>() { 1, 2 };
 
-            testList = testList.AsReadOnly();
+            var testListTwo = testListOne.AsReadOnly();
 
-            Assert.Throws<NotImplementedException>(() => testList.RemoveAt(1));
+            Assert.Throws<NotSupportedException>(() => testListTwo.RemoveAt(1));
+        }
+
+        [Fact]
+
+        public void ClearingAAReadOnlyListShouldThrowNotSupportedException()
+        {
+            var testListOne = new ListCollection<int>() { 1, 2 };
+
+            var testListTwo = testListOne.AsReadOnly();
+
+            Assert.Throws<NotSupportedException>(() => testListTwo.Clear());
         }
     }
 }
