@@ -13,7 +13,7 @@ namespace DataCollections
         {
         }
 
-        public LinkedListCollection(IEnumerable<T> collection)
+        public LinkedListCollection(ICollection<T> collection)
         {
             if (collection == null)
             {
@@ -28,7 +28,7 @@ namespace DataCollections
 
         public LinkedListNode<T> First => Head;
 
-        public LinkedListNode<T> Last => Head?.Previous;
+        public LinkedListNode<T> Last => Head?.PreviousNode;
 
         public int Count
         {
@@ -176,7 +176,7 @@ namespace DataCollections
                 throw new ArgumentNullException(nameof(arrayIndex));
             }
 
-            if (arrayIndex < 0 || arrayIndex > array.Length)
+            if (arrayIndex < 0 || arrayIndex >= array.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex), "Index outside bounds of array.");
             }
@@ -209,32 +209,16 @@ namespace DataCollections
                 return null;
             }
 
-            if (value != null)
+            do
             {
-                do
+                if (c.Equals(node.Value, value))
                 {
-                    if (c.Equals(node.Value, value))
-                    {
-                        return node;
-                    }
-
-                    node = node.NextNode;
+                    return node;
                 }
-                while (node != Head);
-            }
-            else
-            {
-                do
-                {
-                    if (node.Value == null)
-                    {
-                        return node;
-                    }
 
-                    node = node.NextNode;
-                }
-                while (node != Head);
+                node = node.NextNode;
             }
+            while (node != Head);
 
             return null;
         }
@@ -249,44 +233,34 @@ namespace DataCollections
             LinkedListNode<T> last = Head.PreviousNode;
             LinkedListNode<T> node = last;
             EqualityComparer<T> c = EqualityComparer<T>.Default;
+
             if (node == null)
             {
                 return null;
             }
 
-            if (value != null)
+            do
             {
-                do
+                if (c.Equals(node.Value, value))
                 {
-                    if (c.Equals(node.Value, value))
-                    {
-                        return node;
-                    }
-
-                    node = node.PreviousNode;
+                    return node;
                 }
-                while (node != last);
-            }
-            else
-            {
-                do
-                {
-                    if (node.Value == null)
-                    {
-                        return node;
-                    }
 
-                    node = node.PreviousNode;
-                }
-                while (node != last);
+                node = node.PreviousNode;
             }
+            while (node != last);
 
             return null;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            LinkedListNode<T> current = Head;
+            for (int i = 0; i < Count; i++)
+            {
+                yield return current.Value;
+                current = current.Next;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -382,7 +356,7 @@ namespace DataCollections
                 return;
             }
 
-            throw new InvalidOperationException("Node list is not the same as this list.");
+            throw new InvalidOperationException("Node is not present on this list.");
         }
 
         private void InternalInsertNodeBefore(LinkedListNode<T> node, LinkedListNode<T> newNode)
