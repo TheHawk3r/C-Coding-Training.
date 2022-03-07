@@ -28,7 +28,7 @@ namespace DataCollections
 
         public LinkedListNode<T> First => Head;
 
-        public LinkedListNode<T> Last => Head?.PreviousNode;
+        public LinkedListNode<T> Last => Head?.Previous;
 
         public int Count
         {
@@ -47,7 +47,7 @@ namespace DataCollections
         {
             ValidateNode(node);
             LinkedListNode<T> result = new LinkedListNode<T>(node.List, value);
-            InternalInsertNodeBefore(node.NextNode, result);
+            InternalInsertNodeBefore(node.Next, result);
             return result;
         }
 
@@ -55,7 +55,7 @@ namespace DataCollections
         {
             ValidateNode(node);
             ValidateNewNode(newNode);
-            InternalInsertNodeBefore(node.NextNode, newNode);
+            InternalInsertNodeBefore(node.Next, newNode);
             newNode.List = this;
         }
 
@@ -73,7 +73,7 @@ namespace DataCollections
         }
 
         public void AddBefore(LinkedListNode<T> node, LinkedListNode<T> newNode)
-            {
+        {
             ValidateNode(node);
             ValidateNewNode(newNode);
             InternalInsertNodeBefore(node, newNode);
@@ -195,7 +195,7 @@ namespace DataCollections
             do
             {
                 array[arrayIndex++] = node.Value;
-                node = node.NextNode;
+                node = node.Next;
             }
             while (node != Head);
         }
@@ -216,7 +216,7 @@ namespace DataCollections
                     return node;
                 }
 
-                node = node.NextNode;
+                node = node.Next;
             }
             while (node != Head);
 
@@ -230,7 +230,7 @@ namespace DataCollections
                 return null;
             }
 
-            LinkedListNode<T> last = Head.PreviousNode;
+            LinkedListNode<T> last = Head.Previous;
             LinkedListNode<T> node = last;
             EqualityComparer<T> c = EqualityComparer<T>.Default;
 
@@ -246,7 +246,7 @@ namespace DataCollections
                     return node;
                 }
 
-                node = node.PreviousNode;
+                node = node.Previous;
             }
             while (node != last);
 
@@ -303,25 +303,25 @@ namespace DataCollections
                 throw new InvalidOperationException("Can not remove from a empty list.");
             }
 
-            InternalRemoveNode(Head.PreviousNode);
+            InternalRemoveNode(Head.Previous);
         }
 
         internal void InternalRemoveNode(LinkedListNode<T> node)
         {
             Debug.Assert(node.List == this, "Deleting the node from another list!");
-            Debug.Assert(Head != null, "This method shouldn't be called on empty list!");
-            if (node.NextNode == node)
+            Debug.Assert(Head != null, "This method shouldn't be called on an empty list!");
+            if (node.Next == node)
             {
                 Debug.Assert(Count == 1 && Head == node, "this should only be true for a list with only one node");
                 Head = null;
             }
             else
             {
-                node.NextNode.PreviousNode = node.PreviousNode;
-                node.PreviousNode.NextNode = node.NextNode;
+                node.Next.Previous = node.Previous;
+                node.Previous.Next = node.Next;
                 if (Head == node)
                 {
-                    Head = node.NextNode;
+                    Head = node.Next;
                 }
             }
 
@@ -361,18 +361,18 @@ namespace DataCollections
 
         private void InternalInsertNodeBefore(LinkedListNode<T> node, LinkedListNode<T> newNode)
         {
-            newNode.NextNode = node;
-            newNode.PreviousNode = node.PreviousNode;
-            node.PreviousNode.NextNode = newNode;
-            node.PreviousNode = newNode;
+            newNode.Next = node;
+            newNode.Previous = node.Previous;
+            node.Previous.Next = newNode;
+            node.Previous = newNode;
             Count++;
         }
 
         private void InternalInsertNodeToEmptyList(LinkedListNode<T> newNode)
         {
             Debug.Assert(Head == null && Count == 0, "LinkedList must be empty when this method is called!");
-            newNode.NextNode = newNode;
-            newNode.PreviousNode = newNode;
+            newNode.Next = newNode;
+            newNode.Previous = newNode;
             Head = newNode;
             Count++;
         }

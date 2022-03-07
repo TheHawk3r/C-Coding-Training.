@@ -432,5 +432,73 @@ namespace DataCollection.Tests
 
             var exception = Assert.Throws<InvalidOperationException>(() => testList.RemoveLast());
         }
+
+        [Fact]
+
+        public void AddingAValueAfterANullNodeThrowsArgumentNullException()
+        {
+            var testList = new LinkedListCollection<int>();
+
+            Assert.Throws<ArgumentNullException>(() => testList.AddAfter(testList.First, 1));
+        }
+
+        [Fact]
+
+        public void AddingAValueAfterANodeThatDoesNotBelongToTheListThrowsArgumentNullException()
+        {
+            var testList = new LinkedListCollection<int>();
+
+            Assert.Throws<InvalidOperationException>(() => testList.AddAfter(new LinkedListNode<int>(3), 1));
+        }
+
+        [Fact]
+
+        public void AddingANullNodeAfterANodeOfTheListThrowsArgumentNullException()
+        {
+            var testList = new LinkedListCollection<int>() { 1 };
+
+            Assert.Throws<ArgumentNullException>(() => testList.AddAfter(testList.First, null));
+        }
+
+        [Fact]
+
+        public void AddingANodeOfAnotherLinkedListAfterANodeOfTheListThrowsArgumentNullException()
+        {
+            var testListOne = new LinkedListCollection<int>() { 1 };
+            var testListTwo = new LinkedListCollection<int>() { 2 };
+
+            Assert.Throws<InvalidOperationException>(() => testListOne.AddAfter(testListOne.First, testListTwo.First));
+        }
+
+        [Fact]
+
+        public void LinkedListWithOneNodePrevioousPropertyShouldReturnFirstNodeValue()
+        {
+            var testListOne = new LinkedListCollection<int> { 1 };
+
+            Assert.Equal(1, testListOne.First.Previous.Value);
+        }
+
+        [Fact]
+
+        public void LinkedListWithOneNodeNextPropertyShouldReturnFirstNodeValue()
+        {
+            var testListOne = new LinkedListCollection<int> { 1 };
+
+            Assert.Equal(1, testListOne.First.Next.Value);
+        }
+
+        [Fact]
+
+        private void CanHaveAListWithMultipleNodes()
+        {
+            var testListOne = new LinkedListCollection<int> { 2, 3, 4, 5, 6, 7 };
+
+            Assert.Equal(2, testListOne.First.Value);
+            Assert.Equal(3, testListOne.First.Next.Value);
+            Assert.Equal(4, testListOne.First.Next.Next.Value);
+            Assert.Equal(5, testListOne.Last.Previous.Previous.Value);
+            Assert.Equal(6, testListOne.Last.Previous.Value);
+        }
     }
 }

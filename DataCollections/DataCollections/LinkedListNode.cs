@@ -2,9 +2,6 @@
 {
     public class LinkedListNode<T>
     {
-        internal LinkedListNode<T> PreviousNode;
-        internal LinkedListNode<T> NextNode;
-
         public LinkedListNode(T item)
         {
             this.Value = item;
@@ -22,17 +19,25 @@
             internal set;
         }
 
-        public LinkedListNode<T> Next => NextNode == null || NextNode == List.Head ? null : NextNode;
+        public LinkedListNode<T> Next
+        {
+            get;
+            internal set;
+        }
 
-        public LinkedListNode<T> Previous => PreviousNode == null || this == List.Head ? null : PreviousNode;
+        public LinkedListNode<T> Previous
+        {
+            get;
+            internal set;
+        }
 
         public T Value { get; set; }
 
         internal void Invalidate()
         {
             List = null;
-            NextNode = null;
-            PreviousNode = null;
+            Next = null;
+            Previous = null;
         }
     }
 }
