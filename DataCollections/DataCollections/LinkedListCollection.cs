@@ -7,14 +7,19 @@ namespace DataCollections
 {
     public class LinkedListCollection<T> : ICollection<T>
     {
-        internal LinkedListNode<T> Head;
+        private readonly LinkedListNode<T> sentinel;
 
         public LinkedListCollection()
         {
+            sentinel = new LinkedListNode<T>(this, default);
+            sentinel.Next = sentinel;
+            sentinel.Previous = sentinel;
         }
 
         public LinkedListCollection(ICollection<T> collection)
         {
+            sentinel = new LinkedListNode<T>(this, default);
+
             if (collection == null)
             {
                 throw new ArgumentNullException(nameof(collection));
@@ -26,9 +31,9 @@ namespace DataCollections
             }
         }
 
-        public LinkedListNode<T> First => Head;
+        public LinkedListNode<T> First => sentinel.Next;
 
-        public LinkedListNode<T> Last => Head?.Previous;
+        public LinkedListNode<T> Last => sentinel.Previous;
 
         public int Count
         {
@@ -47,7 +52,7 @@ namespace DataCollections
         {
             ValidateNode(node);
             LinkedListNode<T> result = new LinkedListNode<T>(node.List, value);
-            InternalInsertNodeBefore(node.Next, result);
+            AddBefore(node.Next, result);
             return result;
         }
 
@@ -55,7 +60,7 @@ namespace DataCollections
         {
             ValidateNode(node);
             ValidateNewNode(newNode);
-            InternalInsertNodeBefore(node.Next, newNode);
+            AddBefore(node.Next, newNode);
             newNode.List = this;
         }
 
@@ -63,10 +68,10 @@ namespace DataCollections
         {
             ValidateNode(node);
             LinkedListNode<T> result = new LinkedListNode<T>(node.List, value);
-            InternalInsertNodeBefore(node, result);
-            if (node == Head)
+            AddBefore(node, result);
+            if (node == sentinel.Next)
             {
-                Head = result;
+                sentinel.Next = result;
             }
 
             return result;
@@ -75,84 +80,55 @@ namespace DataCollections
         public void AddBefore(LinkedListNode<T> node, LinkedListNode<T> newNode)
         {
             ValidateNode(node);
-            ValidateNewNode(newNode);
-            InternalInsertNodeBefore(node, newNode);
+            CheckIfListIsEmpty(node, newNode);
+
+            newNode.Next = node;
+            newNode.Previous = node.Previous;
+            node.Previous.Next = newNode;
+            node.Previous = newNode;
+            Count++;
             newNode.List = this;
-            if (node != Head)
+            if (node != sentinel.Next)
             {
                 return;
             }
 
-            Head = newNode;
+            sentinel.Next = newNode;
         }
 
         public LinkedListNode<T> AddFirst(T value)
         {
             LinkedListNode<T> result = new LinkedListNode<T>(this, value);
-            if (Head == null)
-            {
-                InternalInsertNodeToEmptyList(result);
-            }
-            else
-            {
-                InternalInsertNodeBefore(Head, result);
-                Head = result;
-            }
-
+            AddBefore(sentinel.Next, result);
+            sentinel.Next = result;
             return result;
         }
 
         public void AddFirst(LinkedListNode<T> node)
         {
             ValidateNewNode(node);
-
-            if (Head == null)
-            {
-                InternalInsertNodeToEmptyList(node);
-            }
-            else
-            {
-                InternalInsertNodeBefore(Head, node);
-                Head = node;
-            }
-
+            AddBefore(sentinel.Next, node);
+            sentinel.Next = node;
             node.List = this;
         }
 
         public LinkedListNode<T> AddLast(T value)
         {
             LinkedListNode<T> result = new LinkedListNode<T>(this, value);
-            if (Head == null)
-            {
-                InternalInsertNodeToEmptyList(result);
-            }
-            else
-            {
-                InternalInsertNodeBefore(Head, result);
-            }
-
+            InternalInsertNodeBefore(sentinel, result);
             return result;
         }
 
         public void AddLast(LinkedListNode<T> node)
         {
             ValidateNewNode(node);
-
-            if (Head == null)
-            {
-                InternalInsertNodeToEmptyList(node);
-            }
-            else
-            {
-                InternalInsertNodeBefore(Head, node);
-            }
-
+            InternalInsertNodeBefore(sentinel, node);
             node.List = this;
         }
 
         public void Clear()
         {
-            LinkedListNode<T> current = Head;
+            LinkedListNode<T> current = sentinel.Next;
             while (current != null)
             {
                 LinkedListNode<T> temp = current;
@@ -160,7 +136,7 @@ namespace DataCollections
                 temp.Invalidate();
             }
 
-            Head = null;
+            sentinel.Next = null;
             Count = 0;
         }
 
@@ -186,7 +162,7 @@ namespace DataCollections
                 throw new ArgumentException("Not enough space to copy Items to array.");
             }
 
-            LinkedListNode<T> node = Head;
+            LinkedListNode<T> node = sentinel.Next;
             if (node == null)
             {
                 return;
@@ -197,12 +173,12 @@ namespace DataCollections
                 array[arrayIndex++] = node.Value;
                 node = node.Next;
             }
-            while (node != Head);
+            while (node != sentinel);
         }
 
         public LinkedListNode<T> Find(T value)
         {
-            LinkedListNode<T> node = Head;
+            LinkedListNode<T> node = sentinel.Next;
             EqualityComparer<T> c = EqualityComparer<T>.Default;
             if (node == null)
             {
@@ -218,19 +194,14 @@ namespace DataCollections
 
                 node = node.Next;
             }
-            while (node != Head);
+            while (node != sentinel.Next);
 
             return null;
         }
 
         public LinkedListNode<T> FindLast(T value)
        {
-            if (Head == null)
-            {
-                return null;
-            }
-
-            LinkedListNode<T> last = Head.Previous;
+            LinkedListNode<T> last = sentinel.Previous;
             LinkedListNode<T> node = last;
             EqualityComparer<T> c = EqualityComparer<T>.Default;
 
@@ -255,7 +226,7 @@ namespace DataCollections
 
         public IEnumerator<T> GetEnumerator()
         {
-            LinkedListNode<T> current = Head;
+            LinkedListNode<T> current = First;
             for (int i = 0; i < Count; i++)
             {
                 yield return current.Value;
@@ -269,7 +240,7 @@ namespace DataCollections
         }
 
         public bool Remove(T item)
-            {
+        {
             LinkedListNode<T> node = Find(item);
             if (node == null)
             {
@@ -288,40 +259,40 @@ namespace DataCollections
 
         public void RemoveFirst()
         {
-            if (Head == null)
+            if (sentinel.Next == sentinel)
             {
                 throw new InvalidOperationException("Can not remove from a empty list.");
             }
 
-            InternalRemoveNode(Head);
+            InternalRemoveNode(sentinel.Next);
         }
 
         public void RemoveLast()
         {
-            if (Head == null)
+            if (sentinel.Next == sentinel)
             {
                 throw new InvalidOperationException("Can not remove from a empty list.");
             }
 
-            InternalRemoveNode(Head.Previous);
+            InternalRemoveNode(sentinel.Previous);
         }
 
         internal void InternalRemoveNode(LinkedListNode<T> node)
         {
             Debug.Assert(node.List == this, "Deleting the node from another list!");
-            Debug.Assert(Head != null, "This method shouldn't be called on an empty list!");
+            Debug.Assert(sentinel.Next != null, "This method shouldn't be called on an empty list!");
             if (node.Next == node)
             {
-                Debug.Assert(Count == 1 && Head == node, "this should only be true for a list with only one node");
-                Head = null;
+                Debug.Assert(Count == 1 && sentinel.Next == node, "this should only be true for a list with only one node");
+                sentinel.Next = null;
             }
             else
             {
                 node.Next.Previous = node.Previous;
                 node.Previous.Next = node.Next;
-                if (Head == node)
+                if (sentinel.Next == node)
                 {
-                    Head = node.Next;
+                    sentinel.Next = node.Next;
                 }
             }
 
@@ -361,6 +332,14 @@ namespace DataCollections
 
         private void InternalInsertNodeBefore(LinkedListNode<T> node, LinkedListNode<T> newNode)
         {
+            if (node.Next == null && node.Previous == null)
+            {
+                node.Next = newNode;
+                node.Previous = newNode;
+                Count++;
+                return;
+            }
+
             newNode.Next = node;
             newNode.Previous = node.Previous;
             node.Previous.Next = newNode;
@@ -368,12 +347,15 @@ namespace DataCollections
             Count++;
         }
 
-        private void InternalInsertNodeToEmptyList(LinkedListNode<T> newNode)
-        {
-            Debug.Assert(Head == null && Count == 0, "LinkedList must be empty when this method is called!");
-            newNode.Next = newNode;
-            newNode.Previous = newNode;
-            Head = newNode;
+        private void CheckIfListIsEmpty(LinkedListNode<T> node, LinkedListNode<T> newNode)
+            {
+            if (node.Next != null || node.Previous != null)
+            {
+                return;
+            }
+
+            node.Next = newNode;
+            node.Previous = newNode;
             Count++;
         }
     }

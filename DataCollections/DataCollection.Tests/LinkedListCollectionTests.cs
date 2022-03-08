@@ -25,6 +25,8 @@ namespace DataCollection.Tests
             var testListTwo = new LinkedListCollection<int>(testListOne);
 
             Assert.Equal(3, testListTwo.Count);
+            Assert.Equal(1, testListTwo.First.Value);
+            Assert.Equal(2, testListTwo.First.Next.Value);
             Assert.Equal(3, testListTwo.Last.Value);
         }
 
@@ -435,15 +437,6 @@ namespace DataCollection.Tests
 
         [Fact]
 
-        public void AddingAValueAfterANullNodeThrowsArgumentNullException()
-        {
-            var testList = new LinkedListCollection<int>();
-
-            Assert.Throws<ArgumentNullException>(() => testList.AddAfter(testList.First, 1));
-        }
-
-        [Fact]
-
         public void AddingAValueAfterANodeThatDoesNotBelongToTheListThrowsArgumentNullException()
         {
             var testList = new LinkedListCollection<int>();
@@ -472,20 +465,20 @@ namespace DataCollection.Tests
 
         [Fact]
 
-        public void LinkedListWithOneNodePrevioousPropertyShouldReturnFirstNodeValue()
+        public void LinkedListWithOneNodePrevioousPropertyShouldReturnSentinelValue()
         {
             var testListOne = new LinkedListCollection<int> { 1 };
 
-            Assert.Equal(1, testListOne.First.Previous.Value);
+            Assert.Equal(0, testListOne.First.Previous.Value);
         }
 
         [Fact]
 
-        public void LinkedListWithOneNodeNextPropertyShouldReturnFirstNodeValue()
+        public void LinkedListWithOneNodeNextPropertyShouldReturnSentinelValue()
         {
             var testListOne = new LinkedListCollection<int> { 1 };
 
-            Assert.Equal(1, testListOne.First.Next.Value);
+            Assert.Equal(0, testListOne.First.Next.Value);
         }
 
         [Fact]
