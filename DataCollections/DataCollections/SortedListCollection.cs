@@ -18,20 +18,20 @@ namespace DataCollections
             }
         }
 
-        public override void Add(T element)
+        public override void Add(T item)
         {
-            base.Add(element);
+            base.Add(item);
             BubbleSort();
         }
 
-        public override void Insert(int index, T element)
+        public override void Insert(int index, T item)
         {
-            if (element.CompareTo(ElementAt(index, element)) > 0 || element.CompareTo(ElementAt(index - 1, element)) < 0)
+            if (item.CompareTo(ElementAt(index, item)) > 0 || item.CompareTo(ElementAt(index - 1, item)) < 0)
             {
                 return;
             }
 
-            base.Insert(index, element);
+            base.Insert(index, item);
         }
 
         private T ElementAt(int index, T value)
