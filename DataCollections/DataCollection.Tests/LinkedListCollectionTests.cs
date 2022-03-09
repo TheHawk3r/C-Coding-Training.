@@ -64,6 +64,8 @@ namespace DataCollection.Tests
             testList.Add(2);
             testList.AddAfter(testList.First, 3);
 
+            Assert.Equal(1, testList.First.Value);
+            Assert.Equal(2, testList.Last.Value);
             Assert.Equal(3, testList.First.Next.Value);
             Assert.Equal(3, testList.Count);
         }
@@ -492,6 +494,16 @@ namespace DataCollection.Tests
             Assert.Equal(4, testListOne.First.Next.Next.Value);
             Assert.Equal(5, testListOne.Last.Previous.Previous.Value);
             Assert.Equal(6, testListOne.Last.Previous.Value);
+        }
+
+        [Fact]
+
+        private void EmptyLinkedListFirstAndLastPropertiesReturnNull()
+        {
+            var testListOne = new LinkedListCollection<int>();
+
+            Assert.Null(testListOne.First);
+            Assert.Null(testListOne.Last);
         }
     }
 }

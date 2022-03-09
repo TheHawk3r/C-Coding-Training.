@@ -16,10 +16,8 @@ namespace DataCollections
             sentinel.Previous = sentinel;
         }
 
-        public LinkedListCollection(ICollection<T> collection)
+        public LinkedListCollection(ICollection<T> collection) : this()
         {
-            sentinel = new LinkedListNode<T>(this, default);
-
             if (collection == null)
             {
                 throw new ArgumentNullException(nameof(collection));
@@ -31,9 +29,9 @@ namespace DataCollections
             }
         }
 
-        public LinkedListNode<T> First => sentinel.Next;
+        public LinkedListNode<T> First => sentinel.Next == sentinel ? null : sentinel.Next;
 
-        public LinkedListNode<T> Last => sentinel.Previous;
+        public LinkedListNode<T> Last => sentinel.Previous == sentinel ? null : sentinel.Previous;
 
         public int Count
         {
@@ -48,12 +46,10 @@ namespace DataCollections
             AddLast(item);
         }
 
-        public LinkedListNode<T> AddAfter(LinkedListNode<T> node, T value)
+        public void AddAfter(LinkedListNode<T> node, T value)
         {
             ValidateNode(node);
-            LinkedListNode<T> result = new LinkedListNode<T>(node.List, value);
-            AddBefore(node.Next, result);
-            return result;
+            AddBefore(node.Next, value);
         }
 
         public void AddAfter(LinkedListNode<T> node, LinkedListNode<T> newNode)
@@ -61,7 +57,6 @@ namespace DataCollections
             ValidateNode(node);
             ValidateNewNode(newNode);
             AddBefore(node.Next, newNode);
-            newNode.List = this;
         }
 
         public LinkedListNode<T> AddBefore(LinkedListNode<T> node, T value)
@@ -69,60 +64,41 @@ namespace DataCollections
             ValidateNode(node);
             LinkedListNode<T> result = new LinkedListNode<T>(node.List, value);
             AddBefore(node, result);
-            if (node == sentinel.Next)
-            {
-                sentinel.Next = result;
-            }
-
             return result;
         }
 
         public void AddBefore(LinkedListNode<T> node, LinkedListNode<T> newNode)
         {
             ValidateNode(node);
-            CheckIfListIsEmpty(node, newNode);
-
             newNode.Next = node;
             newNode.Previous = node.Previous;
             node.Previous.Next = newNode;
             node.Previous = newNode;
             Count++;
             newNode.List = this;
-            if (node != sentinel.Next)
-            {
-                return;
-            }
-
-            sentinel.Next = newNode;
         }
 
-        public LinkedListNode<T> AddFirst(T value)
+        public void AddFirst(T value)
         {
-            LinkedListNode<T> result = new LinkedListNode<T>(this, value);
-            AddBefore(sentinel.Next, result);
-            sentinel.Next = result;
-            return result;
+            AddAfter(sentinel, value);
         }
 
         public void AddFirst(LinkedListNode<T> node)
         {
             ValidateNewNode(node);
-            AddBefore(sentinel.Next, node);
-            sentinel.Next = node;
+            AddAfter(sentinel, node);
             node.List = this;
         }
 
-        public LinkedListNode<T> AddLast(T value)
+        public void AddLast(T value)
         {
-            LinkedListNode<T> result = new LinkedListNode<T>(this, value);
-            InternalInsertNodeBefore(sentinel, result);
-            return result;
+            AddBefore(sentinel, value);
         }
 
         public void AddLast(LinkedListNode<T> node)
         {
             ValidateNewNode(node);
-            InternalInsertNodeBefore(sentinel, node);
+            AddBefore(sentinel, node);
             node.List = this;
         }
 
@@ -328,35 +304,6 @@ namespace DataCollections
             }
 
             throw new InvalidOperationException("Node is not present on this list.");
-        }
-
-        private void InternalInsertNodeBefore(LinkedListNode<T> node, LinkedListNode<T> newNode)
-        {
-            if (node.Next == null && node.Previous == null)
-            {
-                node.Next = newNode;
-                node.Previous = newNode;
-                Count++;
-                return;
-            }
-
-            newNode.Next = node;
-            newNode.Previous = node.Previous;
-            node.Previous.Next = newNode;
-            node.Previous = newNode;
-            Count++;
-        }
-
-        private void CheckIfListIsEmpty(LinkedListNode<T> node, LinkedListNode<T> newNode)
-            {
-            if (node.Next != null || node.Previous != null)
-            {
-                return;
-            }
-
-            node.Next = newNode;
-            node.Previous = newNode;
-            Count++;
         }
     }
 }
