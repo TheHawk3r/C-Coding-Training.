@@ -200,15 +200,11 @@ namespace DataCollection.Tests
             int[] array = new int[4];
             testList.Add(1);
             testList.Add(2);
-            testList.Add(3);
-            testList.Add(4);
 
             testList.CopyTo(array, 0);
 
             Assert.Equal(1, array[0]);
             Assert.Equal(2, array[1]);
-            Assert.Equal(3, array[2]);
-            Assert.Equal(4, array[3]);
         }
 
         [Fact]
@@ -285,6 +281,11 @@ namespace DataCollection.Tests
             testList.Add(5);
 
             Assert.Equal(testList.Last, testList.Find(5));
+            Assert.Equal(testList.Last.Previous, testList.Find(4));
+            Assert.Equal(testList.Last.Previous.Previous, testList.Find(3));
+            Assert.Equal(testList.First.Next, testList.Find(2));
+            Assert.Equal(testList.First, testList.Find(1));
+
         }
 
         [Fact]
@@ -306,14 +307,23 @@ namespace DataCollection.Tests
         {
             var testList = new LinkedListCollection<int>();
 
+
+            testList.Add(1);
             testList.Add(1);
             testList.Add(2);
+            testList.Add(2);
             testList.Add(3);
+            testList.Add(3);
+            testList.Add(4);
             testList.Add(4);
             testList.Add(5);
             testList.Add(5);
 
             Assert.Equal(testList.Last, testList.FindLast(5));
+            Assert.Equal(testList.Last.Previous.Previous, testList.FindLast(4));
+            Assert.Equal(testList.Last.Previous.Previous.Previous.Previous, testList.FindLast(3));
+            Assert.Equal(testList.First.Next.Next.Next, testList.FindLast(2));
+            Assert.Equal(testList.First.Next, testList.FindLast(1));
         }
 
         [Fact]

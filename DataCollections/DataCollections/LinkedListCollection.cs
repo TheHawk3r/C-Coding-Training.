@@ -87,7 +87,6 @@ namespace DataCollections
         {
             ValidateNewNode(node);
             AddAfter(sentinel, node);
-            node.List = this;
         }
 
         public void AddLast(T value)
@@ -99,7 +98,6 @@ namespace DataCollections
         {
             ValidateNewNode(node);
             AddBefore(sentinel, node);
-            node.List = this;
         }
 
         public void Clear()
@@ -112,7 +110,8 @@ namespace DataCollections
                 temp.Invalidate();
             }
 
-            sentinel.Next = null;
+            sentinel.Next = sentinel;
+            sentinel.Previous = sentinel;
             Count = 0;
         }
 
@@ -139,17 +138,17 @@ namespace DataCollections
             }
 
             LinkedListNode<T> node = sentinel.Next;
-            if (node == null)
-            {
-                return;
-            }
 
-            do
+            for (int i = arrayIndex; i < this.Count; i++)
             {
-                array[arrayIndex++] = node.Value;
+                if (node == sentinel)
+                {
+                    break;
+                }
+
+                array[i] = node.Value;
                 node = node.Next;
             }
-            while (node != sentinel);
         }
 
         public LinkedListNode<T> Find(T value)
@@ -161,7 +160,7 @@ namespace DataCollections
                 return null;
             }
 
-            do
+            for (int i = 0; i < this.Count; i++)
             {
                 if (c.Equals(node.Value, value))
                 {
@@ -170,15 +169,13 @@ namespace DataCollections
 
                 node = node.Next;
             }
-            while (node != sentinel.Next);
 
             return null;
         }
 
         public LinkedListNode<T> FindLast(T value)
        {
-            LinkedListNode<T> last = sentinel.Previous;
-            LinkedListNode<T> node = last;
+            LinkedListNode<T> node = sentinel.Previous;
             EqualityComparer<T> c = EqualityComparer<T>.Default;
 
             if (node == null)
@@ -186,7 +183,7 @@ namespace DataCollections
                 return null;
             }
 
-            do
+            for (int i = this.Count; i > 0; i--)
             {
                 if (c.Equals(node.Value, value))
                 {
@@ -195,18 +192,15 @@ namespace DataCollections
 
                 node = node.Previous;
             }
-            while (node != last);
 
             return null;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            LinkedListNode<T> current = First;
-            for (int i = 0; i < Count; i++)
+            for (LinkedListNode<T> current = sentinel.Next; current != sentinel; current = current.Next)
             {
                 yield return current.Value;
-                current = current.Next;
             }
         }
 
@@ -223,34 +217,46 @@ namespace DataCollections
                 return false;
             }
 
-            InternalRemoveNode(node);
+            Remove(node);
             return true;
         }
 
         public void Remove(LinkedListNode<T> node)
         {
             ValidateNode(node);
-            InternalRemoveNode(node);
+            if (node.List != this)
+            {
+                throw new InvalidOperationException("Node does not belong to this list!");
+            }
+
+            if (sentinel.Next == sentinel)
+            {
+                throw new InvalidOperationException("Can not remove from a empty list.");
+            }
+
+            if (node.Next == sentinel && node.Previous == sentinel)
+            {
+                sentinel.Next = sentinel;
+                sentinel.Previous = sentinel;
+            }
+            else
+            {
+                node.Next.Previous = node.Previous;
+                node.Previous.Next = node.Next;
+            }
+
+            node.Invalidate();
+            Count--;
         }
 
         public void RemoveFirst()
         {
-            if (sentinel.Next == sentinel)
-            {
-                throw new InvalidOperationException("Can not remove from a empty list.");
-            }
-
-            InternalRemoveNode(sentinel.Next);
+            Remove(sentinel.Next);
         }
 
         public void RemoveLast()
         {
-            if (sentinel.Next == sentinel)
-            {
-                throw new InvalidOperationException("Can not remove from a empty list.");
-            }
-
-            InternalRemoveNode(sentinel.Previous);
+            Remove(sentinel.Previous);
         }
 
         internal void InternalRemoveNode(LinkedListNode<T> node)
