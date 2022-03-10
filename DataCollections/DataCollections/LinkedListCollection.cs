@@ -102,14 +102,6 @@ namespace DataCollections
 
         public void Clear()
         {
-            LinkedListNode<T> current = sentinel.Next;
-            while (current != null)
-            {
-                LinkedListNode<T> temp = current;
-                current = current.Next;
-                temp.Invalidate();
-            }
-
             sentinel.Next = sentinel;
             sentinel.Previous = sentinel;
             Count = 0;
@@ -137,37 +129,25 @@ namespace DataCollections
                 throw new ArgumentException("Not enough space to copy Items to array.");
             }
 
-            LinkedListNode<T> node = sentinel.Next;
+            LinkedListNode<T> node;
 
-            for (int i = arrayIndex; i < this.Count; i++)
+            for (node = sentinel.Next; node != sentinel; node = node.Next)
             {
-                if (node == sentinel)
-                {
-                    break;
-                }
-
-                array[i] = node.Value;
-                node = node.Next;
+                array[arrayIndex++] = node.Value;
             }
         }
 
         public LinkedListNode<T> Find(T value)
         {
-            LinkedListNode<T> node = sentinel.Next;
+            LinkedListNode<T> node;
             EqualityComparer<T> c = EqualityComparer<T>.Default;
-            if (node == null)
-            {
-                return null;
-            }
 
-            for (int i = 0; i < this.Count; i++)
+            for (node = sentinel.Next; node != sentinel; node = node.Next)
             {
                 if (c.Equals(node.Value, value))
                 {
                     return node;
                 }
-
-                node = node.Next;
             }
 
             return null;
@@ -234,16 +214,8 @@ namespace DataCollections
                 throw new InvalidOperationException("Can not remove from a empty list.");
             }
 
-            if (node.Next == sentinel && node.Previous == sentinel)
-            {
-                sentinel.Next = sentinel;
-                sentinel.Previous = sentinel;
-            }
-            else
-            {
-                node.Next.Previous = node.Previous;
-                node.Previous.Next = node.Next;
-            }
+            node.Next.Previous = node.Previous;
+            node.Previous.Next = node.Next;
 
             node.Invalidate();
             Count--;

@@ -197,7 +197,7 @@ namespace DataCollection.Tests
         public void CanCopyValuesToAnArray()
         {
             var testList = new LinkedListCollection<int>();
-            int[] array = new int[4];
+            int[] array = new int[2];
             testList.Add(1);
             testList.Add(2);
 
@@ -205,6 +205,20 @@ namespace DataCollection.Tests
 
             Assert.Equal(1, array[0]);
             Assert.Equal(2, array[1]);
+        }
+
+        [Fact]
+        public void CanCopyValuesToAnArrayAtArrayInde()
+        {
+            var testList = new LinkedListCollection<int>();
+            int[] array = new int[4];
+            testList.Add(1);
+            testList.Add(2);
+
+            testList.CopyTo(array, 2);
+
+            Assert.Equal(1, array[2]);
+            Assert.Equal(2, array[3]);
         }
 
         [Fact]
@@ -285,7 +299,6 @@ namespace DataCollection.Tests
             Assert.Equal(testList.Last.Previous.Previous, testList.Find(3));
             Assert.Equal(testList.First.Next, testList.Find(2));
             Assert.Equal(testList.First, testList.Find(1));
-
         }
 
         [Fact]
@@ -306,7 +319,6 @@ namespace DataCollection.Tests
         public void CanFindLastNodeWithGivenValue()
         {
             var testList = new LinkedListCollection<int>();
-
 
             testList.Add(1);
             testList.Add(1);
@@ -404,14 +416,10 @@ namespace DataCollection.Tests
             var testList = new LinkedListCollection<int>();
 
             testList.Add(2);
-            testList.Add(3);
-            testList.Add(4);
-            testList.Add(5);
-            testList.Add(5);
 
             testList.RemoveFirst();
 
-            Assert.Equal(3, testList.First.Value);
+            Assert.Empty(testList);
         }
 
         [Fact]
