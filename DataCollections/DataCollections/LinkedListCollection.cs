@@ -259,29 +259,6 @@ namespace DataCollections
             Remove(sentinel.Previous);
         }
 
-        internal void InternalRemoveNode(LinkedListNode<T> node)
-        {
-            Debug.Assert(node.List == this, "Deleting the node from another list!");
-            Debug.Assert(sentinel.Next != null, "This method shouldn't be called on an empty list!");
-            if (node.Next == node)
-            {
-                Debug.Assert(Count == 1 && sentinel.Next == node, "this should only be true for a list with only one node");
-                sentinel.Next = null;
-            }
-            else
-            {
-                node.Next.Previous = node.Previous;
-                node.Previous.Next = node.Next;
-                if (sentinel.Next == node)
-                {
-                    sentinel.Next = node.Next;
-                }
-            }
-
-            node.Invalidate();
-            Count--;
-        }
-
         internal void ValidateNewNode(LinkedListNode<T> node)
         {
             if (node == null)
