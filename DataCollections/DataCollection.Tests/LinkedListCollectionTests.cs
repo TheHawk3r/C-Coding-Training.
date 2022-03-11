@@ -309,7 +309,7 @@ namespace DataCollection.Tests
             testList.Add("A");
             testList.Add("B");
             testList.Add("C");
-            testList.Add("E");
+            testList.Add("D");
             testList.Add(null);
 
             Assert.Equal(testList.Last, testList.Find(null));

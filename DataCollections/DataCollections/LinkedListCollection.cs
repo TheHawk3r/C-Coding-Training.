@@ -102,6 +102,13 @@ namespace DataCollections
 
         public void Clear()
         {
+            var node = sentinel.Next;
+            for (var temp = node; temp != sentinel; temp = node)
+            {
+                node = node.Next;
+                temp.Invalidate();
+            }
+
             sentinel.Next = sentinel;
             sentinel.Previous = sentinel;
             Count = 0;
@@ -129,9 +136,8 @@ namespace DataCollections
                 throw new ArgumentException("Not enough space to copy Items to array.");
             }
 
-            LinkedListNode<T> node;
 
-            for (node = sentinel.Next; node != sentinel; node = node.Next)
+            for (var node = sentinel.Next; node != sentinel; node = node.Next)
             {
                 array[arrayIndex++] = node.Value;
             }
@@ -139,12 +145,9 @@ namespace DataCollections
 
         public LinkedListNode<T> Find(T value)
         {
-            LinkedListNode<T> node;
-            EqualityComparer<T> c = EqualityComparer<T>.Default;
-
-            for (node = sentinel.Next; node != sentinel; node = node.Next)
+            for (var node = sentinel.Next; node != sentinel; node = node.Next)
             {
-                if (c.Equals(node.Value, value))
+                if (Equals(node.Value, value))
                 {
                     return node;
                 }
@@ -154,23 +157,13 @@ namespace DataCollections
         }
 
         public LinkedListNode<T> FindLast(T value)
-       {
-            LinkedListNode<T> node = sentinel.Previous;
-            EqualityComparer<T> c = EqualityComparer<T>.Default;
-
-            if (node == null)
+        {
+            for (var node = sentinel.Previous; node != sentinel; node = node.Previous)
             {
-                return null;
-            }
-
-            for (int i = this.Count; i > 0; i--)
-            {
-                if (c.Equals(node.Value, value))
+                if (Equals(node.Value, value))
                 {
                     return node;
                 }
-
-                node = node.Previous;
             }
 
             return null;
@@ -178,7 +171,7 @@ namespace DataCollections
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (LinkedListNode<T> current = sentinel.Next; current != sentinel; current = current.Next)
+            for (var current = sentinel.Next; current != sentinel; current = current.Next)
             {
                 yield return current.Value;
             }
