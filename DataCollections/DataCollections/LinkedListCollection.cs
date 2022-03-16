@@ -136,7 +136,6 @@ namespace DataCollections
                 throw new ArgumentException("Not enough space to copy Items to array.");
             }
 
-
             for (var node = sentinel.Next; node != sentinel; node = node.Next)
             {
                 array[arrayIndex++] = node.Value;
