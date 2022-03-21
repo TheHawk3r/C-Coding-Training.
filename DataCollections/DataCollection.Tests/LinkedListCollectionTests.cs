@@ -11,7 +11,6 @@ namespace DataCollection.Tests
         public void CanInitializeALinkedList()
         {
             var testNodeOne = new LinkedListNode<int>(5);
-            var testNodeTwo = new DictionaryEntry<int, int>(testNodeOne, 4);
             var testList = new LinkedListCollection<int>();
 
             testList.Add(1);
