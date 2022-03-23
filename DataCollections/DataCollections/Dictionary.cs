@@ -211,12 +211,27 @@ namespace DataCollections
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            throw new NotImplementedException();
+            ref TValue value = ref FindValue(item.Key);
+            if (Unsafe.IsNullRef(ref value) || object.Equals(value, item.Value))
+            {
+                return false;
+            }
+
+            Remove(item.Key);
+            return true;
         }
 
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
         {
-            throw new NotImplementedException();
+            ref TValue valRef = ref FindValue(key);
+            if (!Unsafe.IsNullRef(ref valRef))
+            {
+                value = valRef;
+                return true;
+            }
+
+            value = default;
+            return false;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
