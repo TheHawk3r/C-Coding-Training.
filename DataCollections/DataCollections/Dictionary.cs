@@ -15,6 +15,20 @@ namespace DataCollections
         private int freeList;
         private int freeCount;
 
+        public Dictionary() : this(0)
+        {
+        }
+
+        public Dictionary(uint capacity)
+        {
+            if (capacity < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
+
+            Initialize(capacity);
+        }
+
         public ICollection<TKey> Keys
         {
             get
@@ -283,6 +297,10 @@ namespace DataCollections
             buckets = new int[capacity];
             elements = new DictionaryElement<TValue, TKey>[capacity];
             freeList = -1;
+            for (int i = 0; i < capacity; i++)
+            {
+                elements[i].Next = -1;
+            }
         }
 
         private bool TryGetIndexOfKey(TKey key, out int index)
@@ -300,7 +318,7 @@ namespace DataCollections
             return false;
         }
 
-        private bool TryInsert(TKey key, TValue value, bool throwOnExisting)
+        private void TryInsert(TKey key, TValue value, bool throwOnExisting)
         {
             if (key == null)
             {
@@ -312,10 +330,9 @@ namespace DataCollections
                 Initialize(0);
             }
 
+            CheckKeys(key, value, true);
             uint hashCode = (uint)key.GetHashCode();
             ref int bucket = ref buckets[hashCode % (uint)buckets.Length];
-            CheckKeys(key, value, true);
-
             int index;
             if (freeCount > 0)
             {
@@ -341,8 +358,6 @@ namespace DataCollections
             element.Key = key;
             element.Value = value;
             bucket = index + 1;
-
-            return true;
         }
 
         private void CheckKeys(TKey key, TValue value, bool throwOnExisting)
@@ -351,16 +366,11 @@ namespace DataCollections
             uint collisionCount = 0;
             ref int bucket = ref buckets[hashCode % (uint)buckets.Length];
 
-            for (int i = bucket - 1; i < elements.Length; i = elements[i].Next)
+            for (int i = bucket; i != -1; i = elements[i].Next)
             {
                 if (elements[i].HashCode == hashCode && object.Equals(elements[i].Key, key))
                 {
-                    if (throwOnExisting)
-                    {
-                        throw new InvalidOperationException("Key already present in dictionary.");
-                    }
-
-                    elements[i].Value = value;
+                    throw new InvalidOperationException("Key already present in dictionary.");
                 }
 
                 collisionCount++;
