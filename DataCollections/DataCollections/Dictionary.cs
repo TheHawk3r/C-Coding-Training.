@@ -36,10 +36,10 @@ namespace DataCollections
                 var keys = new ListCollection<TKey>();
                 foreach (var element in this)
                 {
-                    Keys.Add(element.Key);
+                    keys.Add(element.Key);
                 }
 
-                return keys;
+                return (ICollection<TKey>)keys;
             }
         }
 
@@ -53,7 +53,7 @@ namespace DataCollections
                     values.Add(element.Value);
                 }
 
-                return values;
+                return (ICollection<TValue>)values;
             }
         }
 
@@ -300,6 +300,7 @@ namespace DataCollections
             for (int i = 0; i < capacity; i++)
             {
                 elements[i].Next = -1;
+                buckets[i] = -1;
             }
         }
 
@@ -354,10 +355,10 @@ namespace DataCollections
 
             ref DictionaryElement<TValue, TKey> element = ref elements![index];
             element.HashCode = hashCode;
-            element.Next = bucket - 1;
+            element.Next = bucket;
             element.Key = key;
             element.Value = value;
-            bucket = index + 1;
+            bucket = index;
         }
 
         private void CheckKeys(TKey key, TValue value, bool throwOnExisting)
@@ -377,7 +378,7 @@ namespace DataCollections
 
                 if (collisionCount > elements.Length)
                 {
-                    throw new InvalidOperationException("Collisions excedet capacity");
+                    throw new InvalidOperationException("Collisions exceded capacity");
                 }
             }
         }
