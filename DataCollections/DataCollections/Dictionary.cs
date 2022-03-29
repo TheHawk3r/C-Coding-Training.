@@ -9,19 +9,18 @@ namespace DataCollections
 {
     public class Dictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
-        private const int StartOfFreeList = -3;
         private int[] buckets;
         private DictionaryElement<TValue, TKey>[] elements;
         private int freeList;
         private int freeCount;
 
-        public Dictionary() : this(0)
+        public Dictionary() : this(1)
         {
         }
 
         public Dictionary(uint capacity)
         {
-            if (capacity < 0)
+            if (capacity <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
             }
@@ -39,7 +38,7 @@ namespace DataCollections
                     keys.Add(element.Key);
                 }
 
-                return (ICollection<TKey>)keys;
+                return keys;
             }
         }
 
@@ -53,14 +52,14 @@ namespace DataCollections
                     values.Add(element.Value);
                 }
 
-                return (ICollection<TValue>)values;
+                return values;
             }
         }
 
         public int Count
         {
             get;
-            set;
+            internal set;
         }
 
         public bool IsReadOnly => false;
@@ -82,6 +81,7 @@ namespace DataCollections
                 if (!TryGetIndexOfKey(key, out int index))
                 {
                     Add(key, value);
+                    return;
                 }
 
                 elements[index].Value = value;
@@ -90,7 +90,44 @@ namespace DataCollections
 
         public void Add(TKey key, TValue value)
         {
-            TryInsert(key, value, true);
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (buckets == null || elements == null)
+            {
+                Initialize(1);
+            }
+
+            CheckKeys(key, value);
+            uint hashCode = (uint)key.GetHashCode();
+            ref int bucket = ref buckets[hashCode % (uint)buckets.Length];
+            int index;
+            if (freeCount > 0)
+            {
+                index = freeList;
+                freeList = elements[freeList].Next;
+                freeCount--;
+            }
+            else
+            {
+                if (Count == elements.Length)
+                {
+                    Resize(elements.Length + 1);
+                    bucket = ref buckets[hashCode % (uint)buckets.Length];
+                }
+
+                index = Count;
+                Count++;
+            }
+
+            ref DictionaryElement<TValue, TKey> element = ref elements![index];
+            element.HashCode = hashCode;
+            element.Next = bucket;
+            element.Key = key;
+            element.Value = value;
+            bucket = index;
         }
 
         public void Add(KeyValuePair<TKey, TValue> item)
@@ -192,7 +229,7 @@ namespace DataCollections
             ref int bucket = ref buckets[hashCode % (uint)buckets.Length];
             DictionaryElement<TValue, TKey> element;
             int last = -1;
-            for (int i = bucket - 1; i < 0; i = element.Next)
+            for (int i = bucket; i != -1; i = element.Next)
             {
                 element = elements[i];
                 if (element.HashCode == hashCode && object.Equals(element.Key, key))
@@ -202,10 +239,10 @@ namespace DataCollections
                         elements[last].Next = element.Next;
                     }
 
-                    Debug.Assert(
-                        (StartOfFreeList - freeList) < 0,
-                        "shouldn't underflow because max hashtable length is MaxPrimeArrayLength = 0x7FEFFFFD(2146435069) _freelist underflow threshold 2147483646");
-                    element.Next = StartOfFreeList - freeList;
+                    elements[i].Next = -1;
+                    elements[i].HashCode = default;
+                    elements[i].Key = default;
+                    elements[i].Value = default;
 
                     freeList = i;
                     freeCount++;
@@ -319,49 +356,7 @@ namespace DataCollections
             return false;
         }
 
-        private void TryInsert(TKey key, TValue value, bool throwOnExisting)
-        {
-            if (key == null)
-            {
-                throw new ArgumentNullException(key.ToString());
-            }
-
-            if (buckets == null || elements == null)
-            {
-                Initialize(0);
-            }
-
-            CheckKeys(key, value, true);
-            uint hashCode = (uint)key.GetHashCode();
-            ref int bucket = ref buckets[hashCode % (uint)buckets.Length];
-            int index;
-            if (freeCount > 0)
-            {
-                index = freeList;
-                freeList = StartOfFreeList - elements[freeList].Next;
-                freeCount--;
-            }
-            else
-            {
-                if (Count == elements.Length)
-                {
-                    Resize(elements.Length + 1);
-                    bucket = ref buckets[hashCode % (uint)buckets.Length];
-                }
-
-                index = Count;
-                Count++;
-            }
-
-            ref DictionaryElement<TValue, TKey> element = ref elements![index];
-            element.HashCode = hashCode;
-            element.Next = bucket;
-            element.Key = key;
-            element.Value = value;
-            bucket = index;
-        }
-
-        private void CheckKeys(TKey key, TValue value, bool throwOnExisting)
+        private void CheckKeys(TKey key, TValue value)
         {
             uint hashCode = (uint)key.GetHashCode();
             uint collisionCount = 0;
@@ -397,17 +392,23 @@ namespace DataCollections
 
             var newElements = new DictionaryElement<TValue, TKey>[newSize];
             Array.Copy(elements, newElements, Count);
-            buckets = new int[newSize];
+            var newBuckets = new int[newSize];
+            Array.Copy(buckets, newBuckets, Count);
 
-            for (int i = 0; i < Count; i++)
+            for (int i = Count; i < newElements.Length; i++)
             {
                 if (newElements[i].Next >= -1)
                 {
-                    ref int bucket = ref buckets[elements[i].HashCode % (uint)buckets.Length];
-                    newElements[i].Next = bucket - 1;
+                    newElements[i].Next = -1;
+                }
+
+                if (newBuckets[i] != -1)
+                {
+                    newBuckets[i] = -1;
                 }
             }
 
+            buckets = newBuckets;
             elements = newElements;
         }
     }
