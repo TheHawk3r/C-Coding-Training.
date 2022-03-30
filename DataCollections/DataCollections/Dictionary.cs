@@ -245,9 +245,15 @@ namespace DataCollections
                     elements[i].Key = default;
                     elements[i].Value = default;
 
+                    if (freeList != -1)
+                    {
+                        elements[i].Next = freeList;
+                    }
+
                     freeList = i;
                     freeCount++;
                     Count--;
+                    buckets[Math.Abs(hashCode) % buckets.Length] = -1;
                     return true;
                 }
 
@@ -399,12 +405,14 @@ namespace DataCollections
             for (int i = 0; i < Count; i++)
             {
                 int hashCode = elements[i].Key.GetHashCode();
-                if (newBuckets[Math.Abs(hashCode) % newBuckets.Length] != -1 && newBuckets[Math.Abs(hashCode) % newBuckets.Length] != i)
+                if (newElements[i].Next != -1)
                 {
-                    newElements[i].Next = newBuckets[Math.Abs(hashCode) % newBuckets.Length];
+                    ref int bucket = ref newBuckets[Math.Abs(hashCode) % newBuckets.Length];
+                    newElements[i].Next = bucket;
+#pragma warning disable S1854 // Unused assignments should be removed
+                    bucket = i;
+#pragma warning restore S1854 // Unused assignments should be removed
                 }
-
-                newBuckets[Math.Abs(hashCode) % newBuckets.Length] = i;
             }
 
             buckets = newBuckets;
