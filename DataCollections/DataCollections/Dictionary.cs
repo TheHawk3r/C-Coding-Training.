@@ -109,6 +109,7 @@ namespace DataCollections
                 index = freeList;
                 freeList = elements[freeList].Next;
                 freeCount--;
+                Count++;
             }
             else
             {
@@ -246,6 +247,7 @@ namespace DataCollections
 
                     freeList = i;
                     freeCount++;
+                    Count--;
                     return true;
                 }
 
@@ -397,9 +399,9 @@ namespace DataCollections
             for (int i = 0; i < Count; i++)
             {
                 int hashCode = elements[i].Key.GetHashCode();
-                if (newBuckets[Math.Abs(hashCode) % newBuckets.Length] != -1)
+                if (newBuckets[Math.Abs(hashCode) % newBuckets.Length] != -1 && newBuckets[Math.Abs(hashCode) % newBuckets.Length] != i)
                 {
-                    elements[i].Next = buckets[Math.Abs(hashCode) % buckets.Length];
+                    newElements[i].Next = newBuckets[Math.Abs(hashCode) % newBuckets.Length];
                 }
 
                 newBuckets[Math.Abs(hashCode) % newBuckets.Length] = i;

@@ -171,9 +171,10 @@ namespace DataCollection.Tests
             testDictionary.Add("B", 20);
             testDictionary.Add("C", 30);
             testDictionary.Remove("B");
+            testDictionary.Remove("C");
             testDictionary.Add("D", 40);
 
-            Assert.Equal(3, testDictionary.Count);
+            Assert.Equal(2, testDictionary.Count);
         }
     }
 }
