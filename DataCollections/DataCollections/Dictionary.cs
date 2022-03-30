@@ -100,9 +100,9 @@ namespace DataCollections
                 Initialize(1);
             }
 
-            CheckKeys(key, value);
-            uint hashCode = (uint)key.GetHashCode();
-            ref int bucket = ref buckets[hashCode % (uint)buckets.Length];
+            int hashCode = key.GetHashCode();
+            ref int bucket = ref buckets[Math.Abs(hashCode) % buckets.Length];
+            CheckKeys(key, value, hashCode, ref bucket);
             int index;
             if (freeCount > 0)
             {
@@ -115,7 +115,7 @@ namespace DataCollections
                 if (Count == elements.Length)
                 {
                     Resize(elements.Length + 1);
-                    bucket = ref buckets[hashCode % (uint)buckets.Length];
+                    bucket = ref buckets[Math.Abs(hashCode) % buckets.Length];
                 }
 
                 index = Count;
@@ -225,8 +225,8 @@ namespace DataCollections
             }
 
             uint collisionCount = 0;
-            uint hashCode = (uint)key.GetHashCode();
-            ref int bucket = ref buckets[hashCode % (uint)buckets.Length];
+            int hashCode = key.GetHashCode();
+            ref int bucket = ref buckets[Math.Abs(hashCode) % buckets.Length];
             DictionaryElement<TValue, TKey> element;
             int last = -1;
             for (int i = bucket; i != -1; i = element.Next)
@@ -356,11 +356,9 @@ namespace DataCollections
             return false;
         }
 
-        private void CheckKeys(TKey key, TValue value)
+        private void CheckKeys(TKey key, TValue value, int hashCode, ref int bucket)
         {
-            uint hashCode = (uint)key.GetHashCode();
             uint collisionCount = 0;
-            ref int bucket = ref buckets[hashCode % (uint)buckets.Length];
 
             for (int i = bucket; i != -1; i = elements[i].Next)
             {
@@ -394,18 +392,17 @@ namespace DataCollections
             Array.Copy(elements, newElements, Count);
             var newBuckets = new int[newSize];
             Array.Copy(buckets, newBuckets, Count);
-
-            for (int i = Count; i < newElements.Length; i++)
+            newElements[newElements.Length - 1].Next = -1;
+            newBuckets[newBuckets.Length - 1] = -1;
+            for (int i = 0; i < Count; i++)
             {
-                if (newElements[i].Next >= -1)
+                int hashCode = elements[i].Key.GetHashCode();
+                if (newBuckets[Math.Abs(hashCode) % newBuckets.Length] != -1)
                 {
-                    newElements[i].Next = -1;
+                    elements[i].Next = buckets[Math.Abs(hashCode) % buckets.Length];
                 }
 
-                if (newBuckets[i] != -1)
-                {
-                    newBuckets[i] = -1;
-                }
+                newBuckets[Math.Abs(hashCode) % newBuckets.Length] = i;
             }
 
             buckets = newBuckets;
