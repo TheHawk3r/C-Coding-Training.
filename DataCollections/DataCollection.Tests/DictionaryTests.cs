@@ -165,15 +165,17 @@ namespace DataCollection.Tests
         [Fact]
         public void AddFunctionShouldUseFreeSpacesIfElementsHaveBeenRemoved()
         {
-            var testDictionary = new Dictionary<string, int>();
+            var testDictionary = new Dictionary<string, int>(3);
 
             testDictionary.Add("A", 10);
             testDictionary.Add("B", 20);
             testDictionary.Add("C", 30);
             testDictionary.Remove("B");
             testDictionary.Remove("C");
+            testDictionary.Remove("A");
             testDictionary.Add("B", 40);
             testDictionary.Add("C", 50);
+            testDictionary.Add("A", 10);
 
             Assert.Equal(3, testDictionary.Count);
         }

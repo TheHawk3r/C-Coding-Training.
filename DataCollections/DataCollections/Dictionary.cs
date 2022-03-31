@@ -20,10 +20,7 @@ namespace DataCollections
 
         public Dictionary(uint capacity)
         {
-            if (capacity <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(capacity));
-            }
+            CheckCapacityOutOfRangeException(capacity);
 
             Initialize(capacity);
         }
@@ -90,10 +87,7 @@ namespace DataCollections
 
         public void Add(TKey key, TValue value)
         {
-            if (key == null)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
+            CheckKeyNullException(key);
 
             if (buckets == null || elements == null)
             {
@@ -143,15 +137,7 @@ namespace DataCollections
                 return;
             }
 
-            if (buckets == null)
-            {
-                throw new InvalidOperationException("Buckets array can not be null");
-            }
-
-            if (elements == null)
-            {
-                throw new InvalidOperationException("Elements array can not be null");
-            }
+            CheckElementsNullException();
 
             Array.Clear(buckets, 0, Count);
             Array.Clear(elements, 0, Count);
@@ -174,21 +160,9 @@ namespace DataCollections
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            if (array == null)
-            {
-                throw new ArgumentNullException(nameof(array));
-            }
-
-            if ((uint)arrayIndex > (uint)array.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(arrayIndex));
-            }
-
-            if (array.Length - arrayIndex < Count)
-            {
-                throw new ArgumentException("Not enough space to copy Items to array.");
-            }
-
+            CheckArrayNullExcepiton(array);
+            CheckArrayIndexOutOfRangeException(arrayIndex, array);
+            CheckNotEnoughSpaceArgumentException(arrayIndex, array);
             for (int i = 0; i < Count; i++)
             {
                 if (elements[i].Next >= -1)
@@ -210,34 +184,24 @@ namespace DataCollections
 
         public bool Remove(TKey key)
         {
-            if (key == null)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
-
-            if (buckets == null)
-            {
-                throw new InvalidOperationException("Buckets should not be null");
-            }
-
-            if (elements == null)
-            {
-                throw new InvalidOperationException("Elements should not be empty");
-            }
+            CheckKeyNullException(key);
+            CheckBucketsNullException();
+            CheckElementsNullException();
 
             uint collisionCount = 0;
             int hashCode = key.GetHashCode();
-            ref int bucket = ref buckets[Math.Abs(hashCode) % buckets.Length];
-            DictionaryElement<TValue, TKey> element;
             int last = -1;
-            for (int i = bucket; i != -1; i = element.Next)
+            for (int i = buckets[Math.Abs(hashCode) % buckets.Length]; i != -1; i = elements[i].Next)
             {
-                element = elements[i];
-                if (element.HashCode == hashCode && object.Equals(element.Key, key))
+                if (elements[i].HashCode == hashCode && object.Equals(elements[i].Key, key))
                 {
                     if (last >= 0)
                     {
-                        elements[last].Next = element.Next;
+                        elements[last].Next = elements[i].Next;
+                    }
+                    else if (last == -1)
+                    {
+                        buckets[Math.Abs(hashCode) % buckets.Length] = elements[i].Next == -1 ? -1 : elements[i].Next;
                     }
 
                     elements[i].Next = -1;
@@ -253,16 +217,12 @@ namespace DataCollections
                     freeList = i;
                     freeCount++;
                     Count--;
-                    buckets[Math.Abs(hashCode) % buckets.Length] = -1;
                     return true;
                 }
 
                 last = i;
                 collisionCount++;
-                if (collisionCount > (uint)elements.Length)
-                {
-                    throw new InvalidOperationException("Collisions surpassed dictionary size");
-                }
+                CheckCollitsionLimitExceededExecption(collisionCount);
             }
 
             return false;
@@ -300,20 +260,9 @@ namespace DataCollections
 
         internal ref TValue FindValue(TKey key)
         {
-            if (key == null)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
-
-            if (buckets == null)
-            {
-                throw new InvalidOperationException("Buckets array should not be null");
-            }
-
-            if (elements == null)
-            {
-                throw new InvalidOperationException("Elements array should not be null");
-            }
+            CheckKeyNullException(key);
+            CheckBucketsNullException();
+            CheckElementsNullException();
 
             uint hashCode = (uint)key.GetHashCode();
             int bucket = buckets[hashCode % (uint)buckets.Length];
@@ -370,53 +319,132 @@ namespace DataCollections
 
             for (int i = bucket; i != -1; i = elements[i].Next)
             {
-                if (elements[i].HashCode == hashCode && object.Equals(elements[i].Key, key))
-                {
-                    throw new InvalidOperationException("Key already present in dictionary.");
-                }
+                CheckKeyPresentInvalidOperationException(i, hashCode, key);
 
                 collisionCount++;
 
-                if (collisionCount > elements.Length)
-                {
-                    throw new InvalidOperationException("Collisions exceded capacity");
-                }
+                CheckCollitsionLimitExceededExecption(collisionCount);
             }
         }
 
         private void Resize(int newSize)
         {
-            if (elements == null)
-            {
-                throw new InvalidOperationException("elements is null");
-            }
-
-            if (newSize <= elements.Length)
-            {
-                throw new ArgumentException("The size should be bigger then the actual size");
-            }
+            CheckElementsNullException();
+            CheckNewSizeArgumentException(newSize);
 
             var newElements = new DictionaryElement<TValue, TKey>[newSize];
             Array.Copy(elements, newElements, Count);
             var newBuckets = new int[newSize];
-            Array.Copy(buckets, newBuckets, Count);
             newElements[newElements.Length - 1].Next = -1;
             newBuckets[newBuckets.Length - 1] = -1;
             for (int i = 0; i < Count; i++)
             {
-                int hashCode = elements[i].Key.GetHashCode();
-                if (newElements[i].Next != -1)
-                {
-                    ref int bucket = ref newBuckets[Math.Abs(hashCode) % newBuckets.Length];
-                    newElements[i].Next = bucket;
-#pragma warning disable S1854 // Unused assignments should be removed
-                    bucket = i;
-#pragma warning restore S1854 // Unused assignments should be removed
-                }
+                int hashCode = elements[i].HashCode;
+                newBuckets[Math.Abs(hashCode) % newBuckets.Length] = i;
             }
 
             buckets = newBuckets;
             elements = newElements;
+        }
+
+        private void CheckKeyNullException(TKey key)
+        {
+            if (key != null)
+            {
+                return;
+            }
+
+            throw new ArgumentNullException(nameof(key));
+        }
+
+        private void CheckBucketsNullException()
+        {
+            if (buckets != null)
+            {
+                return;
+            }
+
+            throw new InvalidOperationException("Buckets array can not be null");
+        }
+
+        private void CheckElementsNullException()
+        {
+            if (elements != null)
+            {
+                return;
+            }
+
+            throw new InvalidOperationException("Elements should not be empty");
+        }
+
+        private void CheckCollitsionLimitExceededExecption(uint collisionCount)
+        {
+            if (collisionCount <= (uint)elements.Length)
+            {
+                return;
+            }
+
+            throw new InvalidOperationException("Collisions surpassed dictionary size");
+        }
+
+        private void CheckCapacityOutOfRangeException(uint capacity)
+        {
+            if (capacity > 0)
+            {
+                return;
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(capacity));
+        }
+
+        private void CheckArrayNullExcepiton(KeyValuePair<TKey, TValue>[] array)
+            {
+            if (array != null)
+            {
+                return;
+            }
+
+            throw new ArgumentNullException(nameof(array));
+        }
+
+        private void CheckArrayIndexOutOfRangeException(int arrayIndex, KeyValuePair<TKey, TValue>[] array)
+            {
+            if ((uint)arrayIndex <= (uint)array.Length)
+            {
+                return;
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+        }
+
+        private void CheckNotEnoughSpaceArgumentException(int arrayIndex, KeyValuePair<TKey, TValue>[] array)
+            {
+            if (array.Length - arrayIndex >= Count)
+            {
+                return;
+            }
+
+            throw new ArgumentException("Not enough space to copy Items to array.");
+        }
+
+        private void CheckNewSizeArgumentException(int newSize)
+            {
+            if (newSize > elements.Length)
+            {
+                return;
+            }
+
+            throw new ArgumentException("The new size should be bigger then the actual size");
+        }
+
+        private void CheckKeyPresentInvalidOperationException(int i, int hashCode, TKey key)
+            {
+            if (elements[i].HashCode != hashCode || !object.Equals(elements[i].Key, key))
+            {
+                return;
+            }
+
+            throw new InvalidOperationException("Key already present in dictionary.");
         }
     }
 }
