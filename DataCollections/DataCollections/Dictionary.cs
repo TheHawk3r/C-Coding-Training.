@@ -335,12 +335,23 @@ namespace DataCollections
             var newElements = new DictionaryElement<TValue, TKey>[newSize];
             Array.Copy(elements, newElements, Count);
             var newBuckets = new int[newSize];
+            Array.Fill(newBuckets, -1);
             newElements[newElements.Length - 1].Next = -1;
-            newBuckets[newBuckets.Length - 1] = -1;
             for (int i = 0; i < Count; i++)
             {
                 int hashCode = elements[i].HashCode;
-                newBuckets[Math.Abs(hashCode) % newBuckets.Length] = i;
+                if (newBuckets[Math.Abs(hashCode) % newBuckets.Length] != -1 && !object.Equals(newElements[newBuckets[Math.Abs(hashCode) % newBuckets.Length]].Key, elements[i].Key))
+                {
+                    newElements[newBuckets[Math.Abs(hashCode) % newBuckets.Length]].Next = i;
+                    if (newElements[i].Next == newBuckets[Math.Abs(hashCode) % newBuckets.Length])
+                    {
+                        newElements[i].Next = newBuckets[Math.Abs(hashCode) % newBuckets.Length];
+                    }
+                }
+                else if (newBuckets[Math.Abs(hashCode) % newBuckets.Length] == -1)
+                {
+                    newBuckets[Math.Abs(hashCode) % newBuckets.Length] = i;
+                }
             }
 
             buckets = newBuckets;
