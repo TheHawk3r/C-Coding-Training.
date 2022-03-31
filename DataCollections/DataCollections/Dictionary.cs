@@ -117,7 +117,7 @@ namespace DataCollections
                 Count++;
             }
 
-            ref DictionaryElement<TValue, TKey> element = ref elements![index];
+             ref DictionaryElement<TValue, TKey> element = ref elements![index];
             element.HashCode = hashCode;
             element.Next = bucket;
             element.Key = key;
@@ -332,30 +332,15 @@ namespace DataCollections
             CheckElementsNullException();
             CheckNewSizeArgumentException(newSize);
 
-            var newElements = new DictionaryElement<TValue, TKey>[newSize];
-            Array.Copy(elements, newElements, Count);
-            var newBuckets = new int[newSize];
-            Array.Fill(newBuckets, -1);
-            newElements[newElements.Length - 1].Next = -1;
-            for (int i = 0; i < Count; i++)
+            var oldElements = elements;
+            Count = 0;
+            elements = new DictionaryElement<TValue, TKey>[newSize];
+            buckets = new int[newSize];
+            Array.Fill(buckets, -1);
+            for (int i = 0; i < oldElements.Length; i++)
             {
-                int hashCode = elements[i].HashCode;
-                if (newBuckets[Math.Abs(hashCode) % newBuckets.Length] != -1 && !object.Equals(newElements[newBuckets[Math.Abs(hashCode) % newBuckets.Length]].Key, elements[i].Key))
-                {
-                    newElements[newBuckets[Math.Abs(hashCode) % newBuckets.Length]].Next = i;
-                    if (newElements[i].Next == newBuckets[Math.Abs(hashCode) % newBuckets.Length])
-                    {
-                        newElements[i].Next = newBuckets[Math.Abs(hashCode) % newBuckets.Length];
-                    }
-                }
-                else if (newBuckets[Math.Abs(hashCode) % newBuckets.Length] == -1)
-                {
-                    newBuckets[Math.Abs(hashCode) % newBuckets.Length] = i;
-                }
+                Add(oldElements[i].Key, oldElements[i].Value);
             }
-
-            buckets = newBuckets;
-            elements = newElements;
         }
 
         private void CheckKeyNullException(TKey key)
