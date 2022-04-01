@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -109,7 +108,8 @@ namespace DataCollections
             {
                 if (Count == elements.Length)
                 {
-                    Resize(elements.Length + 1);
+                    const int two = 2;
+                    Resize(elements.Length * two);
                     bucket = ref buckets[Math.Abs(hashCode) % buckets.Length];
                 }
 
@@ -117,7 +117,7 @@ namespace DataCollections
                 Count++;
             }
 
-             ref DictionaryElement<TValue, TKey> element = ref elements![index];
+            ref DictionaryElement<TValue, TKey> element = ref elements![index];
             element.HashCode = hashCode;
             element.Next = bucket;
             element.Key = key;
@@ -163,12 +163,14 @@ namespace DataCollections
             CheckArrayNullExcepiton(array);
             CheckArrayIndexOutOfRangeException(arrayIndex, array);
             CheckNotEnoughSpaceArgumentException(arrayIndex, array);
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < elements.Length; i++)
             {
-                if (elements[i].Next >= -1)
+                if (elements[i].Next == -1 && elements[i].HashCode == 0)
                 {
-                    array[arrayIndex++] = new KeyValuePair<TKey, TValue>(elements[i].Key, elements[i].Value);
+                    continue;
                 }
+
+                array[arrayIndex++] = new KeyValuePair<TKey, TValue>(elements[i].Key, elements[i].Value);
             }
         }
 
@@ -231,7 +233,7 @@ namespace DataCollections
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
             ref TValue value = ref FindValue(item.Key);
-            if (Unsafe.IsNullRef(ref value) || object.Equals(value, item.Value))
+            if (Unsafe.IsNullRef(ref value) || !object.Equals(value, item.Value))
             {
                 return false;
             }
@@ -264,23 +266,22 @@ namespace DataCollections
             CheckBucketsNullException();
             CheckElementsNullException();
 
-            uint hashCode = (uint)key.GetHashCode();
-            int bucket = buckets[hashCode % (uint)buckets.Length];
-            bucket--;
+            int hashCode = key.GetHashCode();
+            int index = buckets[Math.Abs(hashCode) % buckets.Length];
             for (int collisionCount = 0; collisionCount <= (uint)elements.Length; collisionCount++)
             {
-                if ((uint)bucket >= (uint)elements.Length)
+                if (index >= elements.Length)
                 {
                     return ref Unsafe.NullRef<TValue>();
                 }
 
-                ref DictionaryElement<TValue, TKey> element = ref elements[bucket];
+                ref DictionaryElement<TValue, TKey> element = ref elements[index];
                 if (element.HashCode == hashCode && object.Equals(element.Key, key))
                 {
                     return ref element.Value;
                 }
 
-                bucket = element.Next;
+                index = element.Next;
             }
 
             throw new InvalidOperationException("Number of collisions exceded Dictionary size");
@@ -334,8 +335,7 @@ namespace DataCollections
 
             var oldElements = elements;
             Count = 0;
-            elements = new DictionaryElement<TValue, TKey>[newSize];
-            buckets = new int[newSize];
+            Initialize((uint)newSize);
             Array.Fill(buckets, -1);
             for (int i = 0; i < oldElements.Length; i++)
             {

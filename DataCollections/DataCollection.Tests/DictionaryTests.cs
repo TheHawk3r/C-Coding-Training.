@@ -1,6 +1,7 @@
 ﻿using System;
 using DataCollections;
 using Xunit;
+using System.Collections.Generic;
 
 namespace DataCollection.Tests
 {
@@ -9,8 +10,8 @@ namespace DataCollection.Tests
         [Fact]
         public void CanInitializeADictionary()
         {
-            var testDictionaryOne = new Dictionary<string, int>();
-            var testDictionaryTwo = new Dictionary<string, int>(5);
+            var testDictionaryOne = new DataCollections.Dictionary<string, int>();
+            var testDictionaryTwo = new DataCollections.Dictionary<string, int>(5);
 
             testDictionaryTwo.Add("A", 1);
             var test = testDictionaryTwo.Keys;
@@ -24,7 +25,7 @@ namespace DataCollection.Tests
         [Fact]
         public void KeysPropertyShouldReturnAnICollectionContainingTheDictionaryKeys()
         {
-            var testDictionary = new Dictionary<string, int>(3);
+            var testDictionary = new DataCollections.Dictionary<string, int>(3);
 
             testDictionary.Add("A", 1);
             testDictionary.Add("B", 2);
@@ -42,7 +43,7 @@ namespace DataCollection.Tests
         [Fact]
         public void ValuesPropertyShouldReturnAnICollectionContainingTheDictionaryValues()
         {
-            var testDictionary = new Dictionary<string, int>(3);
+            var testDictionary = new DataCollections.Dictionary<string, int>(3);
 
             testDictionary.Add("A", 1);
             testDictionary.Add("B", 2);
@@ -60,7 +61,7 @@ namespace DataCollection.Tests
         [Fact]
         public void CountPropertyShouldReturnCountOfEntriesInDictionary()
         {
-            var testDictionary = new Dictionary<string, int>(3);
+            var testDictionary = new DataCollections.Dictionary<string, int>(3);
             Assert.Empty(testDictionary);
             testDictionary.Add("A", 1);
             Assert.Single(testDictionary);
@@ -73,7 +74,7 @@ namespace DataCollection.Tests
         [Fact]
         public void KeyGetAccessorShouldReturnDefaultValueOfTypeIfKeyIsNotFoundInDictionary()
         {
-            var testDcitionary = new Dictionary<int, string>(5);
+            var testDcitionary = new DataCollections.Dictionary<int, string>(5);
             testDcitionary[1] = "A";
             testDcitionary[2] = "B";
             testDcitionary[3] = "C";
@@ -85,7 +86,7 @@ namespace DataCollection.Tests
         [Fact]
         public void KeyGetAccessorShouldReturnTheKeysValue()
         {
-            var testDcitionary = new Dictionary<int, string>(5);
+            var testDcitionary = new DataCollections.Dictionary<int, string>(5);
             testDcitionary[1] = "A";
             testDcitionary[2] = "B";
             testDcitionary[3] = "C";
@@ -98,7 +99,7 @@ namespace DataCollection.Tests
         [Fact]
         public void SettingAKeyThatIsNotPresentShouldAddTheKeyValuePairToTheDictionary()
         {
-            var testDcitionary = new Dictionary<int, string>(5);
+            var testDcitionary = new DataCollections.Dictionary<int, string>(5);
             testDcitionary[1] = "X";
             testDcitionary[2] = "Y";
             testDcitionary[3] = "Z";
@@ -111,7 +112,7 @@ namespace DataCollection.Tests
         [Fact]
         public void SettingAnExistingKeyShouldOverwriteItsExistingValue()
         {
-            var testDcitionary = new Dictionary<int, string>(5);
+            var testDcitionary = new DataCollections.Dictionary<int, string>(5);
             testDcitionary.Add(1, "X");
             testDcitionary.Add(2, "Y");
             testDcitionary.Add(3, "Z");
@@ -129,7 +130,7 @@ namespace DataCollection.Tests
         [Fact]
         public void AddFunctionShouldWorkProperlyWithBucketsAndElementsUsedProperly()
         {
-            var testDcitionary = new Dictionary<int, int>(5);
+            var testDcitionary = new DataCollections.Dictionary<int, int>(5);
 
             testDcitionary.Add(1, 10);
             testDcitionary.Add(2, 20);
@@ -147,7 +148,7 @@ namespace DataCollection.Tests
         [Fact]
         public void AddFunctionShouldThrowAnArgumentNullExceptionIfTheKeyIsNull()
         {
-            var testDcitionary = new Dictionary<string, int>(1);
+            var testDcitionary = new DataCollections.Dictionary<string, int>(1);
 
             Assert.Throws<ArgumentNullException>(() => testDcitionary.Add(null, 10));
         }
@@ -155,7 +156,7 @@ namespace DataCollection.Tests
         [Fact]
         public void AddFunctionShouldThrowAnInvalidOpertionExceptionIfKeyIsAlreadyPresent()
         {
-            var testDcitionary = new Dictionary<string, int>(1);
+            var testDcitionary = new DataCollections.Dictionary<string, int>(1);
 
             testDcitionary.Add("A", 10);
 
@@ -165,7 +166,7 @@ namespace DataCollection.Tests
         [Fact]
         public void AddFunctionShouldUseFreeSpacesIfElementsHaveBeenRemoved()
         {
-            var testDictionary = new Dictionary<string, int>();
+            var testDictionary = new DataCollections.Dictionary<string, int>();
 
             testDictionary.Add("A", 10);
             testDictionary.Add("B", 20);
@@ -178,6 +179,159 @@ namespace DataCollection.Tests
             testDictionary.Add("A", 10);
 
             Assert.Equal(3, testDictionary.Count);
+        }
+
+        [Fact]
+        public void ClearFunctionShouldClearTheDictionaryProperly()
+        {
+            var testDictionary = new DataCollections.Dictionary<string, int>();
+
+            testDictionary.Add("A", 1);
+            testDictionary.Add("B", 2);
+            testDictionary["C"] = 3;
+            testDictionary.Clear();
+
+            Assert.Empty(testDictionary);
+        }
+
+        [Fact]
+        public void ContainsFunctionShoouldReturnTrueIfKeyValuePairIsPresent()
+        {
+            var dictionary = new DataCollections.Dictionary<string, int>();
+
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+
+            Assert.Contains(new KeyValuePair<string, int>("A", 1), dictionary);
+
+            Assert.Contains(new KeyValuePair<string, int>("B", 2), dictionary);
+
+            Assert.Contains(new KeyValuePair<string, int>("C", 3), dictionary);
+        }
+
+        [Fact]
+        public void ContainsKeyFunctionShouldReturnTrueIfKeyIsPresent()
+        {
+            var dictionary = new DataCollections.Dictionary<string, int>();
+
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+
+            Assert.Contains("A", dictionary);
+            Assert.Contains("B", dictionary);
+            Assert.Contains("C", dictionary);
+        }
+
+        [Fact]
+        public void CopyToFunctionShouldCopyContentsToKeyValuePairArray()
+        {
+            var dictionary = new DataCollections.Dictionary<string, int>();
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+
+            KeyValuePair<string, int>[] array = new KeyValuePair<string, int>[dictionary.Count];
+
+            dictionary.CopyTo(array, 0);
+
+            Assert.Equal("A", array[0].Key);
+            Assert.Equal("B", array[1].Key);
+            Assert.Equal("C", array[2].Key);
+        }
+
+        [Fact]
+        public void CopyToFunctionIfArrayIsNullShouldThrowArgumentNullException()
+        {
+            var dictionary = new DataCollections.Dictionary<string, int>();
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+
+            KeyValuePair<string, int>[] array = null;
+
+            Assert.Throws<ArgumentNullException>(() => dictionary.CopyTo(array, 0));
+        }
+
+        [Fact]
+        public void CopyToFunctionIfArrayIndexIsOutOfBoundsShouldThrowArgumentOutOfRangeException()
+        {
+            var dictionary = new DataCollections.Dictionary<string, int>();
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+
+            KeyValuePair<string, int>[] array = new KeyValuePair<string, int>[dictionary.Count];
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => dictionary.CopyTo(array, 5));
+        }
+
+        [Fact]
+        public void CopyToFunctionIfNotEnoughSpaceInArrayShouldThrowArgumentException()
+        {
+            var dictionary = new DataCollections.Dictionary<string, int>();
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+
+            KeyValuePair<string, int>[] array = new KeyValuePair<string, int>[dictionary.Count];
+
+            Assert.Throws<ArgumentException>(() => dictionary.CopyTo(array, 2));
+        }
+
+        [Fact]
+        public void CanIterateThroughElements()
+        {
+            int i = 0;
+            var dictionary = new DataCollections.Dictionary<string, int>();
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+            var keyList = (ListCollection<string>)dictionary.Keys;
+
+            foreach (var element in dictionary)
+            {
+                Assert.Equal(keyList[i], element.Key);
+                i++;
+            }
+        }
+
+        [Fact]
+        public void RemoveFunctionShouldThrowArgumentNullExceptionIfKeyIsNull()
+        {
+            var dictionary = new DataCollections.Dictionary<string, int>();
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+
+            Assert.Throws<ArgumentNullException>(() => dictionary.Remove(null));
+        }
+
+        [Fact]
+        public void RemoveFunctionShouldRemoveGivenKey()
+        {
+            var dictionary = new DataCollections.Dictionary<string, int>();
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+
+            Assert.True(dictionary.Remove("A"));
+            Assert.True(dictionary.Remove("B"));
+            Assert.True(dictionary.Remove("C"));
+        }
+
+        [Fact]
+        public void RemoveFunctionShouldRemoveGivenKeyValuePair()
+        {
+            var dictionary = new DataCollections.Dictionary<string, int>();
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+
+            Assert.True(dictionary.Remove(new KeyValuePair<string, int>("A", 1)));
+            Assert.True(dictionary.Remove(new KeyValuePair<string, int>("B", 2)));
+            Assert.True(dictionary.Remove(new KeyValuePair<string, int>("C", 3)));
         }
     }
 }
