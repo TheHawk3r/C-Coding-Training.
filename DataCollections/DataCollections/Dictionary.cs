@@ -86,7 +86,7 @@ namespace DataCollections
 
         public void Add(TKey key, TValue value)
         {
-            CheckKeyNullException(key);
+            CheckNullExceptions(key);
 
             if (buckets == null || elements == null)
             {
@@ -186,9 +186,7 @@ namespace DataCollections
 
         public bool Remove(TKey key)
         {
-            CheckKeyNullException(key);
-            CheckBucketsNullException();
-            CheckElementsNullException();
+            CheckNullExceptions(key);
 
             uint collisionCount = 0;
             int hashCode = key.GetHashCode();
@@ -262,10 +260,7 @@ namespace DataCollections
 
         internal ref TValue FindValue(TKey key)
         {
-            CheckKeyNullException(key);
-            CheckBucketsNullException();
-            CheckElementsNullException();
-
+            CheckNullExceptions(key);
             int hashCode = key.GetHashCode();
             int index = buckets[Math.Abs(hashCode) % buckets.Length];
             for (int collisionCount = 0; collisionCount <= (uint)elements.Length; collisionCount++)
@@ -441,6 +436,13 @@ namespace DataCollections
             }
 
             throw new InvalidOperationException("Key already present in dictionary.");
+        }
+
+        private void CheckNullExceptions(TKey key)
+        {
+            CheckKeyNullException(key);
+            CheckBucketsNullException();
+            CheckElementsNullException();
         }
     }
 }
