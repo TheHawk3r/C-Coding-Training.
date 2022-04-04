@@ -64,12 +64,12 @@ namespace DataCollections
         {
             get
             {
-                if (!TryGetIndexOfKey(key, out int index))
+                if (!TryGetValue(key, out TValue value))
                 {
                     return default;
                 }
 
-                return elements[index].Value;
+                return value;
             }
 
             set
@@ -270,7 +270,7 @@ namespace DataCollections
             int index = buckets[Math.Abs(hashCode) % buckets.Length];
             for (int collisionCount = 0; collisionCount <= (uint)elements.Length; collisionCount++)
             {
-                if (index >= elements.Length)
+                if (index >= elements.Length || index < 0)
                 {
                     return ref Unsafe.NullRef<TValue>();
                 }
