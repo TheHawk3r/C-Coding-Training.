@@ -66,7 +66,7 @@ namespace DataCollections
             {
                 if (!TryGetValue(key, out TValue value))
                 {
-                    return default;
+                    return value;
                 }
 
                 return value;
