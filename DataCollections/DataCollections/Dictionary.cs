@@ -76,7 +76,7 @@ namespace DataCollections
             set
             {
                 CheckKeyNullException(key);
-                int index = FindValue(key);
+                int index = FindElementIndex(key);
                 if (index == -1)
                 {
                     Add(key, value);
@@ -137,13 +137,13 @@ namespace DataCollections
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            int index = FindValue(item.Key);
+            int index = FindElementIndex(item.Key);
             return !Unsafe.IsNullRef(ref elements[index].Value) && object.Equals(item.Value, elements[index].Value);
         }
 
         public bool ContainsKey(TKey key)
         {
-            return !Unsafe.IsNullRef(ref elements[FindValue(key)].Value);
+            return !Unsafe.IsNullRef(ref elements[FindElementIndex(key)].Value);
         }
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
@@ -221,7 +221,7 @@ namespace DataCollections
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            int index = FindValue(item.Key);
+            int index = FindElementIndex(item.Key);
             if (index == -1 || !object.Equals(elements[index].Value, item.Value))
             {
                 return false;
@@ -233,7 +233,7 @@ namespace DataCollections
 
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
         {
-            int index = FindValue(key);
+            int index = FindElementIndex(key);
             if (index != -1)
             {
                 value = elements[index].Value;
