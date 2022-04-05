@@ -76,7 +76,8 @@ namespace DataCollections
             set
             {
                 CheckKeyNullException(key);
-                if (!TryGetIndexOfKey(key, out int index))
+                int index = FindValue(key);
+                if (index == -1)
                 {
                     Add(key, value);
                     return;
@@ -89,35 +90,23 @@ namespace DataCollections
         public void Add(TKey key, TValue value)
         {
             CheckNullExceptions(key);
-
-            ref int bucket = ref GetBucket(key);
-            CheckKeys(key, value, key.GetHashCode(), ref bucket);
+            CheckKeys(key);
             int index;
             if (freeCount > 0)
             {
-                index = freeList;
-                freeList = elements[freeList].Next;
-                freeCount--;
-                Count++;
+                index = PopFreeIndex();
             }
             else
             {
-                if (Count == elements.Length)
-                {
-                    const int two = 2;
-                    Resize(elements.Length * two);
-                    bucket = ref GetBucket(key);
-                }
-
+                CheckDictionarySize(key);
                 index = Count;
-                Count++;
             }
 
-            ref DictionaryElement<TValue, TKey> element = ref elements![index];
-            element.Next = bucket;
-            element.Key = key;
-            element.Value = value;
-            bucket = index;
+            Count++;
+            elements[index].Next = GetBucket(key);
+            elements[index].Key = key;
+            elements[index].Value = value;
+            buckets[Math.Abs(key.GetHashCode()) % buckets.Length] = index;
         }
 
         public void Add(KeyValuePair<TKey, TValue> item)
@@ -197,39 +186,37 @@ namespace DataCollections
         public bool Remove(TKey key)
         {
             CheckNullExceptions(key);
-            int last = -1;
-            for (int i = GetBucket(key); i != -1; i = elements[i].Next)
+            int last;
+            int index;
+            SearchForElement(key, out index, out last);
+            if (index == -1)
             {
-                if (elements[i].Key.GetHashCode() == key.GetHashCode() && object.Equals(elements[i].Key, key))
-                {
-                    if (last >= 0)
-                    {
-                        elements[last].Next = elements[i].Next;
-                    }
-                    else if (last == -1)
-                    {
-                        buckets[Math.Abs(key.GetHashCode()) % buckets.Length] = elements[i].Next == -1 ? -1 : elements[i].Next;
-                    }
-
-                    elements[i].Next = -1;
-                    elements[i].Key = default;
-                    elements[i].Value = default;
-
-                    if (freeList != -1)
-                    {
-                        elements[i].Next = freeList;
-                    }
-
-                    freeList = i;
-                    freeCount++;
-                    Count--;
-                    return true;
-                }
-
-                last = i;
+                return false;
             }
 
-            return false;
+            if (last >= 0)
+            {
+                elements[last].Next = elements[index].Next;
+            }
+            else if (last == -1)
+            {
+                buckets[Math.Abs(key.GetHashCode()) % buckets.Length] = elements[index].Next == -1 ? -1 : elements[index].Next;
+            }
+
+            elements[index].Next = -1;
+            elements[index].Key = default;
+            elements[index].Value = default;
+
+            if (freeList != -1)
+            {
+                elements[index].Next = freeList;
+            }
+
+            freeList = index;
+            freeCount++;
+            Count--;
+
+            return true;
         }
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
@@ -265,24 +252,55 @@ namespace DataCollections
         internal int FindValue(TKey key)
         {
             CheckNullExceptions(key);
-            int index = GetBucket(key);
-            for (int collisionCount = 0; collisionCount <= (uint)elements.Length; collisionCount++)
+            for (int i = GetBucket(key); i != -1; i = elements[i].Next)
             {
-                if (index >= elements.Length || index < 0)
+                if (object.Equals(key, elements[i].Key))
                 {
-                    return -1;
+                    return i;
                 }
-
-                ref DictionaryElement<TValue, TKey> element = ref elements[index];
-                if (element.Key.GetHashCode() == key.GetHashCode() && object.Equals(element.Key, key))
-                {
-                    return index;
-                }
-
-                index = element.Next;
             }
 
-            throw new InvalidOperationException("Number of collisions exceded Dictionary size");
+            return -1;
+        }
+
+        private void SearchForElement(TKey key, out int index, out int previousIndex)
+        {
+            previousIndex = -1;
+            index = GetBucket(key);
+            if (index == -1)
+            {
+                return;
+            }
+
+            for (int i = index; i != -1; i = elements[i].Next)
+            {
+                if (elements[i].Key.GetHashCode() == key.GetHashCode() && object.Equals(elements[i].Key, key))
+                {
+                    index = i;
+                    return;
+                }
+
+                previousIndex = i;
+            }
+        }
+
+        private int PopFreeIndex()
+        {
+            int temp = freeList;
+            freeList = elements[freeList].Next;
+            freeCount--;
+            return temp;
+        }
+
+        private void CheckDictionarySize(TKey key)
+        {
+            if (Count != elements.Length)
+            {
+                return;
+            }
+
+            const int two = 2;
+            Resize(elements.Length * two);
         }
 
         private void Initialize(uint capacity)
@@ -297,32 +315,17 @@ namespace DataCollections
             }
         }
 
-        private ref int GetBucket(TKey key)
+        private int GetBucket(TKey key)
         {
             int hashCode = key.GetHashCode();
-            return ref buckets[Math.Abs(hashCode) % buckets.Length];
+            return buckets[Math.Abs(hashCode) % buckets.Length];
         }
 
-        private bool TryGetIndexOfKey(TKey key, out int index)
+        private void CheckKeys(TKey key)
         {
             for (int i = GetBucket(key); i != -1; i = elements[i].Next)
             {
-                if (object.Equals(key, elements[i].Key))
-                {
-                    index = i;
-                    return true;
-                }
-            }
-
-            index = -1;
-            return false;
-        }
-
-        private void CheckKeys(TKey key, TValue value, int hashCode, ref int bucket)
-        {
-            for (int i = bucket; i != -1; i = elements[i].Next)
-            {
-                CheckKeyPresentInvalidOperationException(i, hashCode, key);
+                CheckKeyPresentInvalidOperationException(i, key);
             }
         }
 
@@ -421,9 +424,9 @@ namespace DataCollections
             throw new ArgumentException("The new size should be bigger then the actual size");
         }
 
-        private void CheckKeyPresentInvalidOperationException(int i, int hashCode, TKey key)
-            {
-            if (elements[i].Key.GetHashCode() != hashCode || !object.Equals(elements[i].Key, key))
+        private void CheckKeyPresentInvalidOperationException(int i, TKey key)
+        {
+            if (elements[i].Key.GetHashCode() != key.GetHashCode() || !object.Equals(elements[i].Key, key))
             {
                 return;
             }
