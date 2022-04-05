@@ -66,15 +66,14 @@ namespace DataCollection.Tests
         }
 
         [Fact]
-        public void KeyGetAccessorShouldReturnDefaultValueOfTypeIfKeyIsNotFoundInDictionary()
+        public void KeyGetAccessorShouldThrowKeyNotFoundExceptionIfKeyIsNotPresent()
         {
             var testDcitionary = new DataCollections.Dictionary<int, string>(5);
             testDcitionary[1] = "A";
             testDcitionary[2] = "B";
             testDcitionary[3] = "C";
-            var testString = testDcitionary[4];
 
-            Assert.Equal(default(string), testString);
+            Assert.Throws<KeyNotFoundException>(() => testDcitionary[4]);
         }
 
         [Fact]

@@ -67,7 +67,7 @@ namespace DataCollections
                 CheckKeyNullException(key);
                 if (!TryGetValue(key, out TValue value))
                 {
-                    return value;
+                    throw new KeyNotFoundException("Key not present in the Dictionary.");
                 }
 
                 return value;
