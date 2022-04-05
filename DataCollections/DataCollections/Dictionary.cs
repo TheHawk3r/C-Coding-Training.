@@ -249,7 +249,7 @@ namespace DataCollections
             return GetEnumerator();
         }
 
-        internal int FindValue(TKey key)
+        internal int FindElementIndex(TKey key)
         {
             CheckNullExceptions(key);
             for (int i = GetBucket(key); i != -1; i = elements[i].Next)
