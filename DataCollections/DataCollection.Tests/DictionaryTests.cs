@@ -35,9 +35,6 @@ namespace DataCollection.Tests
             Assert.Contains("A", testList);
             Assert.Contains("B", testList);
             Assert.Contains("C", testList);
-            Assert.Equal("A", testList[0]);
-            Assert.Equal("B", testList[1]);
-            Assert.Equal("C", testList[2]);
         }
 
         [Fact]
@@ -53,9 +50,6 @@ namespace DataCollection.Tests
             Assert.Contains(1, testList);
             Assert.Contains(2, testList);
             Assert.Contains(3, testList);
-            Assert.Equal(1, testList[0]);
-            Assert.Equal(2, testList[1]);
-            Assert.Equal(3, testList[2]);
         }
 
         [Fact]
@@ -171,6 +165,8 @@ namespace DataCollection.Tests
             testDictionary.Add("A", 10);
             testDictionary.Add("B", 20);
             testDictionary.Add("C", 30);
+            testDictionary.Add("D", 60);
+            testDictionary.Add("E", 70);
             testDictionary.Remove("B");
             testDictionary.Remove("C");
             testDictionary.Remove("A");
@@ -178,7 +174,7 @@ namespace DataCollection.Tests
             testDictionary.Add("C", 50);
             testDictionary.Add("A", 10);
 
-            Assert.Equal(3, testDictionary.Count);
+            Assert.Equal(5, testDictionary.Count);
         }
 
         [Fact]
@@ -235,10 +231,45 @@ namespace DataCollection.Tests
             KeyValuePair<string, int>[] array = new KeyValuePair<string, int>[dictionary.Count];
 
             dictionary.CopyTo(array, 0);
+            int keysFound = 0;
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i].Key == "A")
+                {
+                    keysFound++;
+                }
 
-            Assert.Equal("A", array[0].Key);
-            Assert.Equal("B", array[1].Key);
-            Assert.Equal("C", array[2].Key);
+                if (array[i].Key == "B")
+                {
+                    keysFound++;
+                }
+
+                if (array[i].Key == "C")
+                {
+                    keysFound++;
+                }
+            }
+
+            Assert.Equal(3, keysFound);
+        }
+
+        [Fact]
+        public void CopyToFunctionShouldNotCopyRemovedElements()
+        {
+            var dictionary = new DataCollections.Dictionary<string, int>();
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+            dictionary.Remove("A");
+            dictionary.Remove("B");
+            dictionary.Remove("C");
+
+            KeyValuePair<string, int>[] array = new KeyValuePair<string, int>[3];
+            dictionary.CopyTo(array, 0);
+
+            Assert.Equal(null, array[0].Key);
+            Assert.Null(array[1].Key);
+            Assert.Null(array[2].Key);
         }
 
         [Fact]
