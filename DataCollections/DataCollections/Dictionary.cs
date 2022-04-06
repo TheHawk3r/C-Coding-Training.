@@ -282,6 +282,8 @@ namespace DataCollections
 
                 previousIndex = i;
             }
+
+            index = -1;
         }
 
         private int PopFreeIndex()

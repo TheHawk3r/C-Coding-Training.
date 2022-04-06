@@ -352,6 +352,19 @@ namespace DataCollection.Tests
         }
 
         [Fact]
+        public void RemoveFunctionShouldReturnFalseIfKeyNotPresent()
+        {
+            var dictionary = new DataCollections.Dictionary<string, int>();
+            dictionary.Add("A", 1);
+            dictionary.Add("B", 2);
+            dictionary.Add("C", 3);
+
+            Assert.False(dictionary.Remove("D"));
+            Assert.False(dictionary.Remove("E"));
+            Assert.False(dictionary.Remove("F"));
+        }
+
+        [Fact]
         public void RemoveFunctionShouldRemoveGivenKeyValuePair()
         {
             var dictionary = new DataCollections.Dictionary<string, int>();
