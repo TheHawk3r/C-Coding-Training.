@@ -10,7 +10,7 @@ namespace DataCollections
     {
         private int[] buckets;
         private DictionaryElement<TValue, TKey>[] elements;
-        private int freeList;
+        private int freeIndex;
         private int freeCount;
 
         public Dictionary() : this(1)
@@ -131,7 +131,7 @@ namespace DataCollections
             }
 
             Count = 0;
-            freeList = -1;
+            freeIndex = -1;
             freeCount = 0;
         }
 
@@ -186,35 +186,17 @@ namespace DataCollections
         public bool Remove(TKey key)
         {
             CheckNullExceptions(key);
-            int last;
+            int previousIndex;
             int index;
-            SearchForElement(key, out index, out last);
+            SearchForElement(key, out index, out previousIndex);
             if (index == -1)
             {
                 return false;
             }
 
-            if (last >= 0)
-            {
-                elements[last].Next = elements[index].Next;
-            }
-            else if (last == -1)
-            {
-                buckets[Math.Abs(key.GetHashCode()) % buckets.Length] = elements[index].Next == -1 ? -1 : elements[index].Next;
-            }
-
-            elements[index].Next = -1;
-            elements[index].Key = default;
-            elements[index].Value = default;
-
-            if (freeList != -1)
-            {
-                elements[index].Next = freeList;
-            }
-
-            freeList = index;
-            freeCount++;
-            Count--;
+            CheckPreviousIndex(key, previousIndex, index);
+            RemoveElement(index);
+            UpdateFreeIndex(index);
 
             return true;
         }
@@ -288,10 +270,22 @@ namespace DataCollections
 
         private int PopFreeIndex()
         {
-            int temp = freeList;
-            freeList = elements[freeList].Next;
+            int temp = freeIndex;
+            freeIndex = elements[freeIndex].Next;
             freeCount--;
             return temp;
+        }
+
+        private void UpdateFreeIndex(int index)
+        {
+            if (freeIndex != -1)
+            {
+                elements[index].Next = freeIndex;
+            }
+
+            freeIndex = index;
+            freeCount++;
+            Count--;
         }
 
         private void CheckDictionarySize(TKey key)
@@ -309,7 +303,7 @@ namespace DataCollections
         {
             buckets = new int[capacity];
             elements = new DictionaryElement<TValue, TKey>[capacity];
-            freeList = -1;
+            freeIndex = -1;
             for (int i = 0; i < capacity; i++)
             {
                 elements[i].Next = -1;
@@ -329,6 +323,25 @@ namespace DataCollections
             {
                 CheckKeyPresentInvalidOperationException(i, key);
             }
+        }
+
+        private void CheckPreviousIndex(TKey key, int previousIndex, int index)
+        {
+            if (previousIndex >= 0)
+            {
+                elements[previousIndex].Next = elements[index].Next;
+            }
+            else if (previousIndex == -1)
+            {
+                buckets[Math.Abs(key.GetHashCode()) % buckets.Length] = elements[index].Next == -1 ? -1 : elements[index].Next;
+            }
+        }
+
+        private void RemoveElement(int index)
+        {
+            elements[index].Next = -1;
+            elements[index].Key = default;
+            elements[index].Value = default;
         }
 
         private void Resize(int newSize)
