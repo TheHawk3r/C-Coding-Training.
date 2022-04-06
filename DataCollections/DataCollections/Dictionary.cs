@@ -195,7 +195,7 @@ namespace DataCollections
             }
 
             CheckPreviousIndex(key, previousIndex, index);
-            RemoveElement(index);
+            RemoveElementAt(index);
             UpdateFreeIndex(index);
 
             return true;
@@ -337,7 +337,7 @@ namespace DataCollections
             }
         }
 
-        private void RemoveElement(int index)
+        private void RemoveElementAt(int index)
         {
             elements[index].Next = -1;
             elements[index].Key = default;
